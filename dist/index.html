@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A current developer handover and component extraction map for Cognoscene.">
+  <title>Cognoscene · Daniella handover</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23111'/%3E%3Cpath d='M16 34c0-10 7-18 16-18s16 8 16 18-7 14-16 14S16 44 16 34Z' fill='%23C8E88A'/%3E%3Cpath d='M24 34c2 3 5 5 8 5s6-2 8-5' fill='none' stroke='%23111' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root{--ink:#111;--carbon:#24251f;--muted:#62665d;--line:#d8d4c9;--paper:#f5f0e8;--wash:#fbfaf7;--lime:#c8e88a;--green:#3b6d11;--amber:#e9b95c;--red:#af4f36;--radius:18px;--shadow:0 18px 55px rgba(25,25,20,.09)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.5 "Be Vietnam Pro",Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{max-width:1440px;margin:auto;padding:0 28px}.topline{height:7px;background:var(--lime)}
+    .masthead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end;padding:44px 0 28px;border-bottom:1px solid var(--line)}.eyebrow{margin:0 0 10px;color:var(--green);font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase}.masthead h1{max-width:850px;margin:0;font-size:clamp(2.2rem,5vw,4.75rem);letter-spacing:-.065em;line-height:.95}.masthead h1 em{font-style:normal;color:var(--green)}.masthead p{max-width:730px;margin:19px 0 0;color:#4e514b;font-size:1.08rem}.stamp{min-width:190px;padding:14px 16px;border:1px solid var(--ink);border-radius:12px;background:var(--paper);font-size:.84rem;line-height:1.35}.stamp strong{display:block;font-size:1rem}.stamp span{color:var(--muted)}
+    .layout{display:grid;grid-template-columns:242px minmax(0,1fr);gap:46px;padding:30px 0 82px}.nav{position:sticky;top:18px;align-self:start;padding:14px 0}.nav p{margin:0 0 8px;font-size:.73rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.nav a{display:block;padding:7px 10px;color:#3d403a;text-decoration:none;border-left:2px solid transparent;font-size:.92rem}.nav a:hover,.nav a:focus-visible{border-color:var(--green);color:var(--ink);outline:none}.main{min-width:0}.section{padding:31px 0;border-bottom:1px solid var(--line)}.section:first-child{padding-top:0}.kicker{margin:0 0 8px;color:var(--green);font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.section h2{margin:0 0 12px;font-size:clamp(1.55rem,2.4vw,2.35rem);letter-spacing:-.045em;line-height:1.08}.section-intro{max-width:825px;margin:0;color:#50544c}
+    .notice{display:grid;grid-template-columns:auto 1fr;gap:13px;margin-top:22px;padding:16px 18px;border-left:4px solid var(--lime);background:#eef4df;border-radius:0 12px 12px 0}.notice b{font-size:.94rem}.notice p{margin:0;color:#41463d;font-size:.94rem}.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:21px}.chip{display:inline-flex;align-items:center;min-height:27px;padding:4px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:.75rem;font-weight:750;line-height:1.1}.chip.current{border-color:#98bd54;background:#eff8d9;color:#375e0f}.chip.plan{border-color:#e1ba70;background:#fff4d9;color:#70510c}.chip.verify{border-color:#c8c5bb;background:#f6f5f1;color:#50534d}.chip.exclude{border-color:#e2b7aa;background:#fff0ec;color:#7e3726}.chip.runtime{border-color:#b7c8de;background:#eff5fb;color:#31567d}
+    .flow{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr));gap:8px;margin-top:24px}.flow-step{position:relative;min-height:112px;padding:14px 13px;border:1px solid var(--line);border-radius:13px;background:#fff}.flow-step:not(:last-child)::after{position:absolute;content:"";right:-7px;top:49px;z-index:2;width:13px;height:13px;border-top:1px solid #aaa69b;border-right:1px solid #aaa69b;transform:rotate(45deg);background:var(--wash)}.flow-step strong{display:block;margin-bottom:6px;font-size:.91rem;line-height:1.1}.flow-step span{display:block;color:var(--muted);font-size:.76rem;line-height:1.35}.flow-step.active{border-color:#8fba45;background:#f3f9e7}.flow-step.active strong{color:#31580c}
+    .state-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:24px}.state-card{padding:17px;border:1px solid var(--line);border-radius:14px;background:#fff}.state-card h3{margin:0 0 7px;font-size:1rem}.state-card p{margin:0;color:var(--muted);font-size:.86rem}.state-card .chip{margin-bottom:10px}
+    .controls{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:24px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.controls p{margin:0;color:var(--muted);font-size:.86rem}.filters{display:flex;flex-wrap:wrap;gap:7px}.filter{border:1px solid var(--line);border-radius:999px;padding:7px 11px;background:#fff;color:#383b35;font:700 .76rem/1 inherit;cursor:pointer}.filter:hover,.filter:focus-visible,.filter[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff;outline:none}
+    .component-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:21px}.component{position:relative;padding:19px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 2px 0 rgba(20,20,16,.02)}.component[hidden]{display:none}.component-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.component h3{margin:0;font-size:1.08rem;line-height:1.15;letter-spacing:-.025em}.component .summary{margin:9px 0 14px;color:#53564f;font-size:.9rem}.meta{display:grid;grid-template-columns:84px 1fr;gap:6px 10px;padding-top:13px;border-top:1px solid #e6e3dc;font-size:.78rem;line-height:1.35}.meta dt{font-weight:800;color:#5a5d56}.meta dd{margin:0;color:#575a53}.component details{margin-top:14px;border-top:1px solid #e6e3dc;padding-top:12px}.component summary{cursor:pointer;font-size:.82rem;font-weight:800}.component ul{margin:10px 0 0;padding-left:18px;color:#5b5e57;font-size:.8rem}.component li+li{margin-top:4px}
+    .export-order{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:16px;align-items:start;margin-top:10px;padding:17px;border:1px solid var(--line);border-radius:14px;background:#fff}.order-num{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--paper);font-weight:850}.export-order h3{margin:0 0 3px;font-size:1rem}.export-order p{margin:0;color:var(--muted);font-size:.87rem}.export-order .chip{align-self:center}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}.boundary{padding:19px;border-radius:15px}.boundary h3{margin:0 0 8px;font-size:1rem}.boundary p{margin:0;color:#51554d;font-size:.88rem}.boundary ul{padding-left:18px;margin:13px 0 0;font-size:.84rem;color:#4f534c}.boundary li+li{margin-top:5px}.runtime-box{border:1px solid #b7c8de;background:#eff5fb}.exclude-box{border:1px solid #e2b7aa;background:#fff0ec}
+    .proof-table{width:100%;margin-top:23px;border-collapse:collapse;font-size:.84rem}.proof-table th,.proof-table td{padding:12px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}.proof-table th{color:#565950;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}.proof-table td{color:#4e524b}.proof-table strong{color:var(--ink)}
+    .handoff{margin-top:23px;padding:24px;border-radius:17px;background:var(--ink);color:#fff}.handoff h2{margin:0;font-size:1.65rem}.handoff p{max-width:760px;margin:9px 0 0;color:#dcdfd4}.handoff ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:20px 0 0;padding:0;list-style:none;counter-reset:handoff}.handoff li{min-height:100px;padding:15px;border:1px solid #484b42;border-radius:11px;background:#1c1d19;color:#e7e9e1;font-size:.86rem;counter-increment:handoff}.handoff li::before{display:block;margin-bottom:9px;color:var(--lime);font-weight:800;content:"0" counter(handoff)}
+    footer{padding:23px 0 44px;color:var(--muted);font-size:.78rem}.copy{border:0;border-radius:8px;padding:8px 10px;background:var(--lime);color:#1e3209;font:800 .75rem/1 inherit;cursor:pointer}.copy:hover,.copy:focus-visible{background:#b7db72;outline:2px solid var(--ink);outline-offset:2px}
+    @media(max-width:1100px){.flow{grid-template-columns:repeat(4,minmax(0,1fr))}.flow-step:nth-child(4)::after{display:none}.layout{grid-template-columns:190px minmax(0,1fr);gap:28px}}@media(max-width:780px){.shell{padding:0 18px}.masthead{grid-template-columns:1fr;align-items:start;padding-top:32px}.stamp{width:max-content}.layout{display:block;padding-top:16px}.nav{position:relative;top:auto;display:flex;gap:3px;overflow:auto;padding:8px 0 13px;white-space:nowrap;border-bottom:1px solid var(--line)}.nav p{display:none}.nav a{display:inline-block;border-left:0;border-bottom:2px solid transparent}.nav a:hover,.nav a:focus-visible{border-color:var(--green)}.state-grid,.component-grid,.split{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow-step:nth-child(2n)::after{display:none}.controls{display:block}.filters{margin-top:10px}.export-order{grid-template-columns:50px 1fr}.export-order .chip{grid-column:2}.handoff ol{grid-template-columns:1fr}.proof-table{display:block;overflow-x:auto;white-space:nowrap}}
+  </style>
+</head>
+<body>
+  <div class="topline"></div>
+  <header class="shell masthead">
+    <div>
+      <p class="eyebrow">Private developer handover · live reconciliation</p>
+      <h1>Build the <em>right</em> components. Leave the risky plumbing alone.</h1>
+      <p>A working extraction map for Daniella: what is current, what to export from the extension monolith, what stays runtime-only, and what must never reach the user-facing release.</p>
+    </div>
+    <div class="stamp"><strong>Source snapshot</strong><span>2 Oct 2026 · QA source v1.4.102</span><br><span>Production staging v1.4.101</span></div>
+  </header>
+
+  <div class="shell layout">
+    <nav class="nav" aria-label="Handover sections">
+      <p>Handover</p>
+      <a href="#release">Release frame</a>
+      <a href="#map">Component map</a>
+      <a href="#order">Extraction order</a>
+      <a href="#boundaries">Boundaries</a>
+      <a href="#proof">Proof and gates</a>
+    </nav>
+
+    <main class="main">
+      <section id="release" class="section">
+        <p class="kicker">01 · Current release frame</p>
+        <h2>One journey; no consumer test controls.</h2>
+        <p class="section-intro">The founder-approved direction is a private trusted-tester beta. It keeps only the user-chosen-site journey and explicitly separates it from QA, legacy friction modes, experimental browse layers, and any autonomous Python or vision behaviour.</p>
+        <div class="notice"><b>Source conflict resolved</b><p>The current source audit overrides historical handover sections. For example, Product Pulse currently surfaces at seven rendered items with no session cap, even though an older launch plan records 2/4/6 and a three-pulse cap. Export against current source; log a product decision before changing that behaviour.</p></div>
+        <div class="flow" aria-label="Target product flow">
+          <div class="flow-step active"><strong>Onboarding</strong><span>Explicit consent and site selection</span></div>
+          <div class="flow-step active"><strong>Protected site</strong><span>Local, user-chosen boundary</span></div>
+          <div class="flow-step active"><strong>Observer</strong><span>Fresh active browsing check-in</span></div>
+          <div class="flow-step active"><strong>Product Pulse</strong><span>Confirmed cart growth tether</span></div>
+          <div class="flow-step active"><strong>24h hold</strong><span>Confident checkout only</span></div>
+          <div class="flow-step active"><strong>Deliberation</strong><span>Continue, wait or verified edit</span></div>
+          <div class="flow-step active"><strong>Growth</strong><span>Evidence-safe record and reflection</span></div>
+        </div>
+        <div class="legend" aria-label="Status legend"><span class="chip current">Current source</span><span class="chip plan">Approved direction, not yet proved</span><span class="chip verify">Browser proof required</span><span class="chip runtime">Runtime-only dependency</span><span class="chip exclude">Do not export</span></div>
+      </section>
+
+      <section id="map" class="section">
+        <p class="kicker">02 · Component map</p>
+        <h2>Export surfaces by owner, not by file size.</h2>
+        <p class="section-intro">The current extension remains mostly `content.js`. These are the visual surfaces worth extracting into named components. Each keeps one owner, one root, and explicit dependencies; the surrounding checkout and storage runtime stays generic.</p>
+        <div class="controls">
+          <p id="component-count">15 component surfaces shown</p>
+          <div class="filters" role="group" aria-label="Filter components">
+            <button class="filter" data-filter="all" aria-pressed="true">All</button>
+            <button class="filter" data-filter="onboarding" aria-pressed="false">Onboarding</button>
+            <button class="filter" data-filter="observer" aria-pressed="false">Observer</button>
+            <button class="filter" data-filter="rationalisation" aria-pressed="false">Rationalisation</button>
+            <button class="filter" data-filter="growth" aria-pressed="false">Growth</button>
+          </div>
+        </div>
+        <div class="component-grid" id="component-grid">
+          <article class="component" data-group="onboarding">
+            <div class="component-top"><h3>ProtectedSitePicker</h3><span class="chip current">Export now</span></div>
+            <p class="summary">Manual site entry, recognised local suggestions and explicit protect/remove actions.</p>
+            <dl class="meta"><dt>Source</dt><dd>`instructions.html/js` · `shopping-site-registry.js`</dd><dt>State</dt><dd>`blockedWebsites`, consent settings</dd><dt>Owner</dt><dd>Onboarding</dd></dl>
+            <details><summary>Contract</summary><ul><li>Never auto-protect from Top Sites or history.</li><li>Keep raw Top Sites local; consent withdrawal clears suggestion cache.</li><li>Save failure means no new protection.</li></ul></details>
+          </article>
+          <article class="component" data-group="onboarding">
+            <div class="component-top"><h3>OnboardingSequence</h3><span class="chip current">Export now</span></div>
+            <p class="summary">Simple card progression: intro, site selection, 24-hour hold, factual Growth and ready/consent.</p>
+            <dl class="meta"><dt>Source</dt><dd>`instructions.html/js`</dd><dt>Depends on</dt><dd>ProtectedSitePicker, consent settings</dd><dt>Exclude</dt><dd>Guided Morrow demo WIP</dd></dl>
+            <details><summary>Contract</summary><ul><li>Current entrypoint does not load the Morrow walkthrough.</li><li>Explain time and choice; do not promise savings or an outcome.</li><li>Use the completion state only after explicit setup action.</li></ul></details>
+          </article>
+          <article class="component" data-group="observer">
+            <div class="component-top"><h3>ObserverStatusStrip</h3><span class="chip current">Export now</span></div>
+            <p class="summary">Passive protected-site status with a minimise state and the lower-right recovery `c` handle.</p>
+            <dl class="meta"><dt>Source</dt><dd>`content.js` `#cognoscene-lookout-strip` · `content.css`</dd><dt>State</dt><dd>Observer session only</dd><dt>Owner</dt><dd>Observer</dd></dl>
+            <details><summary>Contract</summary><ul><li>The `c` restores status only; it cannot advance a prompt.</li><li>Suppress while a higher-priority hold surface is visible.</li><li>Must remain idempotent across navigation/reload.</li></ul></details>
+          </article>
+          <article class="component" data-group="observer">
+            <div class="component-top"><h3>ObserverSoftPrompt</h3><span class="chip current">Export now</span></div>
+            <p class="summary">The voluntary soft check-in with green leave and a smaller continue action.</p>
+            <dl class="meta"><dt>Source</dt><dd>`showLookoutSoftReveal` · `#cognoscene-lookout-soft`</dd><dt>Inputs</dt><dd>Prompt stage, continuation treatment</dd><dt>Owner</dt><dd>Observer</dd></dl>
+            <details><summary>Contract</summary><ul><li>Green leave is `yeah, i'm good`.</li><li>Continue is black/green for prompts 1–2; amber/black from 3.</li><li>Dismissal starts a 60-second cooldown; do not stack with Product Pulse.</li></ul></details>
+          </article>
+          <article class="component" data-group="observer">
+            <div class="component-top"><h3>ObserverActiveCheck</h3><span class="chip current">Export now</span></div>
+            <p class="summary">The central voluntary check plus the prompt-six specific-need and re-entry reason branches.</p>
+            <dl class="meta"><dt>Source</dt><dd>`showLookoutActiveOverlay` · `#cognoscene-lookout-active`</dd><dt>Inputs</dt><dd>Reason, prompt count, restore state</dd><dt>Owner</dt><dd>Observer</dd></dl>
+            <details><summary>Contract</summary><ul><li>Specific need/re-entry reason are user-confirmed labels, never inferred motives.</li><li>Active continuation waits five seconds.</li><li>Recheck existing surfaces before async render.</li></ul></details>
+          </article>
+          <article class="component" data-group="observer">
+            <div class="component-top"><h3>ProductPulseTether</h3><span class="chip current">Export now</span></div>
+            <p class="summary">A cart-adjacent tether shown after a confirmed rendered cart-count increase.</p>
+            <dl class="meta"><dt>Source</dt><dd>`showProductPulse` · `#cognoscene-product-pulse`</dd><dt>State</dt><dd>`productPulseEventsV1` + tab/brand session</dd><dt>Owner</dt><dd>Product Pulse</dd></dl>
+            <details><summary>Contract</summary><ul><li>Current audit: threshold seven rendered items; 60-second cooldown; no session cap.</li><li>Never treat an add click alone as confirmation.</li><li>Unknown value is omitted; defer Observer for five seconds after dismissal.</li></ul></details>
+          </article>
+          <article class="component" data-group="rationalisation">
+            <div class="component-top"><h3>RationalisationShell</h3><span class="chip current">Export now</span></div>
+            <p class="summary">Shared centred cream shell for hold, Deliberation, Urgente, cart-edit feedback and verified outcomes.</p>
+            <dl class="meta"><dt>Source</dt><dd>`.ui-card-alt`, hold and success overlay CSS</dd><dt>Style</dt><dd>Cream, charcoal veil, grayscale/blur</dd><dt>Owner</dt><dd>Rationalisation</dd></dl>
+            <details><summary>Contract</summary><ul><li>One overlay root at a time; cleanup must be idempotent.</li><li>Respect reduced motion and focus recovery.</li><li>Preserve current brand-scoped hold/pass behaviour outside the shell.</li></ul></details>
+          </article>
+          <article class="component" data-group="rationalisation">
+            <div class="component-top"><h3>HoldReminder + Rationator</h3><span class="chip current">Export now</span></div>
+            <p class="summary">Small active-hold reminder, persistent return card and the active-hold Rationator choice flow.</p>
+            <dl class="meta"><dt>Source</dt><dd>`showHoldReminder`, `showRationator`, `showRationatorReturnNudge`</dd><dt>Scope</dt><dd>Active Rationalisation hold only</dd><dt>Owner</dt><dd>Rationalisation</dd></dl>
+            <details><summary>Contract</summary><ul><li>Not an ordinary-browsing Observer feature.</li><li>Central veil and unblurred bottom-left return card are separate surfaces.</li><li>Never send hobby/work/custom text to telemetry, Growth, Python or remote services.</li></ul></details>
+          </article>
+          <article class="component" data-group="rationalisation">
+            <div class="component-top"><h3>DeliberationCard</h3><span class="chip current">Export now</span></div>
+            <p class="summary">Post-hold decision surface for continue, wait, full decline and review of selected cart items.</p>
+            <dl class="meta"><dt>Source</dt><dd>`showTimeUpPrompt` · `#cognoscene-block-overlay`</dd><dt>State</dt><dd>24-hour Decision Window</dd><dt>Owner</dt><dd>Deliberation</dd></dl>
+            <details><summary>Contract</summary><ul><li>Only explicit continue writes the Decision checkout pass.</li><li>Item removal never approves checkout or closes Deliberation.</li><li>Uncertain route/row means manual review and no event.</li></ul></details>
+          </article>
+          <article class="component" data-group="rationalisation">
+            <div class="component-top"><h3>NativeCartEditReceipt</h3><span class="chip current">Export now</span></div>
+            <p class="summary">In-cart edit prompt and confirmation receipt for an externally verified merchant mutation.</p>
+            <dl class="meta"><dt>Source</dt><dd>`native-cart-edit-state.js` · `showNativeCartEditConfirmation`</dd><dt>Depends on</dt><dd>Cart adapter and visible verification</dd><dt>Owner</dt><dd>Deliberation</dd></dl>
+            <details><summary>Contract</summary><ul><li>Show only after the specific selected merchant item has been verified.</li><li>Ambiguous/failed mutation writes nothing.</li><li>Do not expose cart content beyond approved transient UI.</li></ul></details>
+          </article>
+          <article class="component" data-group="rationalisation">
+            <div class="component-top"><h3>UrgenteChallenge</h3><span class="chip current">Export now</span></div>
+            <p class="summary">The deliberate typing-challenge alternative to the normal active hold.</p>
+            <dl class="meta"><dt>Source</dt><dd>Hold overlay runtime in `content.js`</dd><dt>State</dt><dd>12-hour brand checkout-only pass</dd><dt>Owner</dt><dd>Urgente</dd></dl>
+            <details><summary>Contract</summary><ul><li>Persist pass before removing hold; restore before interception.</li><li>Never alias to global browsing bypass.</li><li>Other brands, Observer, Product Pulse and data controls remain active.</li></ul></details>
+          </article>
+          <article class="component" data-group="rationalisation">
+            <div class="component-top"><h3>DecisionOutcomeFeedback</h3><span class="chip current">Export now</span></div>
+            <p class="summary">Verified decline success and intentional-purchase confirmation, each with evidence-safe wording.</p>
+            <dl class="meta"><dt>Source</dt><dd>`showRationalisedSuccess` and purchase confirmation overlay</dd><dt>Inputs</dt><dd>Verified outcome only; unknown value allowed</dd><dt>Owner</dt><dd>Rationalisation</dd></dl>
+            <details><summary>Contract</summary><ul><li>Never claim saved money or prevented purchase without proof.</li><li>Show unknown value as unknown.</li><li>Reduced-motion route remains equivalent.</li></ul></details>
+          </article>
+          <article class="component" data-group="growth">
+            <div class="component-top"><h3>HomeGrowthStrip</h3><span class="chip current">Export now</span></div>
+            <p class="summary">A small factual home bridge into Growth, using recorded-action language rather than scores or streaks.</p>
+            <dl class="meta"><dt>Source</dt><dd>`growth-view-model.js` · `popup.js/css`</dd><dt>Reads</dt><dd>Bounded outcome/event view model</dd><dt>Owner</dt><dd>Growth</dd></dl>
+            <details><summary>Contract</summary><ul><li>Count only correctly dated recorded actions.</li><li>QA records are excluded from production progress.</li><li>No money, efficacy, regret or diagnosis claim.</li></ul></details>
+          </article>
+          <article class="component" data-group="growth">
+            <div class="component-top"><h3>GrowthHistory + Assurance</h3><span class="chip current">Export now</span></div>
+            <p class="summary">Evidence-labelled history and optional local response: feels right, not sure yet, revisit later.</p>
+            <dl class="meta"><dt>Source</dt><dd>`popup.js`, `dashboard.js`, `decision-assurance.js`</dd><dt>State</dt><dd>`decisionOutcomes`, episodes, `decisionAssuranceV1`</dd><dt>Owner</dt><dd>Growth</dd></dl>
+            <details><summary>Contract</summary><ul><li>Growth consumes bounded shared events; it never reads merchant DOM.</li><li>Responses are local by default and evidence-labelled.</li><li>Remote delivery, if ever used, is separately consent-gated.</li></ul></details>
+          </article>
+          <article class="component" data-group="onboarding">
+            <div class="component-top"><h3>SettingsDataControls</h3><span class="chip current">Export now</span></div>
+            <p class="summary">The user-facing settings grouping: sites, data & privacy, help and reset.</p>
+            <dl class="meta"><dt>Source</dt><dd>`popup.html/js/css`, reset modules</dd><dt>Reads</dt><dd>Local/sync settings and bounded history</dd><dt>Owner</dt><dd>Onboarding/shared UI</dd></dl>
+            <details><summary>Contract</summary><ul><li>Keep a visible reset and clear data boundary.</li><li>Do not surface retired feature controls.</li><li>Do not package QA tier/test controls as consumer settings.</li></ul></details>
+          </article>
+        </div>
+      </section>
+
+      <section id="order" class="section">
+        <p class="kicker">03 · Extraction order</p>
+        <h2>Use this order to reduce the monolith without changing the product journey.</h2>
+        <p class="section-intro">Extraction is a refactor only when state ownership, DOM IDs, timing, storage and acceptance path remain stable. Do not make visual components own checkout classification or merchant adapters.</p>
+        <article class="export-order"><div class="order-num">01</div><div><h3>Shared tokens and modal shell</h3><p>Extract brand tokens, focus/reduced-motion rules and the cream `.ui-card-alt` shell first. It has no right to change hold, pass or timer state.</p></div><span class="chip verify">Visual regression</span></article>
+        <article class="export-order"><div class="order-num">02</div><div><h3>Observer and Product Pulse surfaces</h3><p>Extract passive strip, soft prompt, active check and tether behind existing event handlers. Preserve current triggers and priority rechecks.</p></div><span class="chip verify">Cadence proof</span></article>
+        <article class="export-order"><div class="order-num">03</div><div><h3>Rationalisation shells</h3><p>Move hold, Rationator, Deliberation, Urgente, cart-edit feedback and outcome cards into visual modules while leaving passes, cart verification and classification in runtime services.</p></div><span class="chip verify">Merchant proof</span></article>
+        <article class="export-order"><div class="order-num">04</div><div><h3>Onboarding and settings</h3><p>Extract site selection and consent cards from current entrypoint. Keep WIP guided-demo files quarantined until explicitly approved for production onboarding.</p></div><span class="chip verify">Consent proof</span></article>
+        <article class="export-order"><div class="order-num">05</div><div><h3>Growth view components</h3><p>Extract pure display components from the existing view models. Keep data selectors, QA provenance and optional delivery outside visual rendering.</p></div><span class="chip verify">Evidence-copy audit</span></article>
+      </section>
+
+      <section id="boundaries" class="section">
+        <p class="kicker">04 · Export boundaries</p>
+        <h2>These are dependencies, not UI components.</h2>
+        <p class="section-intro">Daniella should keep these as explicit services/contracts. A component may receive their prepared state, but must not quietly recreate their authority.</p>
+        <div class="split">
+          <article class="boundary runtime-box"><h3>Keep runtime-only</h3><p>Generic decision logic, merchant uncertainty handling and bounded data contracts stay outside exported visual surfaces.</p><ul><li>Checkout classification, `siteIdentityKey`, brand holds and checkout passes</li><li>`ProductExposureTracker`, cadence eligibility and async surface priority</li><li>`cart-snapshot.js`, native-cart adapters and verified-mutation checks</li><li>`background.js` hydration, alarms, tab cleanup and protected-site injection</li><li>Local storage/events, telemetry allow-list and consent gate</li></ul></article>
+          <article class="boundary exclude-box"><h3>Do not export or ship</h3><p>These may remain in the QA source as isolated test material, but are deliberately outside the user-facing handover.</p><ul><li>QA speed-up button, test/production toggle, Ctrl+D preview and local tier override</li><li>Tests, reports, handovers, scripts and the Morrow guided-demo WIP</li><li>Retired friction modes, scroll stopper, blur/distortion, urgency/promo mute and legacy gates</li><li>Legacy escalation, add-to-cart and coupon overlays unless separately resurrected by a product decision</li><li>Python/vision/AI as a live prompt, hold or permission authority</li></ul></article>
+        </div>
+      </section>
+
+      <section id="proof" class="section">
+        <p class="kicker">05 · Proof and handoff gate</p>
+        <h2>Static code is a map. It is not a shipped interaction.</h2>
+        <p class="section-intro">The current audit supports the source map above. It does not prove onboarding rendering, merchant cart behaviour or `chrome-extension://` UI. Each component handoff carries its own acceptance path.</p>
+        <table class="proof-table"><thead><tr><th>Surface</th><th>Static source status</th><th>Browser proof still required</th></tr></thead><tbody>
+          <tr><td><strong>Onboarding</strong></td><td>Current card flow and local Top Sites boundary read in source.</td><td>Explicit selection, opt-out, reset, production staging and extension-page rendering.</td></tr>
+          <tr><td><strong>Observer + Pulse</strong></td><td>Current timing, threshold, cooldown, priority and tether code read in source.</td><td>Fresh interval, prompt hierarchy, dismissal cooldown, cart growth, placement and five-second deferral on merchant pages.</td></tr>
+          <tr><td><strong>Rationalisation</strong></td><td>Current runtime surfaces and visual shell identified.</td><td>Checkout confidence, reload/subdomain, active-hold Rationator, Deliberation, verified cart edit and Urgente isolation.</td></tr>
+          <tr><td><strong>Growth</strong></td><td>Pure view models and QA provenance paths exist.</td><td>Popup/dashboard rendering, empty state, evidence labels, reset and offline/local behaviour.</td></tr>
+        </tbody></table>
+        <div class="handoff"><h2>Daniella’s component handoff rule</h2><p>Every extracted component needs its source, owner, dependencies, deliberately excluded material, storage/event boundary, validation input and remaining risk recorded before the next contributor inherits it.</p><ol><li>Freeze the runtime contract first.</li><li>Extract one owned visual surface.</li><li>Prove browser behaviour separately.</li></ol></div>
+      </section>
+    </main>
+  </div>
+  <footer class="shell">Cognoscene internal handover · source audit reconciled 2 October 2026 · current code overrides historical sections.</footer>
+  <script>
+    const buttons=[...document.querySelectorAll('.filter')];const cards=[...document.querySelectorAll('.component')];const count=document.querySelector('#component-count');
+    buttons.forEach(button=>button.addEventListener('click',()=>{const filter=button.dataset.filter;buttons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));let shown=0;cards.forEach(card=>{const visible=filter==='all'||card.dataset.group===filter;card.hidden=!visible;if(visible)shown++});count.textContent=`${shown} component surface${shown===1?'':'s'} shown`; }));
+  </script>
+</body>
+</html>
