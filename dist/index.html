@@ -3,27 +3,637 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Cognoscene.">
-  <title>Cognoscene</title>
+  <meta name="description" content="Cognoscene developer handover workspace for Daniella.">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>Cognoscene · Daniella handover</title>
   <style>
-    :root { color-scheme: light; }
-    * { box-sizing: border-box; }
-    body {
-      display: grid;
-      min-height: 100vh;
-      margin: 0;
-      place-items: center;
-      background: #fbfaf7;
-      color: #171814;
-      font: 600 1rem/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    :root {
+      color-scheme: light;
+      --ink: #171b22;
+      --muted: #707782;
+      --line: #dfe3e8;
+      --paper: #f7f8fa;
+      --panel: #fff;
+      --new: #20a86b;
+      --changed: #3478df;
+      --historical: #dc8430;
+      --retained: #8a929d;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
     }
-    main { padding: 2rem; text-align: center; }
-    p { margin: 0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; background: var(--paper); color: var(--ink); }
+    button, summary { font: inherit; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem clamp(1rem, 4vw, 3.5rem); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.82); }
+    .brand { display: flex; align-items: center; gap: .75rem; font-weight: 650; letter-spacing: -.02em; }
+    .brand-mark { width: .65rem; height: .65rem; border-radius: 50%; background: var(--ink); }
+    .top-meta { display: flex; align-items: center; gap: .7rem; color: var(--muted); font-size: .875rem; }
+    .draft { padding: .25rem .55rem; border: 1px solid var(--line); border-radius: 999px; color: #505864; background: #fff; }
+    .sound-toggle { min-height: 1.9rem; padding: .28rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: #505864; cursor: pointer; font-size: .76rem; }
+    .sound-toggle[aria-pressed="true"] { border-color: #8b949f; color: var(--ink); }
+    .sound-toggle:disabled { color: #89909a; background: #f2f3f5; cursor: not-allowed; }
+    main { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: clamp(1.5rem, 4vw, 3.25rem) 0 4rem; }
+    .intro { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 1.25rem; }
+    h1 { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.12; letter-spacing: -.04em; font-weight: 620; }
+    .intro p { margin: .4rem 0 0; color: var(--muted); font-size: .95rem; }
+    .legend { display: flex; flex-wrap: wrap; gap: .6rem 1.1rem; margin: 1.25rem 0 1rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--panel); }
+    .legend-item { display: inline-flex; align-items: center; gap: .45rem; color: #4e5661; font-size: .875rem; }
+    .dot { width: .62rem; height: .62rem; border-radius: 50%; background: var(--retained); }
+    .dot.new { background: var(--new); }
+    .dot.changed { background: var(--changed); }
+    .dot.historical { background: var(--historical); }
+    .shape-guide { margin-left: auto; }
+    .shape-guide summary { cursor: pointer; color: #4e5661; font-size: .875rem; }
+    .shape-guide[open] { flex-basis: 100%; }
+    .shape-list { display: flex; flex-wrap: wrap; gap: .55rem; padding-top: .7rem; }
+    .shape-chip { padding: .3rem .55rem; border: 1px solid var(--line); border-radius: .45rem; color: var(--muted); font-size: .8rem; }
+    .compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .flow-panel { min-width: 0; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); }
+    .flow-heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .9rem; }
+    .flow-heading h2 { margin: 0; font-size: 1rem; font-weight: 620; }
+    .version-tag { padding: .22rem .5rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .75rem; white-space: nowrap; }
+    .flow-placeholder { display: grid; min-height: 13rem; place-content: center; gap: .45rem; padding: 1rem; border: 1px dashed #cbd1d9; border-radius: .75rem; text-align: center; color: var(--muted); }
+    .flow-placeholder strong { color: #535c68; font-size: .95rem; font-weight: 560; }
+    .flow-placeholder span { font-size: .85rem; }
+    .flow-map { display: grid; justify-items: center; gap: .38rem; }
+    .flow-node { position: relative; display: flex; align-items: center; justify-content: space-between; gap: .6rem; width: min(100%, 23rem); min-height: 2.5rem; padding: .52rem .72rem; border: 1px solid #cbd1d9; background: #fff; color: var(--ink); text-align: left; cursor: pointer; transition: box-shadow .22s ease, border-color .22s ease, transform .22s ease, background-color .22s ease; }
+    .flow-node:hover { transform: translateY(-1px); }
+    .flow-node--start { border-radius: 999px; }
+    .flow-node--process { border-radius: .55rem; }
+    .flow-node--decision { width: min(100%, 20rem); min-height: 3rem; border-radius: 0; padding: .72rem 1.25rem; clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); }
+    .flow-node--state { border-radius: .35rem; clip-path: polygon(5% 0,100% 0,95% 100%,0 100%); padding-inline: 1.1rem; }
+    .flow-node--action { border-radius: 999px; }
+    .flow-node--fallback { border-style: dashed; border-radius: .55rem; }
+    .flow-node.is-retained { border-color: color-mix(in srgb, var(--retained) 58%, white); }
+    .flow-node.is-new { border-color: color-mix(in srgb, var(--new) 68%, white); }
+    .flow-node.is-changed { border-color: color-mix(in srgb, var(--changed) 68%, white); }
+    .flow-node.is-historical { border-color: color-mix(in srgb, var(--historical) 70%, white); }
+    .flow-label { font-size: .9rem; font-weight: 560; }
+    .flow-status { flex: 0 0 auto; color: var(--muted); font-size: .7rem; font-weight: 550; }
+    .is-new .flow-status { color: #137447; }
+    .is-changed .flow-status { color: #245eb5; }
+    .is-historical .flow-status { color: #a65d18; }
+    .flow-sidebrow { flex: 0 0 auto; color: #58616c; font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+    .flow-connector { height: .8rem; color: #9299a2; font-size: .75rem; line-height: .8rem; }
+    .branch-label { width: min(100%, 23rem); margin: .28rem 0 0; color: var(--muted); font-size: .75rem; text-align: left; }
+    .branch-row { display: grid; width: 100%; gap: .4rem; }
+    .branch-row .flow-node { width: 100%; min-height: 2.85rem; }
+    .flow-note { width: min(100%, 23rem); padding: .55rem .7rem; border: 1px dashed #d2d7de; border-radius: .55rem; color: var(--muted); font-size: .78rem; }
+    .flow-node:focus-visible { z-index: 1; outline: 3px solid rgba(52,120,223,.32); outline-offset: 2px; }
+    .flow-node.is-open { z-index: 1; animation: nodeReveal .42s cubic-bezier(.2,.8,.2,1) both; }
+    .flow-node.is-open.is-new { --node-glow: rgba(32,168,107,.4); box-shadow: 0 0 0 1px rgba(32,168,107,.45),0 0 0 4px rgba(32,168,107,.12),0 0 23px var(--node-glow); }
+    .flow-node.is-open.is-changed { --node-glow: rgba(52,120,223,.4); box-shadow: 0 0 0 1px rgba(52,120,223,.48),0 0 0 4px rgba(52,120,223,.12),0 0 23px var(--node-glow); }
+    .flow-node.is-open.is-historical { --node-glow: rgba(220,132,48,.44); box-shadow: 0 0 0 1px rgba(220,132,48,.5),0 0 0 4px rgba(220,132,48,.14),0 0 23px var(--node-glow); }
+    .flow-node.is-open.is-retained { --node-glow: rgba(138,146,157,.36); box-shadow: 0 0 0 1px rgba(138,146,157,.45),0 0 0 4px rgba(138,146,157,.1),0 0 18px var(--node-glow); }
+    .flow-node.is-closing { animation: nodeSettle .18s ease both; }
+    @keyframes nodeReveal { from { opacity: .65; transform: translateY(3px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes nodeSettle { to { box-shadow: none; transform: translateY(0) scale(1); } }
+    @keyframes chainReveal { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes chainCollapse { to { opacity: 0; transform: translateY(-5px); } }
+    @keyframes connectorDraw { from { opacity: .2; transform: scaleY(.2); } to { opacity: 1; transform: scaleY(1); } }
+    @keyframes workspaceReveal { from { opacity: .55; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .feature-chain { width: min(100%, 23rem); padding: .2rem .65rem .45rem; border-left: 2px solid var(--tone, var(--retained)); transform-origin: top; }
+    .feature-chain ol { display: grid; gap: .34rem; margin: 0; padding: 0; list-style: none; }
+    .chain-step { display: grid; grid-template-columns: 6.2rem minmax(0,1fr); gap: .55rem; padding: .42rem .5rem; border: 1px solid #e8ebef; border-radius: .45rem; background: #fbfcfd; animation: chainReveal .28s ease both; animation-delay: calc(var(--step-index, 0) * 42ms); }
+    .feature-chain.is-closing { animation: chainCollapse .18s ease both; pointer-events: none; }
+    .flow-connector.connector-draw { transform-origin: top; animation: connectorDraw .28s ease both; }
+    .chain-step-label { color: #58616c; font-size: .74rem; font-weight: 620; }
+    .chain-step-text { min-width: 0; color: #252b33; font-size: .8rem; line-height: 1.4; }
+    .feature-chain[data-status="new"] { --tone: var(--new); }
+    .feature-chain[data-status="changed"] { --tone: var(--changed); }
+    .feature-chain[data-status="historical"] { --tone: var(--historical); }
+    .feature-chain[data-status="retained"] { --tone: var(--retained); }
+    .workspace { margin-top: 1rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); }
+    .workspace-head { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; }
+    .workspace h2 { margin: 0; font-size: 1rem; font-weight: 620; }
+    .workspace-state { color: var(--muted); font-size: .8rem; }
+    .workspace-placeholder { margin: .8rem 0 0; padding: .8rem 0 0; border-top: 1px solid #edf0f3; color: var(--muted); font-size: .9rem; }
+    .feature-content { display: grid; gap: .65rem; margin-top: .8rem; padding-top: .8rem; border-top: 1px solid #edf0f3; animation: workspaceReveal .28s ease both; }
+    .feature-purpose { margin: 0; color: #3f4752; font-size: .92rem; }
+    .handover-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .5rem; }
+    .handover-field { min-width: 0; padding: .62rem .7rem; border: 1px solid #e8ebef; border-radius: .55rem; background: #fbfcfd; }
+    .handover-field h3 { margin: 0 0 .22rem; color: #58616c; font-size: .72rem; font-weight: 650; letter-spacing: .03em; text-transform: uppercase; }
+    .handover-field p { margin: 0; color: #313842; font-size: .82rem; line-height: 1.4; }
+    .handover-field--wide { grid-column: 1 / -1; }
+    .not-selected { margin: .8rem 0 0; padding: .8rem 0 0; border-top: 1px solid #edf0f3; color: var(--muted); font-size: .9rem; }
+    .release { margin-top: 1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--panel); }
+    .release summary { padding: .9rem 1rem; cursor: pointer; color: #424a54; font-size: .925rem; font-weight: 550; }
+    .release p { margin: 0; padding: 0 1rem 1rem; color: var(--muted); font-size: .875rem; }
+    .boundary-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; padding: 0 1rem 1rem; }
+    .boundary-list div { display: grid; gap: .2rem; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: .65rem; background: #fff; }
+    .boundary-list strong { color: #424a54; font-size: .825rem; }
+    .boundary-list span { color: var(--muted); font-size: .8rem; line-height: 1.45; }
+    :focus-visible { outline: 3px solid rgba(52,120,223,.38); outline-offset: 3px; }
+    @media (max-width: 720px) {
+      .topbar { flex-wrap: wrap; }
+      .top-meta { margin-left: auto; flex-wrap: wrap; justify-content: flex-end; gap: .45rem; }
+      .compare { grid-template-columns: 1fr; }
+      .flow-placeholder { min-height: 9rem; }
+      .shape-guide { margin-left: 0; }
+      .intro { align-items: start; flex-direction: column; }
+      .boundary-list { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
   </style>
 </head>
 <body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>Cognoscene</span></div>
+    <div class="top-meta"><span>Daniella handover</span><span class="draft">Draft</span><button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false" aria-label="Turn reveal sounds on" title="Optional original reveal sound · off by default">Sound off</button></div>
+  </header>
   <main>
-    <p>Cognoscene</p>
+    <section aria-labelledby="journey-title">
+      <div class="intro">
+        <div>
+          <h1 id="journey-title">Shopping journey</h1>
+          <p>Beta 1.2 → Current V2</p>
+        </div>
+      </div>
+      <div class="legend" aria-label="Flowchart legend">
+        <span class="legend-item"><i class="dot new" aria-hidden="true"></i>New</span>
+        <span class="legend-item"><i class="dot changed" aria-hidden="true"></i>Changed</span>
+        <span class="legend-item"><i class="dot historical" aria-hidden="true"></i>Historical</span>
+        <span class="legend-item"><i class="dot" aria-hidden="true"></i>Retained</span>
+        <details class="shape-guide">
+          <summary>Shape meanings</summary>
+          <div class="shape-list">
+            <span class="shape-chip">Rounded · start/end</span>
+            <span class="shape-chip">Rectangle · process</span>
+            <span class="shape-chip">Diamond · decision</span>
+            <span class="shape-chip">Parallelogram · state/event</span>
+            <span class="shape-chip">Pill · user action</span>
+            <span class="shape-chip">Dashed · fallback/unknown</span>
+          </div>
+        </details>
+      </div>
+      <div class="compare">
+        <section class="flow-panel" aria-labelledby="beta-title">
+          <div class="flow-heading"><h2 id="beta-title">Beta 1.2</h2><span class="version-tag">Historical · manifest 1.0</span></div>
+          <div class="flow-map" aria-label="Historical Beta 1.2 shopping journey">
+            <button class="flow-node flow-node--start is-retained" type="button" data-feature="beta-onboarding" aria-expanded="false"><span class="flow-label">Onboarding</span><span class="flow-status">Baseline</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <div class="flow-node flow-node--process is-retained"><span class="flow-label">Browse monitored shop</span><span class="flow-status">Retained</span></div>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <div class="flow-node flow-node--process is-retained"><span class="flow-label">Checkout attempt</span><span class="flow-status">Retained</span></div>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <button class="flow-node flow-node--process is-historical" type="button" data-feature="beta-hold" aria-expanded="false"><span class="flow-label">48-hour hold</span><span class="flow-status">Historical</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <div class="branch-label">During the hold</div>
+            <div class="branch-row">
+              <button class="flow-node flow-node--action is-historical" type="button" data-feature="beta-urgente" aria-expanded="false"><span class="flow-label">Urgente typing challenge</span><span class="flow-status">Historical</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+              <div class="flow-node flow-node--process is-historical"><span class="flow-label">Wait 48 hours</span><span class="flow-status">Historical</span></div>
+            </div>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <div class="flow-node flow-node--decision is-historical"><span class="flow-label">Buy or drop</span><span class="flow-status">Historical</span></div>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <button class="flow-node flow-node--process is-historical" type="button" data-feature="beta-cart-clear" aria-expanded="false"><span class="flow-label">Drop could clear the merchant cart</span><span class="flow-status">Historical</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+          </div>
+        </section>
+        <section class="flow-panel" aria-labelledby="current-title">
+          <div class="flow-heading"><h2 id="current-title">Current V2</h2><span class="version-tag">Current · 1.4.103</span></div>
+          <div class="flow-map" aria-label="Current V2 shopping journey">
+            <button class="flow-node flow-node--start is-changed" type="button" data-feature="onboarding" aria-expanded="false"><span class="flow-label">Onboarding</span><span class="flow-status">Changed</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <div class="flow-node flow-node--process is-retained"><span class="flow-label">Browse a protected shop</span><span class="flow-status">Retained</span></div>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <button class="flow-node flow-node--process is-new" type="button" data-feature="observer" aria-expanded="false"><span class="flow-label">Observer · browsing cue</span><span class="flow-status">New</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <button class="flow-node flow-node--process is-new" type="button" data-feature="product-pulse" aria-expanded="false"><span class="flow-label">Product Pulse · cart cue</span><span class="flow-status">New</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <div class="flow-node flow-node--process is-retained"><span class="flow-label">Checkout attempt</span><span class="flow-status">Retained</span></div>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <button class="flow-node flow-node--process is-changed" type="button" data-feature="rationalisation" aria-expanded="false"><span class="flow-label">24-hour Rationalisation hold</span><span class="flow-status">Changed</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <div class="branch-label">While the hold is active</div>
+            <div class="branch-row">
+              <button class="flow-node flow-node--action is-new" type="button" data-feature="rationator" aria-expanded="false"><span class="flow-label">Rationator pause</span><span class="flow-status">New</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+              <button class="flow-node flow-node--action is-changed" type="button" data-feature="urgente" aria-expanded="false"><span class="flow-label">Urgente challenge · temporary pass</span><span class="flow-status">Changed</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+              <div class="flow-node flow-node--process is-changed"><span class="flow-label">Wait 24 hours</span><span class="flow-status">Changed</span></div>
+            </div>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <button class="flow-node flow-node--process is-changed" type="button" data-feature="deliberation" aria-expanded="false"><span class="flow-label">24-hour Deliberation window</span><span class="flow-status">Changed</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <div class="branch-label">User chooses what happens next</div>
+            <div class="branch-row">
+              <button class="flow-node flow-node--action is-new" type="button" data-feature="cart-edit" aria-expanded="false"><span class="flow-label">Edit selected cart items</span><span class="flow-status">New</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+              <div class="flow-node flow-node--action is-changed"><span class="flow-label">Continue to checkout or drop</span><span class="flow-status">Changed</span></div>
+            </div>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <button class="flow-node flow-node--process is-changed" type="button" data-feature="growth" aria-expanded="false"><span class="flow-label">Growth · factual decision record</span><span class="flow-status">Changed</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+            <span class="flow-connector" aria-hidden="true">↓</span>
+            <button class="flow-node flow-node--process is-new" type="button" data-feature="decision-assurance" aria-expanded="false"><span class="flow-label">Decision Assurance</span><span class="flow-status">New</span><span class="flow-sidebrow">Click to reveal ›</span></button>
+          </div>
+        </section>
+      </div>
+    </section>
+    <section class="workspace" aria-labelledby="workspace-title">
+      <div class="workspace-head"><h2 id="workspace-title">Feature handover</h2><span class="workspace-state" id="workspace-state">No feature selected</span></div>
+      <div id="feature-content" aria-live="polite"><p class="not-selected">Select a flowchart node to view its feature, component and implementation notes.</p></div>
+    </section>
+    <details class="release">
+      <summary>Boundaries &amp; release decisions</summary>
+      <div class="boundary-list" aria-label="System boundaries">
+        <div><strong>Python</strong><span>Shadow-only analysis; no live intervention authority.</span></div>
+        <div><strong>Vision</strong><span>DOM-failure fallback only; not continuous screen observation and cannot decide live friction.</span></div>
+      </div>
+      <p>Release decisions · placeholder pending audit.</p>
+    </details>
   </main>
+  <script>
+    (() => {
+      const features = {
+        'beta-onboarding': {
+          label: 'Beta 1.2 · Onboarding', status: 'historical', proof: 'Historical · Beta folder label; manifest says 1.0.',
+          purpose: 'Historical onboarding preview screens; site setup happened outside the static tour.', owner: 'Historical reference only',
+          export: 'Not exportable. Historical source only.', implementation: 'Placeholder · no current implementation batch.',
+          boundary: 'Do not transfer preview values or old setup assumptions.',
+          chain: [
+            ['Trigger', 'First run when onboarding is not marked complete.'],
+            ['Eligibility / state read', 'Read onboarding completion. Real protected-site choice is not made in the preview screens.'],
+            ['UI', 'Welcome → static site preview → 48-hour hold preview → fictional savings sample → Urgente preview → completion.'],
+            ['User action', 'Move through, go back, skip or finish the preview.'],
+            ['State / event write', 'Mark onboarding complete; configure protected sites separately.'],
+            ['Next state', 'The extension proceeds to its separate site settings and checkout monitoring.'],
+            ['Cooldown / reset / fallback', 'Skip completes the tour; the source folder is labelled Beta 1.2 but its manifest is 1.0.']
+          ]
+        },
+        'beta-hold': {
+          label: 'Beta 1.2 · Checkout hold', status: 'historical', proof: 'Historical · Beta source inspection.',
+          purpose: 'Paused a qualifying checkout before offering the later decision window.', owner: 'Historical reference only',
+          export: 'Not exportable. Historical source only.', implementation: 'Placeholder · no current implementation batch.',
+            boundary: 'Historical production mode used a 48-hour hold and 24-hour decision window; this folder’s manifest says 1.0.',
+          chain: [
+            ['Trigger', 'A checkout action on a configured protected domain.'],
+            ['Eligibility / state read', 'Read protected domains and the existing per-domain hold timestamp; uncertain state avoids interception.'],
+            ['UI', 'Show a 48-hour countdown and a monthly Urgente option.'],
+            ['User action', 'Wait, or complete the typed Urgente challenge; after the hold, choose buy or drop.'],
+            ['State / event write', 'Write the hold timestamp; record the Urgente use or a drop only after the legacy clear flow confirms an empty cart.'],
+            ['Next state', 'A 24-hour decision window follows the hold; legacy Drop starts merchant-cart clearing.'],
+            ['Cooldown / reset / fallback', 'The old timestamp expires after the hold and decision window; storage/classification uncertainty fails open.']
+          ]
+        },
+        'beta-urgente': {
+          label: 'Beta 1.2 · Urgente', status: 'historical', proof: 'Historical · Beta source inspection.',
+          purpose: 'Historical typed challenge that could open a faster checkout route.', owner: 'Historical reference only',
+          export: 'Not exportable. Historical source only.', implementation: 'Placeholder · no current implementation batch.',
+          boundary: 'The old monthly typing-test contract is not the current contract.',
+          chain: [
+            ['Trigger', 'The user chooses Urgente from the active checkout pause.'],
+            ['Eligibility / state read', 'Read monthly usage; the old flow allows one use per month.'],
+            ['UI', 'Show the typing challenge and prevent paste.'],
+            ['User action', 'Type the full challenge accurately and submit, or return to the pause.'],
+            ['State / event write', 'Increment monthly usage and grant the historical session checkout bypass.'],
+            ['Next state', 'Checkout becomes available in that page session.'],
+            ['Cooldown / reset / fallback', 'Usage resets monthly; an incomplete or inaccurate challenge leaves the pause in place.']
+          ]
+        },
+        'beta-cart-clear': {
+          label: 'Beta 1.2 · Drop / cart clearing', status: 'historical', proof: 'Historical · Beta source inspection.',
+          purpose: 'The old Drop route could automatically remove items from the merchant cart.', owner: 'Historical reference only',
+          export: 'Not exportable. Automatic cart clearing is retired.', implementation: 'Placeholder · do not rebuild this path.',
+          boundary: 'Current Cognoscene must leave the merchant cart untouched when a person records a drop.',
+          chain: [
+            ['Trigger', 'The user chooses Drop at the end of the historical decision window.'],
+            ['Eligibility / state read', 'Read the captured cart snapshot and current cart-page context.'],
+            ['UI', 'Ask for confirmation, then show progress while the flow opens and edits the merchant cart.'],
+            ['User action', 'Confirm the clear; Cognoscene then attempts merchant-side item removal.'],
+            ['State / event write', 'Record a drop only after the merchant cart appears empty.'],
+            ['Next state', 'Clear the old Cognoscene hold and show a success or failure result.'],
+            ['Cooldown / reset / fallback', 'If cart clearing is unsupported or unverified, report failure and do not record a successful drop.']
+          ]
+        },
+        onboarding: {
+          label: 'Onboarding', status: 'changed', proof: 'Verified current · source inspection; browser flow not verified here.',
+          purpose: 'Sets the shopping sites and preferences Cognoscene should use.', owner: 'Onboarding',
+          export: 'Placeholder · production files, dependencies and QA exclusions pending component audit.', implementation: 'Placeholder · implementation batch and focused checks pending.',
+          boundary: 'Suggested Top Sites need opt-in and explicit user selection; Python and Vision are not onboarding authorities.',
+          chain: [
+            ['Trigger', 'Fresh install or onboarding not yet completed.'],
+            ['Eligibility / state read', 'Read onboarding completion, existing settings and optional Top Sites consent.'],
+            ['UI', 'Welcome → select protected sites → 24-hour hold preview → factual Growth preview → ready, privacy and toolbar guidance. A guided-demo hook is also present; its release status is unresolved.'],
+            ['User action', 'Add at least one site to finish; optionally request local Top Sites suggestions and choose which sites to protect, or skip.'],
+            ['State / event write', 'Save protected sites and settings; write completion/skip state. Recognised Top Sites remain local.'],
+            ['Next state', 'The chosen sites become eligible for browsing and checkout flows.'],
+            ['Cooldown / reset / fallback', 'Consent off or unavailable Top Sites leaves manual entry; no selected site prevents normal completion, while skip remains available.']
+          ]
+        },
+        observer: {
+          label: 'Observer', status: 'new', proof: 'Verified current · source inspection; browser cadence not verified here.',
+          purpose: 'Offers a pause during qualifying browsing on a protected shop.', owner: 'Observer',
+          export: 'Observer component · production files, dependencies and QA exclusions pending map.', implementation: 'Placeholder · implementation batch and focused checks pending.',
+          boundary: 'Exposure state is local; remote Observer telemetry is optional and consent-gated.',
+          chain: [
+            ['Trigger', 'Protected-shop browsing arms Observer after the current entry and engagement thresholds.'],
+            ['Eligibility / state read', 'Read local exposure/session state; require a fresh qualifying active minute, scroll and pause conditions.'],
+            ['UI', 'Show the next Observer prompt; later prompts add a specific-need check.'],
+            ['User action', 'Choose to leave for now or continue browsing; an explicit exit can be followed by genuine returns.'],
+            ['State / event write', 'Update bounded local episode/recurrence state; send only eligible events when telemetry consent is on.'],
+            ['Next state', 'Continue browsing or exit; after five genuine returns in the rolling window, show the central check-in.'],
+            ['Cooldown / reset / fallback', 'Use a 60-second prompt cooldown and rolling 24-hour re-entry episode; stale or uncertain exposure does not prompt.']
+          ]
+        },
+        'product-pulse': {
+          label: 'Product Pulse', status: 'new', proof: 'Verified current · source inspection; merchant behavior not verified here.',
+          purpose: 'Adds a cart-specific cue after confirmed additions reach the current threshold.', owner: 'Observer',
+          export: 'Product Pulse component · production files, dependencies and QA exclusions pending map.', implementation: 'Placeholder · implementation batch and focused checks pending.',
+          boundary: 'Bounded local cart-count events only; do not send cart contents or add checkout-hold logic.',
+          chain: [
+            ['Trigger', 'A recent add-to-cart intent is followed by a rendered cart-count increase to seven or more.'],
+            ['Eligibility / state read', 'Read the saved count baseline, fresh intent, active overlays and 60-second cooldown. Unconfirmed count changes only reset the baseline.'],
+            ['UI', 'Show a cart-anchored prompt; show value only when its evidence is safe.'],
+            ['User action', 'Review the cart or keep browsing.'],
+            ['State / event write', 'Write bounded local events under the Product Pulse state contract.'],
+            ['Next state', 'Return to shopping; queue Observer if needed after Product Pulse closes.'],
+            ['Cooldown / reset / fallback', 'Coalesce rapid additions; wait 60 seconds before another pulse and defer Observer for five seconds after dismissal.']
+          ]
+        },
+        rationalisation: {
+          label: 'Rationalisation', status: 'changed', proof: 'Verified current · source inspection; merchant coverage not verified here.',
+          purpose: 'Starts a deliberate hold at the first qualifying checkout attempt.', owner: 'Rationalisation',
+          export: 'Rationalisation package · production files, dependencies and QA exclusions pending map.', implementation: 'Placeholder · implementation batch and focused checks pending.',
+          boundary: 'Uncertain checkout classification fails open; browsing and adding to cart remain available.',
+          chain: [
+            ['Trigger', 'The first qualifying checkout attempt on a protected brand.'],
+            ['Eligibility / state read', 'Read protected-site settings, active hold/window, checkout pass and confidence of the checkout signal.'],
+            ['UI', 'Show the 24-hour hold and its countdown with the user-controlled wait and Urgente choices.'],
+            ['User action', 'Give the decision time, choose Urgente if eligible, or use the separate Rationator pause.'],
+            ['State / event write', 'Persist the brand-scoped hold start and record the hold impression.'],
+            ['Next state', 'Keep the hold active; after expiry, open Deliberation. Urgente creates its separate pass.'],
+            ['Cooldown / reset / fallback', 'One active hold per brand; explicit passes and expiry govern reset. Uncertain classification fails open.']
+          ]
+        },
+        rationator: {
+          label: 'Rationator', status: 'new', proof: 'Verified current · source inspection; browser path not verified here.',
+          purpose: 'Offers an additional pause and return route during an active Rationalisation hold.', owner: 'Rationator',
+          export: 'Rationator component · production files, dependencies and QA exclusions pending map.', implementation: 'Placeholder · implementation batch and focused checks pending.',
+          boundary: 'A pause does not grant checkout permission or change the hold clock; choices/text stay local.',
+          chain: [
+            ['Trigger', 'The user chooses “take a pause” from the hold reminder or an eligible return route.'],
+            ['Eligibility / state read', 'Read active brand hold, expiry and per-tab return eligibility.'],
+            ['UI', 'Show the central pause flow and a compact return card; optional hobby/work branches stay within Rationator.'],
+            ['User action', 'Choose a route or browse, then return through the card when ready.'],
+            ['State / event write', 'Update bounded local/tab return availability; no checkout pass is created.'],
+            ['Next state', 'Close the reflection surface and resume the same active hold.'],
+            ['Cooldown / reset / fallback', 'Clear return availability on hold expiry, pass, or invalid state; if the surface fails, the hold remains authoritative.']
+          ]
+        },
+        urgente: {
+          label: 'Urgente', status: 'changed', proof: 'Verified current · source inspection; browser path not verified here.',
+          purpose: 'Offers a typed, time-limited route to checkout for a user who chooses it.', owner: 'Rationalisation',
+          export: 'Urgente · production files, dependencies and QA exclusions pending map.', implementation: 'Placeholder · implementation batch and focused checks pending.',
+          boundary: 'Monthly eligibility; a brand-scoped 12-hour checkout-only pass does not suppress Observer or Product Pulse.',
+          chain: [
+            ['Trigger', 'The user chooses Urgente on the active hold.'],
+            ['Eligibility / state read', 'Read monthly usage and current brand pass; refuse if the monthly use is exhausted.'],
+            ['UI', 'Show the typed challenge and its submit/return choices.'],
+            ['User action', 'Complete and submit the challenge or return to the hold.'],
+            ['State / event write', 'Record monthly use and grant a 12-hour brand-scoped checkout pass.'],
+            ['Next state', 'Checkout is available for that brand while the pass remains active.'],
+            ['Cooldown / reset / fallback', 'Monthly usage resets; failed typing leaves the hold. If persistence fails, checkout may remain available only in-session.']
+          ]
+        },
+        deliberation: {
+          label: 'Deliberation', status: 'changed', proof: 'Verified current · source inspection; merchant coverage not verified here.',
+          purpose: 'Opens a 24-hour decision window after the hold.', owner: 'Rationalisation',
+          export: 'Deliberation · production files, dependencies and QA exclusions pending map.', implementation: 'Placeholder · implementation batch and focused checks pending.',
+          boundary: 'User retains the choice; a drop does not clear the merchant cart.',
+          chain: [
+            ['Trigger', 'The brand-scoped 24-hour hold expires.'],
+            ['Eligibility / state read', 'Read hold age, decision-window expiry, explicit checkout pass and any verified cart-edit receipt.'],
+            ['UI', 'Show the 24-hour window with selected-item edit, explicit continue and drop choices.'],
+            ['User action', 'Edit items manually, explicitly confirm checkout, or record a drop.'],
+            ['State / event write', 'Write the explicit decision outcome; buy creates a bounded checkout re-entry pass.'],
+            ['Next state', 'Return to checkout after explicit buy; otherwise keep the merchant cart and show the recorded choice.'],
+            ['Cooldown / reset / fallback', 'Window expiry clears Cognoscene’s hold. Failed outcome logging does not block an explicit checkout choice.']
+          ]
+        },
+        'cart-edit': {
+          label: 'Native cart editing', status: 'new', proof: 'Verified current · source inspection; merchant-wide behavior not verified here.',
+          purpose: 'Lets the user change selected items directly on the merchant’s own cart page.', owner: 'Rationalisation',
+          export: 'Cart snapshot/edit receipt components · production files and dependencies pending map.', implementation: 'Placeholder · supported-merchant matrix and focused checks pending.',
+          boundary: 'Cognoscene does not click merchant remove controls; only verified changes create a receipt.',
+          chain: [
+            ['Trigger', 'The user chooses “edit specific items” during Deliberation.'],
+            ['Eligibility / state read', 'Read a bounded cart snapshot and same-brand/tab review state.'],
+            ['UI', 'Open the merchant’s cart for the user to edit; Cognoscene does not mutate items.'],
+            ['User action', 'Remove or adjust items on the merchant’s page, then return through checkout.'],
+            ['State / event write', 'Compare settled before/after count and total; keep only a bounded verified receipt.'],
+            ['Next state', 'Reopen the same Deliberation window and show only verified cart changes.'],
+            ['Cooldown / reset / fallback', 'Consume the receipt once; unsupported or uncertain comparison gives no reduction claim and does not block explicit checkout.']
+          ]
+        },
+        growth: {
+          label: 'Growth', status: 'changed', proof: 'Verified current · source inspection; outcomes are not efficacy proof.',
+          purpose: 'Summarises bounded decision records in factual language.', owner: 'Growth',
+          export: 'Growth component · production files, dependencies and QA exclusions pending map.', implementation: 'Placeholder · implementation batch and focused checks pending.',
+          boundary: 'No causal savings, prevented-purchase, regret-reduction or behavioural-efficacy claims.',
+          chain: [
+            ['Trigger', 'A current decision outcome becomes available to the local Growth view.'],
+            ['Eligibility / state read', 'Read bounded local events and same-journey evidence; exclude QA/fast-forward from production presentation.'],
+            ['UI', 'Show factual decision history and eligible counters; omit unsupported monetary values.'],
+            ['User action', 'Review or leave the summary.'],
+            ['State / event write', 'The view reads existing records; it does not infer a purchase or savings event.'],
+            ['Next state', 'Return to the extension dashboard or shopping journey.'],
+            ['Cooldown / reset / fallback', 'Missing or weak evidence suppresses the number; local records remain authoritative if optional sync is unavailable.']
+          ]
+        },
+        'decision-assurance': {
+          label: 'Decision Assurance', status: 'new', proof: 'Verified current · source inspection; prompt timing not browser-verified here.',
+          purpose: 'Offers an optional local check-in linked to an explicit decision outcome.', owner: 'Growth',
+          export: 'Decision Assurance · production files, dependencies and QA exclusions pending map.', implementation: 'Placeholder · implementation batch and consent checks pending.',
+          boundary: 'No product, URL, page text or free-text reflection; any remote telemetry remains consent-gated.',
+          chain: [
+            ['Trigger', 'A supported explicit decision outcome creates an eligible follow-up record.'],
+            ['Eligibility / state read', 'Read local pending check-ins and their linked opaque outcome ID.'],
+            ['UI', 'Offer a short optional response or dismissal.'],
+            ['User action', 'Choose a response or dismiss the prompt.'],
+            ['State / event write', 'Store the bounded response locally; send eligible telemetry only under existing consent.'],
+            ['Next state', 'Close the check-in and leave the original decision outcome intact.'],
+            ['Cooldown / reset / fallback', 'Response/dismissal resolves the pending item; missing outcome or local storage leaves the prompt absent.']
+          ]
+        }
+      };
+
+      const workspaceState = document.getElementById('workspace-state');
+      const featureContent = document.getElementById('feature-content');
+      const soundToggle = document.getElementById('sound-toggle');
+      const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const AudioContextType = window.AudioContext || window.webkitAudioContext;
+      let audioContext = null;
+      let soundEnabled = false;
+      let activeNode = null;
+
+      if (reducedMotion) {
+        soundToggle.disabled = true;
+        soundToggle.title = 'Sound is unavailable while reduced motion is enabled.';
+        soundToggle.setAttribute('aria-label', 'Reveal sound unavailable because reduced motion is enabled');
+      } else if (!AudioContextType) {
+        soundToggle.disabled = true;
+        soundToggle.title = 'This browser does not support the optional reveal sound.';
+        soundToggle.setAttribute('aria-label', 'Reveal sound unavailable in this browser');
+      }
+
+      soundToggle.addEventListener('click', () => {
+        if (soundToggle.disabled) return;
+        soundEnabled = !soundEnabled;
+        soundToggle.setAttribute('aria-pressed', String(soundEnabled));
+        soundToggle.textContent = soundEnabled ? 'Sound on' : 'Sound off';
+        soundToggle.setAttribute('aria-label', soundEnabled ? 'Turn reveal sounds off' : 'Turn reveal sounds on');
+        if (soundEnabled && !audioContext) {
+          try { audioContext = new AudioContextType(); } catch (_) {
+            soundEnabled = false;
+            soundToggle.disabled = true;
+            soundToggle.title = 'The optional reveal sound could not start in this browser.';
+            soundToggle.setAttribute('aria-label', 'Reveal sound unavailable in this browser');
+          }
+          soundToggle.setAttribute('aria-pressed', String(soundEnabled));
+          soundToggle.textContent = soundEnabled ? 'Sound on' : 'Sound off';
+        }
+      });
+
+      function playRevealSound(opening) {
+        if (!soundEnabled || reducedMotion || !audioContext) return;
+        try {
+          if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
+          const now = audioContext.currentTime;
+          const master = audioContext.createGain();
+          master.gain.setValueAtTime(0.0001, now);
+          master.gain.exponentialRampToValueAtTime(0.028, now + 0.02);
+          master.gain.exponentialRampToValueAtTime(0.0001, now + 0.36);
+          master.connect(audioContext.destination);
+
+          const tones = [
+            { type: 'triangle', from: opening ? 210 : 620, to: opening ? 620 : 210, level: 0.72, delay: 0 },
+            { type: 'sine', from: opening ? 930 : 1320, to: opening ? 1480 : 760, level: 0.16, delay: 0.035 }
+          ];
+          tones.forEach((tone) => {
+            const oscillator = audioContext.createOscillator();
+            const level = audioContext.createGain();
+            oscillator.type = tone.type;
+            oscillator.frequency.setValueAtTime(tone.from, now + tone.delay);
+            oscillator.frequency.exponentialRampToValueAtTime(tone.to, now + 0.25);
+            level.gain.setValueAtTime(0.0001, now + tone.delay);
+            level.gain.exponentialRampToValueAtTime(tone.level, now + tone.delay + 0.02);
+            level.gain.exponentialRampToValueAtTime(0.0001, now + 0.31);
+            oscillator.connect(level);
+            level.connect(master);
+            oscillator.start(now + tone.delay);
+            oscillator.stop(now + 0.37);
+          });
+        } catch (_) {
+          // Audio is optional; a browser audio failure must not affect navigation.
+        }
+      }
+
+      function resetFeaturePanel() {
+        workspaceState.textContent = 'No feature selected';
+        featureContent.replaceChildren();
+        const prompt = document.createElement('p');
+        prompt.className = 'not-selected';
+        prompt.textContent = 'Select a flowchart node to view its feature, component and implementation notes.';
+        featureContent.appendChild(prompt);
+      }
+
+      function renderFeaturePanel(feature) {
+        workspaceState.textContent = feature.proof;
+        featureContent.replaceChildren();
+        const wrapper = document.createElement('div');
+        wrapper.className = 'feature-content';
+        const purpose = document.createElement('p');
+        purpose.className = 'feature-purpose';
+        purpose.textContent = feature.purpose;
+        wrapper.appendChild(purpose);
+        const fields = [
+          ['Flow', 'Expanded in the selected flowchart node.'],
+          ['Component export', feature.export],
+          ['Implementation', feature.implementation],
+          ['Owner', feature.owner],
+          ['Boundaries', feature.boundary]
+        ];
+        fields.forEach(([label, value], index) => {
+          const card = document.createElement('section');
+          card.className = 'handover-field' + (index === fields.length - 1 ? ' handover-field--wide' : '');
+          const heading = document.createElement('h3');
+          heading.textContent = label;
+          const text = document.createElement('p');
+          text.textContent = value;
+          card.append(heading, text);
+          wrapper.appendChild(card);
+        });
+        featureContent.appendChild(wrapper);
+      }
+
+      function closeNode(node) {
+        playRevealSound(false);
+        node.classList.remove('is-open');
+        node.classList.add('is-closing');
+        node.setAttribute('aria-expanded', 'false');
+        node.removeAttribute('aria-controls');
+        window.setTimeout(() => node.classList.remove('is-closing'), 190);
+        const brow = node.querySelector('.flow-sidebrow');
+        if (brow) brow.textContent = 'Click to reveal ›';
+        const chain = node.nextElementSibling;
+        if (chain && chain.classList.contains('feature-chain')) {
+          chain.classList.add('is-closing');
+          const connector = chain.nextElementSibling;
+          if (connector && connector.classList.contains('flow-connector')) connector.classList.remove('connector-draw');
+          window.setTimeout(() => chain.remove(), 190);
+        }
+      }
+
+      function openNode(node, feature) {
+        playRevealSound(true);
+        node.classList.add('is-open');
+        node.setAttribute('aria-expanded', 'true');
+        const brow = node.querySelector('.flow-sidebrow');
+        if (brow) brow.textContent = 'Click to collapse ‹';
+        const panel = document.createElement('section');
+        panel.className = 'feature-chain';
+        panel.dataset.status = feature.status;
+        panel.id = 'chain-' + node.dataset.feature;
+        node.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('aria-label', feature.label + ' journey chain');
+        const list = document.createElement('ol');
+        feature.chain.forEach(([label, value]) => {
+          const item = document.createElement('li');
+          item.className = 'chain-step';
+          const term = document.createElement('span');
+          term.className = 'chain-step-label';
+          term.textContent = label;
+          const detail = document.createElement('span');
+          detail.className = 'chain-step-text';
+          detail.textContent = value;
+          item.style.setProperty('--step-index', String(list.children.length));
+          item.append(term, detail);
+          list.appendChild(item);
+        });
+        panel.appendChild(list);
+        node.after(panel);
+        const connector = panel.nextElementSibling;
+        if (connector && connector.classList.contains('flow-connector')) connector.classList.add('connector-draw');
+      }
+
+      document.addEventListener('click', (event) => {
+        if (!(event.target instanceof Element)) return;
+        const node = event.target.closest('[data-feature]');
+        if (!node) return;
+        const feature = features[node.dataset.feature];
+        if (!feature) return;
+        if (activeNode === node) {
+          closeNode(node);
+          activeNode = null;
+          resetFeaturePanel();
+          return;
+        }
+        if (activeNode) closeNode(activeNode);
+        activeNode = node;
+        openNode(node, feature);
+        renderFeaturePanel(feature);
+      });
+    })();
+  </script>
 </body>
 </html>
