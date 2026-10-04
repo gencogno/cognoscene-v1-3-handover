@@ -39,7 +39,17 @@
     .section-note { color: var(--moss); font-size: .875rem; }
     .challenge-grid, .compare, .detail-grid, .video-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
     .card { min-width: 0; padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; background: rgba(255,255,255,.62); }
-    .challenge { display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-height: 4.2rem; }
+    .challenge.card { padding: 0; overflow: hidden; }
+    .challenge summary { display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-height: 4.2rem; padding: 1rem; cursor: pointer; list-style: none; }
+    .challenge summary::-webkit-details-marker { display: none; }
+    .challenge-summary-copy { display: grid; min-width: 0; gap: .25rem; }
+    .challenge-reveal { flex: 0 0 auto; color: var(--moss); font-size: .875rem; white-space: nowrap; }
+    .challenge-reveal::before { content: "Click to reveal"; }
+    .challenge[open] .challenge-reveal::before { content: "Click to hide"; }
+    .challenge-detail { padding: .1rem 1rem .9rem; border-top: 1px solid var(--line); color: var(--moss); font-size: .9rem; line-height: 1.45; }
+    .challenge-detail p { margin: .65rem 0 0; }
+    .challenge-proof { padding: .5rem .6rem; border-left: 3px solid var(--retained); background: rgba(119,125,118,.08); }
+    .challenge-unknown { margin: .5rem 0 0; color: var(--moss); font-size: .75rem; }
     .challenge strong { display: block; font-size: 1rem; }
     .placeholder-tag { color: var(--moss); font-size: .8rem; white-space: nowrap; }
     .legend { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; margin: .8rem 0 .35rem; padding: .7rem .85rem; border: 1px solid var(--line); border-radius: .7rem; background: rgba(255,255,255,.62); }
@@ -92,6 +102,7 @@
     .change-badge.new { border-color: rgba(40,124,75,.6); color: #1e633a; background: rgba(40,124,75,.1); }
     .change-badge.enhanced { border-color: rgba(40,95,204,.6); color: #214a9b; background: rgba(40,95,204,.1); }
     .change-badge.removed { border-color: rgba(183,91,22,.62); color: #8a4311; background: rgba(183,91,22,.12); }
+    .change-badge.challenge { border-color: rgba(119,125,118,.5); color: var(--moss); background: rgba(119,125,118,.1); }
     .proof-line { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin: 0; padding: 0 .75rem .55rem; color: var(--moss); font-size: .75rem; line-height: 1.45; }
     .proof-tag { padding: .17rem .38rem; border: 1px solid var(--line); border-radius: 999px; color: var(--moss); background: rgba(119,125,118,.08); font-size: .66rem; font-weight: 700; text-transform: uppercase; }
     .proof-tag.incomplete { border-color: rgba(183,91,22,.48); color: #8a4311; background: rgba(183,91,22,.08); }
@@ -169,9 +180,26 @@
     <section class="section" aria-labelledby="challenges-title">
       <div class="section-head"><h2 id="challenges-title">Production challenges</h2><span class="section-note">Separate from the shopper journey</span></div>
       <div class="challenge-grid">
-        <article class="card challenge"><strong>Improve onboarding</strong><span class="placeholder-tag">Challenge brief pending</span></article>
-        <article class="card challenge"><strong>Improve UI</strong><span class="placeholder-tag">Challenge brief pending</span></article>
+        <details class="card challenge" data-feature="challenge-onboarding">
+          <summary><span class="challenge-summary-copy"><strong>Improve onboarding</strong><span class="placeholder-tag">Production challenge · separate from shopper flow</span></span><span class="challenge-reveal" aria-hidden="true"></span></summary>
+          <div class="challenge-detail">
+            <p><strong>Current source:</strong> five first-run screens; the user must choose at least one protected site. Top Sites suggestions are optional and unchecked. Travel/device sync is prechecked by default and stored as true unless turned off; that is an open consent decision, not proof of explicit opt-in.</p>
+            <p><strong>Challenge:</strong> make the first-run journey clearer and production-grade while preserving explicit site choice, consent, a safe skip, and no automatic protection. Review the sync default before release.</p>
+            <p class="challenge-proof"><strong>Proof:</strong> source verified at manifest 1.4.103. No dedicated onboarding test was found in the current test set; browser/onboarding proof is incomplete.</p>
+            <p><strong>Source scope:</strong> <code>instructions.html</code>, <code>instructions.js</code>, <code>background.js</code>; popup handoff in <code>popup.html</code>/<code>popup.js</code>.</p>
+          </div>
+        </details>
+        <details class="card challenge" data-feature="challenge-ui">
+          <summary><span class="challenge-summary-copy"><strong>Improve UI</strong><span class="placeholder-tag">Production challenge · use current popup</span></span><span class="challenge-reveal" aria-hidden="true"></span></summary>
+          <div class="challenge-detail">
+            <p><strong>Design source of truth:</strong> the current popup, not the old design-document lime. Current popup tokens include lime <code>#C8E88A</code>, paper <code>#F5F0E8</code>, and surface <code>#EBE4D4</code>.</p>
+            <p><strong>Challenge:</strong> improve hierarchy and usability without obscuring user choice, hiding important state, or introducing restriction language.</p>
+            <p class="challenge-proof"><strong>Proof:</strong> QA tools exist in popup markup, while current production-mode <code>popup.js</code> removes that tools panel; <code>tests/extension-mode.test.js</code> checks production QA flags off. Final packaged production/browser proof remains incomplete.</p>
+            <p><strong>Source scope:</strong> <code>popup.html</code>, <code>popup.js</code>, <code>popup.css</code>, and <code>cognoscene-mode.js</code>.</p>
+          </div>
+        </details>
       </div>
+      <p class="challenge-unknown">Other challenge node(s) mentioned earlier · label and scope remain unknown; none added by guess.</p>
     </section>
 
     <section class="section" aria-labelledby="journey-title">
@@ -367,7 +395,7 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
     </section>
 
     <section class="section card selected-feature" id="feature-details" aria-labelledby="feature-title" aria-live="polite" hidden>
-      <div class="section-head"><div><p class="release-label">Details for the selected chart node</p><h2 id="feature-title">Selected feature</h2></div><div><span class="change-badge" id="feature-change"></span> <a class="selection-return" id="feature-return" href="#journey-title">↑ Return to its flow</a></div></div>
+      <div class="section-head"><div><p class="release-label" id="feature-kicker">Details for the selected chart node</p><h2 id="feature-title">Selected feature</h2></div><div><span class="change-badge" id="feature-change"></span> <a class="selection-return" id="feature-return" href="#journey-title">↑ Return to its flow</a></div></div>
       <div class="detail-grid">
         <article class="field"><h3>Feature explanation</h3><p id="feature-explanation"></p></article>
         <article class="field"><h3>Component download</h3><p id="feature-components"></p></article>
@@ -405,6 +433,8 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
   <script>
     (() => {
       const explanations = {
+        "challenge-onboarding": "Improve the five-screen first-run setup without weakening explicit site selection, consent, safe skip, or privacy boundaries.",
+        "challenge-ui": "Improve the current popup experience using popup.css as the palette source; keep internal QA tools out of the production runtime.",
         onboarding: "A first-run setup lets the user choose protected sites and understand the pause. Daniella’s production challenge is to make onboarding clearer and consent-led.",
         "protected-sites": "Only domains a person explicitly protects become eligible. Browser history or Top Sites never silently enable protection.",
         "observer-product-pulse": "Observer offers optional check-ins after qualifying activity; Product Pulse is its branch for confirmed cart growth, not a separate fourth layer.",
@@ -416,6 +446,7 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
       };
       const panel = document.getElementById("feature-details");
       const fields = {
+        kicker: document.getElementById("feature-kicker"),
         title: document.getElementById("feature-title"),
         change: document.getElementById("feature-change"),
         explanation: document.getElementById("feature-explanation"),
@@ -426,6 +457,11 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
         proof: document.getElementById("feature-proof"),
         back: document.getElementById("feature-return")
       };
+      const componentNotes = {
+        "challenge-onboarding": "Challenge packet only; no runtime bundle yet. Audit instructions.html, instructions.js, background.js, popup.html and popup.js together before exporting dependencies.",
+        "challenge-ui": "Challenge packet only; no runtime bundle yet. Audit popup.html, popup.js, popup.css and cognoscene-mode.js together; the current lime is #C8E88A.",
+        removed: "No v1.3 runtime bundle: this is a historical change note, not a downloadable component."
+      };
       let selectedNode = null;
 
       function selectNode(node) {
@@ -434,22 +470,23 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
         if (!explanation) return;
         const title = node.querySelector("summary strong")?.textContent?.trim() || "Selected feature";
         const badge = node.querySelector(".change-badge");
-        const status = key === "removed" ? "removed" : badge?.classList.contains("new") ? "new" : "enhanced";
-        const statusLabel = key === "removed" ? "REMOVED" : status.toUpperCase();
+        const status = key === "removed" ? "removed" : key.startsWith("challenge-") ? "challenge" : badge?.classList.contains("new") ? "new" : "enhanced";
+        const statusLabel = key === "removed" ? "REMOVED" : key.startsWith("challenge-") ? "CHALLENGE" : status.toUpperCase();
         node.id = `feature-flow-${key}`;
         selectedNode = node;
+        fields.kicker.textContent = key.startsWith("challenge-") ? "Details for the selected production challenge" : key === "removed" ? "Details for a historical change" : "Details for the selected chart node";
         fields.title.textContent = title;
         fields.change.className = `change-badge ${status}`;
         fields.change.textContent = statusLabel;
         fields.explanation.textContent = explanation;
-        fields.components.textContent = key === "removed"
-          ? "No v1.3 runtime bundle: this is a historical change note, not a downloadable component."
-          : "Bundle not packaged yet. The export batch will provide one node-level download containing all audited production runtime dependencies together; QA and test files will be excluded unless separately requested.";
+        fields.components.textContent = componentNotes[key]
+          || "Bundle not packaged yet. The export batch will provide one node-level download containing all audited production runtime dependencies together; QA and test files will be excluded unless separately requested.";
         fields.prompt.textContent = "Open decision: one v1.3-wide Claude prompt or focused prompts inside each feature node. The handover will compare both before this is locked.";
         fields.checklist.textContent = "Per-node implementation checks and the greyed-out completion state are scheduled for a later batch.";
         fields.cognoscenti.textContent = "Feature-specific gold-standard acceptance notes are scheduled for a later batch; use the Cognoscenti legend above for its shared meaning.";
-        fields.proof.textContent = node.querySelector(".proof-line")?.innerText?.trim() || "Historical evidence only; shipped Beta 1.2 runtime is unknown.";
+        fields.proof.textContent = node.querySelector(".proof-line")?.innerText?.trim() || node.querySelector(".challenge-proof")?.innerText?.trim() || "Historical evidence only; shipped Beta 1.2 runtime is unknown.";
         fields.back.href = `#${node.id}`;
+        fields.back.textContent = key.startsWith("challenge-") ? "↑ Return to challenge" : key === "removed" ? "↑ Return to change note" : "↑ Return to its flow";
         panel.hidden = false;
         requestAnimationFrame(() => panel.scrollIntoView({ behavior: "smooth", block: "start" }));
       }
