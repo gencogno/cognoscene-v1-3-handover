@@ -15,9 +15,9 @@
       --cream: #EBE4D4;
       --line: #DDD5C0;
       --lime: #C8E88A;
-      --new: #25845D;
-      --enhanced: #3478DF;
-      --removed: #D48B3D;
+      --new: #287C4B;
+      --enhanced: #285FCC;
+      --removed: #B75B16;
       --retained: #777D76;
       --cognoscenti: #B8860B;
       font-family: "Be Vietnam Pro", Inter, ui-sans-serif, system-ui, sans-serif;
@@ -42,13 +42,24 @@
     .challenge { display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-height: 4.2rem; }
     .challenge strong { display: block; font-size: 1rem; }
     .placeholder-tag { color: var(--moss); font-size: .8rem; white-space: nowrap; }
-    .legend { display: flex; flex-wrap: wrap; gap: .55rem 1rem; margin: .8rem 0; padding: .7rem .85rem; border: 1px solid var(--line); border-radius: .7rem; background: rgba(255,255,255,.62); }
-    .legend-item { display: inline-flex; align-items: center; gap: .4rem; color: var(--moss); font-size: .875rem; }
-    .dot { width: .65rem; height: .65rem; border-radius: 50%; background: var(--retained); }
-    .dot.new { background: var(--new); }
-    .dot.enhanced { background: var(--enhanced); }
-    .dot.removed { background: var(--removed); }
-    .dot.cognoscenti { background: var(--cognoscenti); }
+    .legend { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; margin: .8rem 0 .35rem; padding: .7rem .85rem; border: 1px solid var(--line); border-radius: .7rem; background: rgba(255,255,255,.62); }
+    .legend-item { display: inline-flex; align-items: center; gap: .5rem; padding: .38rem .62rem; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); background: #fff9; font-size: .875rem; }
+    .legend-item.new { border-color: rgba(40,124,75,.5); background: rgba(40,124,75,.09); }
+    .legend-item.enhanced { border-color: rgba(40,95,204,.5); background: rgba(40,95,204,.09); }
+    .legend-item.removed { border-color: rgba(183,91,22,.55); background: rgba(183,91,22,.1); }
+    .legend-item.retained { border-color: rgba(119,125,118,.45); background: rgba(119,125,118,.08); }
+    .dot { flex: 0 0 auto; width: .78rem; height: .78rem; border: 1px solid currentColor; border-radius: 50%; background: var(--retained); }
+    .dot.new { color: var(--new); background: var(--new); box-shadow: 0 0 0 3px rgba(40,124,75,.17), 0 0 12px rgba(40,124,75,.34); }
+    .dot.enhanced { color: var(--enhanced); background: var(--enhanced); box-shadow: 0 0 0 3px rgba(40,95,204,.17), 0 0 12px rgba(40,95,204,.34); }
+    .dot.removed { color: var(--removed); background: var(--removed); box-shadow: 0 0 0 3px rgba(183,91,22,.18), 0 0 12px rgba(183,91,22,.36); }
+    .dot.cognoscenti { color: var(--cognoscenti); background: var(--cognoscenti); box-shadow: 0 0 0 3px rgba(184,134,11,.18), 0 0 12px rgba(184,134,11,.35); }
+    .legend-explainer { display: inline-flex; }
+    .legend-explainer summary { cursor: pointer; list-style: none; }
+    .legend-explainer summary::-webkit-details-marker { display: none; }
+    .legend-explainer summary::after { content: "Click to know"; margin-left: .3rem; color: var(--moss); font-size: .75rem; }
+    .legend-explainer[open] { display: block; flex: 1 0 100%; }
+    .legend-explainer p { max-width: 58rem; margin: .55rem .2rem .1rem; color: var(--moss); font-size: .875rem; line-height: 1.5; }
+    .legend-note { margin: 0; color: var(--moss); font-size: .8rem; }
     .flow-card h3 { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin: 0 0 .8rem; font-size: 1rem; }
     .flow-placeholder { display: grid; min-height: 10rem; place-content: center; gap: .45rem; padding: 1rem; border: 1px dashed #bdb5a5; border-radius: .65rem; text-align: center; color: var(--moss); }
     .flow-placeholder strong { color: var(--ink); font-weight: 600; }
@@ -89,12 +100,16 @@
     <section class="section" aria-labelledby="journey-title">
       <div class="section-head"><h2 id="journey-title">Shopper journey</h2><span class="section-note">Before / after flow placeholders</span></div>
       <div class="legend" aria-label="Feature change legend">
-        <span class="legend-item"><i class="dot new" aria-hidden="true"></i>New</span>
-        <span class="legend-item"><i class="dot enhanced" aria-hidden="true"></i>Enhanced</span>
-        <span class="legend-item"><i class="dot removed" aria-hidden="true"></i>Removed</span>
-        <span class="legend-item"><i class="dot" aria-hidden="true"></i>Retained</span>
-        <span class="legend-item"><i class="dot cognoscenti" aria-hidden="true"></i>Cognoscenti · gold standard</span>
+        <span class="legend-item new"><i class="dot new" aria-hidden="true"></i>New</span>
+        <span class="legend-item enhanced"><i class="dot enhanced" aria-hidden="true"></i>Enhanced</span>
+        <span class="legend-item removed"><i class="dot removed" aria-hidden="true"></i>Removed</span>
+        <span class="legend-item retained"><i class="dot" aria-hidden="true"></i>Retained</span>
+        <details class="legend-explainer">
+          <summary class="legend-item"><i class="dot cognoscenti" aria-hidden="true"></i>Cognoscenti · gold standard</summary>
+          <p>The quality bar a feature must meet for Daniella to call it production-grade. It is an acceptance target, not a claim about the current build.</p>
+        </details>
       </div>
+      <p class="legend-note">Change colors label Beta 1.2 → v1.3 differences; they are not extension UI colors.</p>
       <div class="compare">
         <section class="card flow-card" aria-labelledby="before-title">
           <h3 id="before-title">Before · Beta 1.2 <span class="placeholder-tag">Historical</span></h3>
@@ -128,13 +143,17 @@
     </section>
 
     <section class="section" aria-labelledby="brand-title">
-      <div class="section-head"><h2 id="brand-title">Brand tokens</h2><span class="section-note">Current popup palette</span></div>
+      <div class="section-head"><h2 id="brand-title">Brand tokens</h2><span class="section-note">Verified in the current popup · source: popup.css</span></div>
       <div class="brand-tokens" aria-label="Brand colour hex codes">
         <span class="token"><i class="swatch" style="background:#F5F0E8"></i>Paper · #F5F0E8</span>
-        <span class="token"><i class="swatch" style="background:#EBE4D4"></i>Cream · #EBE4D4</span>
+        <span class="token"><i class="swatch" style="background:#EBE4D4"></i>Surface · #EBE4D4</span>
         <span class="token"><i class="swatch" style="background:#C8E88A"></i>Lime · #C8E88A</span>
-        <span class="token"><i class="swatch" style="background:#111111"></i>Ink · #111111</span>
-        <span class="token"><i class="swatch" style="background:#4A4F47"></i>Moss · #4A4F47</span>
+        <span class="token"><i class="swatch" style="background:#111111"></i>Text · #111111</span>
+        <span class="token"><i class="swatch" style="background:#2D2D2A"></i>Dark · #2D2D2A</span>
+        <span class="token"><i class="swatch" style="background:#4A4F47"></i>Mid · #4A4F47</span>
+        <span class="token"><i class="swatch" style="background:#8A8A84"></i>Muted · #8A8A84</span>
+        <span class="token"><i class="swatch" style="background:#DDD5C0"></i>Line · #DDD5C0</span>
+        <span class="token"><i class="swatch" style="background:#3B6D11"></i>Active · #3B6D11</span>
       </div>
     </section>
     <footer>Friction, not restriction. The user keeps the decision.</footer>
