@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Cognoscene v1.3 developer handover for Daniella.">
+  <meta name="description" content="Cognoscene v1.3 Stage A developer handover for Daniella.">
   <meta name="theme-color" content="#F5F0E8">
-  <title>Cognoscene v1.3 · Daniella handover</title>
+  <title>Cognoscene v1.3 · Stage A</title>
   <style>
     :root {
       color-scheme: light;
@@ -13,54 +13,163 @@
       --moss: #4A4F47;
       --paper: #F5F0E8;
       --cream: #EBE4D4;
-      --line: #DDD5C0;
-      --lime: #C8E88A;
+      --line: #D8D0BB;
+      --new: #4F9B64;
+      --new-soft: #DDEFE1;
+      --changed: #4073B8;
+      --changed-soft: #DFE9F8;
+      --tentative: #B9782C;
+      --tentative-soft: #F5E5C9;
+      --locked: #8D8A83;
+      --locked-soft: #E8E5DE;
+      --shadow: 0 14px 34px rgba(54, 49, 38, .10);
       font-family: "Be Vietnam Pro", Inter, ui-sans-serif, system-ui, sans-serif;
       font-synthesis: none;
       text-rendering: optimizeLegibility;
     }
     * { box-sizing: border-box; }
     body { margin: 0; min-width: 320px; background: var(--paper); color: var(--ink); }
-    header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem clamp(1rem, 4vw, 3rem); border-bottom: 1px solid var(--line); background: var(--cream); }
-    .brand { font-weight: 700; letter-spacing: -.03em; }
+    button, summary { font: inherit; }
+    button { color: inherit; }
+    .site-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem clamp(1rem, 4vw, 3rem); border-bottom: 1px solid var(--line); background: var(--cream); }
+    .brand { font-weight: 800; letter-spacing: -.03em; }
     .header-meta { color: var(--moss); font-size: .875rem; }
-    main { width: min(760px, calc(100% - 2rem)); margin: 0 auto; padding: clamp(2rem, 8vh, 5rem) 0 3rem; }
-    .release-label { margin: 0 0 .5rem; color: var(--moss); font-size: .875rem; }
-    h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.12; letter-spacing: -.045em; }
-    .subline { margin: .7rem 0 2rem; color: var(--moss); line-height: 1.5; }
-    .shared-boundaries { padding: .9rem 1rem; border: 1px solid var(--line); border-radius: .7rem; background: rgba(255,255,255,.52); color: var(--moss); }
-    .shared-boundaries summary { color: var(--ink); font-weight: 700; cursor: pointer; }
-    .shared-boundaries ul { display: grid; gap: .65rem; margin: .9rem 0 .1rem; padding-left: 1.25rem; line-height: 1.5; }
-    .shared-boundaries strong { color: var(--ink); }
-    footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--moss); font-size: .875rem; }
-    @media (max-width: 560px) {
-      header { align-items: flex-start; flex-direction: column; gap: .25rem; }
-      main { padding-top: 2.5rem; }
+    main { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: clamp(1.7rem, 5vw, 3.5rem) 0 3rem; }
+    .eyebrow { margin: 0 0 .45rem; color: var(--moss); font-size: .8rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: .6rem; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.04; letter-spacing: -.055em; }
+    h2 { margin-bottom: .5rem; font-size: clamp(1.45rem, 3vw, 2.1rem); letter-spacing: -.035em; }
+    h3 { margin-bottom: .25rem; font-size: 1.05rem; }
+    .lede { max-width: 62rem; margin-bottom: 1.5rem; color: var(--moss); line-height: 1.6; }
+    .stage-note { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; margin: 0 0 1.8rem; padding: .7rem .9rem; border: 1px solid var(--line); border-radius: .75rem; background: rgba(255,255,255,.5); color: var(--moss); font-size: .9rem; line-height: 1.4; }
+    .stage-note strong { color: var(--ink); }
+    .tag, .status { display: inline-flex; align-items: center; width: fit-content; border-radius: 999px; padding: .22rem .58rem; font-size: .7rem; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; }
+    .tag.new, .status.new { color: #246137; background: var(--new-soft); }
+    .tag.changed, .status.changed { color: #22548D; background: var(--changed-soft); }
+    .tag.tentative, .status.tentative { color: #86541C; background: var(--tentative-soft); }
+    .tag.locked, .status.locked { color: #5D5A53; background: var(--locked-soft); }
+    .legend { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.2rem; }
+    .legend .tag::before { content: ""; width: .48rem; height: .48rem; margin-right: .35rem; border-radius: 50%; background: currentColor; }
+
+    .flow-shell { margin: 0 0 2rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; background: rgba(255,255,255,.55); box-shadow: var(--shadow); }
+    .flow-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+    .flow-heading p { margin: 0; color: var(--moss); font-size: .83rem; }
+    .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; align-items: stretch; }
+    .flow-node { position: relative; min-height: 92px; padding: .9rem .85rem; border: 1px solid var(--line); border-radius: .8rem; background: #fffdf8; text-align: left; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+    .flow-node:not(:disabled) { cursor: pointer; }
+    .flow-node:not(:disabled):hover, .flow-node.active { transform: translateY(-2px); border-color: var(--ink); box-shadow: 0 8px 18px rgba(54, 49, 38, .12); }
+    .flow-node.active::after { content: ""; position: absolute; inset: -.22rem; border: 2px solid var(--ink); border-radius: 1rem; pointer-events: none; }
+    .flow-node:disabled { cursor: not-allowed; opacity: .74; }
+    .flow-node .node-title { display: block; margin: .55rem 0 .18rem; font-weight: 800; }
+    .flow-node .node-note { display: block; color: var(--moss); font-size: .73rem; line-height: 1.35; }
+    .flow-arrow { position: absolute; top: 50%; right: -.72rem; width: .8rem; height: 1px; background: var(--line); z-index: 1; }
+    .flow-arrow::after { content: ""; position: absolute; right: 0; top: -.2rem; width: .4rem; height: .4rem; border-top: 1px solid var(--line); border-right: 1px solid var(--line); transform: rotate(45deg); }
+    .flow-node:last-child .flow-arrow { display: none; }
+
+    .phase-panel { min-height: 430px; }
+    .phase-top { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1.25rem; }
+    .phase-top p { max-width: 48rem; margin-bottom: 0; color: var(--moss); line-height: 1.55; }
+    .phase-mark { flex: 0 0 auto; font-size: .78rem; }
+    .phase-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 1rem; }
+    .visual-card, .detail-card, .locked-card { border: 1px solid var(--line); border-radius: .9rem; background: rgba(255,255,255,.55); }
+    .visual-card { padding: 1.05rem; }
+    .visual-card h3 { margin-bottom: .75rem; }
+    .mini-flow { display: grid; gap: .6rem; }
+    .mini-node { position: relative; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: .65rem; background: #fffdf8; }
+    .mini-node.child { margin-left: 1.15rem; }
+    .mini-node.child::before { content: "↳"; position: absolute; left: -.95rem; top: .7rem; color: var(--moss); }
+    .mini-node strong { display: block; font-size: .9rem; }
+    .mini-node span { display: block; margin-top: .18rem; color: var(--moss); font-size: .76rem; line-height: 1.35; }
+    .details-stack { display: grid; gap: .65rem; }
+    details.detail-card { overflow: hidden; }
+    details.detail-card > summary { display: flex; align-items: center; justify-content: space-between; gap: .75rem; list-style: none; padding: .9rem 1rem; cursor: pointer; }
+    details.detail-card > summary::-webkit-details-marker { display: none; }
+    details.detail-card > summary::after { content: "+"; color: var(--moss); font-size: 1.2rem; font-weight: 400; }
+    details.detail-card[open] > summary::after { content: "−"; }
+    .summary-copy { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; }
+    .summary-copy strong { font-size: .95rem; }
+    .detail-body { padding: 0 1rem 1rem; border-top: 1px solid var(--line); }
+    .detail-body p { margin: .85rem 0 .7rem; color: var(--moss); line-height: 1.5; font-size: .88rem; }
+    .sequence { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .5rem; margin: .8rem 0; }
+    .sequence div { padding: .55rem .65rem; border-radius: .55rem; background: var(--cream); }
+    .sequence b { display: block; margin-bottom: .15rem; font-size: .68rem; letter-spacing: .04em; text-transform: uppercase; }
+    .sequence span { display: block; color: var(--moss); font-size: .76rem; line-height: 1.35; }
+    .source-line { margin: .8rem 0 0; padding-top: .7rem; border-top: 1px dashed var(--line); color: var(--moss); font-size: .75rem; line-height: 1.45; }
+    .source-line strong { color: var(--ink); }
+    .checklist { display: grid; gap: .35rem; margin: .75rem 0 0; }
+    .checklist span { color: var(--moss); font-size: .78rem; }
+    .checklist span::first-letter { color: var(--new); }
+
+    .phase-actions { display: flex; justify-content: space-between; gap: .8rem; margin-top: 1.3rem; }
+    .phase-actions button { border: 1px solid var(--line); border-radius: .65rem; padding: .65rem .85rem; background: #fffdf8; cursor: pointer; }
+    .phase-actions button:hover:not(:disabled) { border-color: var(--ink); }
+    .phase-actions button:disabled { color: var(--locked); cursor: not-allowed; opacity: .75; }
+    .locked-card { padding: 1.2rem; background: var(--locked-soft); }
+    .locked-card p { max-width: 54rem; margin-bottom: .8rem; color: var(--moss); line-height: 1.55; }
+    .cognoscenti { margin-top: 1.6rem; padding: 1rem; border-left: 3px solid var(--ink); background: rgba(255,255,255,.45); }
+    .cognoscenti summary { cursor: pointer; font-weight: 800; }
+    .cognoscenti p { margin: .7rem 0 0; color: var(--moss); font-size: .86rem; line-height: 1.5; }
+    footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--moss); font-size: .82rem; line-height: 1.5; }
+    @media (max-width: 760px) {
+      .site-header { align-items: flex-start; flex-direction: column; gap: .25rem; }
+      .flow { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .flow-arrow { display: none; }
+      .phase-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 470px) {
+      main { width: min(100% - 1rem, 1120px); }
+      .flow { grid-template-columns: 1fr; }
+      .sequence { grid-template-columns: 1fr; }
+      .phase-top { flex-direction: column; }
+      .flow-heading { display: block; }
+      .flow-heading p { margin-top: .35rem; }
     }
   </style>
 </head>
 <body>
-  <header>
+  <header class="site-header">
     <div class="brand">Cognoscene · v1.3</div>
-    <div class="header-meta">Developer handover for Daniella</div>
+    <div class="header-meta">Stage A · developer handover for Daniella</div>
   </header>
-  <main>
-    <p class="release-label">Official comparison</p>
-    <h1>Beta 1.2 <span aria-hidden="true">→</span> Cognoscene v1.3</h1>
-    <p class="subline">The current v2 extension is evidence for the handover, not the release label.</p>
 
-    <details class="shared-boundaries section">
-      <summary>Shared ownership boundaries · click to reveal</summary>
-      <ul>
-        <li><strong>Observer:</strong> owns optional browsing check-ins. Product Pulse is the confirmed-cart-growth branch within Observer, not a separate layer.</li>
-        <li><strong>Rationalisation:</strong> owns the 24-hour hold. Rationator is an in-hold return loop; Deliberation is the separate post-hold choice; Urgente is the user-triggered, unlimited-use checkout pass.</li>
-        <li><strong>Growth:</strong> tentative and grey. Cogno retains the scope decision; no Daniella runtime work or download until explicitly unlocked.</li>
-        <li><strong>Python:</strong> shadow-only analysis; it has no live UI, eligibility, blocking, or decision authority.</li>
-        <li><strong>Vision:</strong> planned fallback only after the DOM signal fails, never a parallel observer. Its current runtime wiring is unknown and needs an explicit contract before implementation.</li>
-      </ul>
+  <main>
+    <p class="eyebrow">Beta 1.2 → v1.3</p>
+    <h1>Work one phase at a time.</h1>
+    <p class="lede">This is a small, reviewable slice of the v1.3 handover. Use the flow to move between phases; open a feature to see the implementation contract. Later phases remain visible without making the page noisy.</p>
+
+    <div class="stage-note"><strong>Stage A preview.</strong> Shared shell, flowchart, Onboarding, Observer, their subfeatures, and a grey Growth placeholder are in scope. Checkpoint persistence and later-phase downloads are intentionally deferred.</div>
+    <div class="legend" aria-label="Status legend">
+      <span class="tag new">New</span>
+      <span class="tag changed">Enhanced</span>
+      <span class="tag tentative">Tentative</span>
+      <span class="tag locked">Later / locked</span>
+    </div>
+
+    <section class="flow-shell" aria-labelledby="flow-title">
+      <div class="flow-heading">
+        <div>
+          <p class="eyebrow">Phase map</p>
+          <h2 id="flow-title">v1.3 implementation flow</h2>
+        </div>
+        <p>Click a phase to preview its current slice.</p>
+      </div>
+      <nav class="flow" aria-label="v1.3 phases">
+        <button class="flow-node" data-phase="onboarding" type="button"><span class="status changed">Enhanced</span><span class="node-title">Onboarding</span><span class="node-note">Consent, setup, and Website Tracking.</span><span class="flow-arrow" aria-hidden="true"></span></button>
+        <button class="flow-node" data-phase="observer" type="button"><span class="status new">New</span><span class="node-title">Observer</span><span class="node-note">Product Pulse + Rationator ownership.</span><span class="flow-arrow" aria-hidden="true"></span></button>
+        <button class="flow-node" data-phase="rationalisation" type="button"><span class="status locked">Later</span><span class="node-title">Rationalisation</span><span class="node-note">Hold, Deliberation, and Urgente.</span><span class="flow-arrow" aria-hidden="true"></span></button>
+        <button class="flow-node" data-phase="growth" type="button"><span class="status tentative">Tentative</span><span class="node-title">Growth</span><span class="node-note">Grey placeholder; Python shadow-only.</span></button>
+      </nav>
+    </section>
+
+    <section id="phase-panel" class="phase-panel" aria-live="polite"></section>
+
+    <details class="cognoscenti">
+      <summary>The Cognoscenti · production-grade bar</summary>
+      <p>Use this as the quality bar while refining a feature: clear user intent, understandable copy, reversible actions, explicit consent, correct state transitions, and a safe fallback when a signal is missing. “Verified current” labels reflect the live source audit; planned or incomplete items still need proof.</p>
     </details>
 
-    <footer>Friction, not restriction. The user keeps the decision.</footer>
+    <footer>Friction, not restriction. The user keeps the decision. Python remains shadow-only; Vision remains a DOM-failure fallback, not a parallel observer.</footer>
   </main>
+  <script src="stage-a.js"></script>
 </body>
 </html>
