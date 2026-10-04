@@ -103,6 +103,11 @@
     .branch-loop { margin: 0; padding: .48rem .6rem; border-left: 3px solid var(--new); border-radius: .3rem; background: rgba(40,124,75,.07); color: var(--moss); font-size: .78rem; line-height: 1.4; }
     .tentative-card { margin-top: .65rem; padding: .65rem .75rem; border: 1px dashed #9a9d99; border-radius: .65rem; background: rgba(119,125,118,.08); color: var(--moss); font-size: .8rem; line-height: 1.45; }
     .removed-note { margin-top: .65rem; padding: .6rem .7rem; border: 1px solid rgba(183,91,22,.42); border-left: 4px solid var(--removed); border-radius: .55rem; background: rgba(183,91,22,.07); color: var(--moss); font-size: .78rem; line-height: 1.45; }
+    .removed-note summary { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; cursor: pointer; list-style: none; }
+    .removed-note summary::-webkit-details-marker { display: none; }
+    .removed-note summary::after { content: "Click to reveal"; margin-left: auto; color: var(--moss); font-size: .72rem; white-space: nowrap; }
+    .removed-note[open] summary::after { content: "Click to hide"; }
+    .removed-note p { margin: .5rem 0 0; }
     .flow-arrow { height: .6rem; color: var(--retained); text-align: center; line-height: .6rem; }
     .flow-steps { display: grid; gap: .38rem; margin: 0; padding: 0 .75rem .75rem; list-style: none; }
     .flow-steps li { position: relative; min-width: 0; padding: .5rem .6rem .5rem 2.55rem; border: 1px solid rgba(119,125,118,.24); border-radius: .5rem; background: #fff9; color: var(--moss); font-size: .8rem; line-height: 1.4; }
@@ -128,6 +133,9 @@
     .field { min-height: 5.5rem; padding: .75rem; border: 1px dashed #bdb5a5; border-radius: .6rem; background: rgba(255,255,255,.45); }
     .field h3 { margin: 0 0 .35rem; font-size: .95rem; }
     .field p { margin: 0; color: var(--moss); line-height: 1.45; }
+    .selected-feature[hidden] { display: none; }
+    .selected-feature { scroll-margin-top: 1rem; }
+    .selection-return { color: var(--moss); font-size: .78rem; white-space: nowrap; }
     .video-slot { display: grid; min-height: 8rem; place-content: center; padding: .9rem; border: 1px dashed #bdb5a5; border-radius: .65rem; background: rgba(255,255,255,.4); color: var(--moss); text-align: center; }
     .video-slot strong { color: var(--ink); }
     .brand-tokens { display: flex; flex-wrap: wrap; gap: .5rem; }
@@ -347,7 +355,10 @@ Shop: popup site list → protected shop → checkout attempt → read site + ho
             <div class="flow-terminal">END · the user keeps the decision</div>
           </div>
           <div class="tentative-card"><strong>Growth · tentative / grey</strong> Not an active v1.3 shopper-flow stage or downloadable component until Cogno unlocks it.</div>
-          <div class="removed-note"><span class="change-badge removed">REMOVED</span> Beta 1.2’s sample-savings preview and 48-hour hold are not carried forward. The old monthly Urgente cap is not a v1.3 rule; its historical runtime remains unverified.</div>
+          <details class="removed-note" data-feature="removed">
+            <summary><span class="change-badge removed">REMOVED</span><strong>Beta 1.2 changes not carried into v1.3</strong></summary>
+            <p>The sample-savings preview and 48-hour hold are not carried forward. The old monthly Urgente cap is not a v1.3 rule; its historical runtime remains unverified.</p>
+          </details>
           <details class="plain-fallback"><summary>Plain-text fallback</summary><pre>First run → improved onboarding challenge → user-selected protected sites → protected-site browsing: Observer + Product Pulse.
 Merchant checkout action → 24-hour Rationalisation hold. During the hold: Rationator loops back into that same hold; Urgente is an unlimited-use, 12-hour, brand-scoped checkout-only branch.
 After 24 hours → 24-hour Deliberation window → explicit user choice. Growth remains tentative and outside the active v1.3 path.</pre></details>
@@ -355,15 +366,15 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
       </div>
     </section>
 
-    <section class="section card" aria-labelledby="feature-title">
-      <div class="section-head"><h2 id="feature-title">Selected feature</h2><span class="section-note">Feature and component details will stay in sync with the flowchart.</span></div>
+    <section class="section card selected-feature" id="feature-details" aria-labelledby="feature-title" aria-live="polite" hidden>
+      <div class="section-head"><div><p class="release-label">Details for the selected chart node</p><h2 id="feature-title">Selected feature</h2></div><div><span class="change-badge" id="feature-change"></span> <a class="selection-return" id="feature-return" href="#journey-title">↑ Return to its flow</a></div></div>
       <div class="detail-grid">
-        <article class="field"><h3>Feature explanation</h3><p>Placeholder</p></article>
-        <article class="field"><h3>Component download</h3><p>Bundled downloads will appear here when ready.</p></article>
-        <article class="field"><h3>Claude prompt</h3><p>Prompt format remains an open decision.</p></article>
-        <article class="field"><h3>Daniella checklist</h3><p>Checklist and completion state will appear here.</p></article>
-        <article class="field"><h3>Cognoscenti</h3><p>Gold-standard acceptance notes will appear here.</p></article>
-        <article class="field"><h3>Proof and boundaries</h3><p>Verified, planned, historical, incomplete or unknown.</p></article>
+        <article class="field"><h3>Feature explanation</h3><p id="feature-explanation"></p></article>
+        <article class="field"><h3>Component download</h3><p id="feature-components"></p></article>
+        <article class="field"><h3>Claude prompt</h3><p id="feature-prompt"></p></article>
+        <article class="field"><h3>Daniella checklist</h3><p id="feature-checklist"></p></article>
+        <article class="field"><h3>Cognoscenti</h3><p id="feature-cognoscenti"></p></article>
+        <article class="field"><h3>Proof and boundaries</h3><p id="feature-proof"></p></article>
       </div>
     </section>
 
@@ -391,5 +402,74 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
     </section>
     <footer>Friction, not restriction. The user keeps the decision.</footer>
   </main>
+  <script>
+    (() => {
+      const explanations = {
+        onboarding: "A first-run setup lets the user choose protected sites and understand the pause. Daniella’s production challenge is to make onboarding clearer and consent-led.",
+        "protected-sites": "Only domains a person explicitly protects become eligible. Browser history or Top Sites never silently enable protection.",
+        "observer-product-pulse": "Observer offers optional check-ins after qualifying activity; Product Pulse is its branch for confirmed cart growth, not a separate fourth layer.",
+        rationalisation: "A qualifying checkout on a protected brand starts a 24-hour hold while the merchant cart and the user’s decision remain theirs.",
+        rationator: "During that hold, Rationator offers optional hobby/work or careful-browsing routes and returns to the same active hold.",
+        urgente: "Urgente is unlimited-use. A completed typing challenge grants a 12-hour checkout-only pass for that brand.",
+        deliberation: "After the hold, the user gets a separate 24-hour decision window. No purchase or cart edit happens automatically.",
+        removed: "The historical Beta 1.2 sample-savings preview and 48-hour hold are not part of the v1.3 target. The shipped Beta 1.2 artifact remains unverified."
+      };
+      const panel = document.getElementById("feature-details");
+      const fields = {
+        title: document.getElementById("feature-title"),
+        change: document.getElementById("feature-change"),
+        explanation: document.getElementById("feature-explanation"),
+        components: document.getElementById("feature-components"),
+        prompt: document.getElementById("feature-prompt"),
+        checklist: document.getElementById("feature-checklist"),
+        cognoscenti: document.getElementById("feature-cognoscenti"),
+        proof: document.getElementById("feature-proof"),
+        back: document.getElementById("feature-return")
+      };
+      let selectedNode = null;
+
+      function selectNode(node) {
+        const key = node.dataset.feature;
+        const explanation = explanations[key];
+        if (!explanation) return;
+        const title = node.querySelector("summary strong")?.textContent?.trim() || "Selected feature";
+        const badge = node.querySelector(".change-badge");
+        const status = key === "removed" ? "removed" : badge?.classList.contains("new") ? "new" : "enhanced";
+        const statusLabel = key === "removed" ? "REMOVED" : status.toUpperCase();
+        node.id = `feature-flow-${key}`;
+        selectedNode = node;
+        fields.title.textContent = title;
+        fields.change.className = `change-badge ${status}`;
+        fields.change.textContent = statusLabel;
+        fields.explanation.textContent = explanation;
+        fields.components.textContent = key === "removed"
+          ? "No v1.3 runtime bundle: this is a historical change note, not a downloadable component."
+          : "Bundle not packaged yet. The export batch will provide one node-level download containing all audited production runtime dependencies together; QA and test files will be excluded unless separately requested.";
+        fields.prompt.textContent = "Open decision: one v1.3-wide Claude prompt or focused prompts inside each feature node. The handover will compare both before this is locked.";
+        fields.checklist.textContent = "Per-node implementation checks and the greyed-out completion state are scheduled for a later batch.";
+        fields.cognoscenti.textContent = "Feature-specific gold-standard acceptance notes are scheduled for a later batch; use the Cognoscenti legend above for its shared meaning.";
+        fields.proof.textContent = node.querySelector(".proof-line")?.innerText?.trim() || "Historical evidence only; shipped Beta 1.2 runtime is unknown.";
+        fields.back.href = `#${node.id}`;
+        panel.hidden = false;
+        requestAnimationFrame(() => panel.scrollIntoView({ behavior: "smooth", block: "start" }));
+      }
+
+      function clearSelection(node) {
+        if (selectedNode !== node) return;
+        selectedNode = null;
+        panel.hidden = true;
+      }
+
+      document.querySelectorAll("details[data-feature]").forEach((node) => {
+        node.addEventListener("toggle", () => node.open ? selectNode(node) : clearSelection(node));
+      });
+      fields.back.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (!selectedNode) return;
+        selectedNode.scrollIntoView({ behavior: "smooth", block: "center" });
+        selectedNode.querySelector("summary")?.focus({ preventScroll: true });
+      });
+    })();
+  </script>
 </body>
 </html>
