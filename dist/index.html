@@ -63,6 +63,38 @@
     .flow-card h3 { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin: 0 0 .8rem; font-size: 1rem; }
     .flow-placeholder { display: grid; min-height: 10rem; place-content: center; gap: .45rem; padding: 1rem; border: 1px dashed #bdb5a5; border-radius: .65rem; text-align: center; color: var(--moss); }
     .flow-placeholder strong { color: var(--ink); font-weight: 600; }
+    .shape-key { margin: -.15rem 0 .7rem; color: var(--moss); font-size: .78rem; }
+    .source-note { margin: 0 0 .75rem; padding: .55rem .65rem; border-left: 3px solid var(--retained); background: rgba(119,125,118,.08); color: var(--moss); font-size: .8rem; line-height: 1.45; }
+    .journey-flow { display: grid; gap: .42rem; }
+    .flow-terminal { justify-self: center; padding: .28rem .75rem; border: 1px solid rgba(119,125,118,.52); border-radius: 999px; background: rgba(119,125,118,.1); color: var(--moss); font-size: .74rem; font-weight: 700; }
+    .flow-node { min-width: 0; border: 1px solid rgba(119,125,118,.48); border-radius: .72rem; background: rgba(255,255,255,.72); }
+    .flow-node summary { display: flex; align-items: center; gap: .65rem; padding: .72rem .8rem; cursor: pointer; list-style: none; }
+    .flow-node summary::-webkit-details-marker { display: none; }
+    .flow-node summary::after { content: "Click to reveal"; margin-left: auto; padding-left: .5rem; color: var(--moss); font-size: .72rem; white-space: nowrap; }
+    .flow-node[open] { border-color: var(--retained); box-shadow: 0 0 0 2px rgba(119,125,118,.12); }
+    .flow-node[open] summary::after { content: "Click to hide"; }
+    .flow-index { display: grid; flex: 0 0 1.6rem; width: 1.6rem; height: 1.6rem; place-items: center; border-radius: 50%; background: rgba(119,125,118,.13); color: var(--ink); font-size: .75rem; font-weight: 700; }
+    .flow-copy { display: grid; gap: .12rem; }
+    .flow-copy strong { font-size: .92rem; }
+    .flow-copy small { color: var(--moss); font-size: .76rem; }
+    .flow-arrow { height: .6rem; color: var(--retained); text-align: center; line-height: .6rem; }
+    .flow-steps { display: grid; gap: .38rem; margin: 0; padding: 0 .75rem .75rem; list-style: none; }
+    .flow-steps li { position: relative; min-width: 0; padding: .5rem .6rem .5rem 2.1rem; border: 1px solid rgba(119,125,118,.24); border-radius: .5rem; background: #fff9; color: var(--moss); font-size: .8rem; line-height: 1.4; }
+    .flow-steps li::before { position: absolute; top: .47rem; left: .6rem; color: var(--retained); font-size: .7rem; font-weight: 700; }
+    .flow-steps li:nth-child(1)::before { content: "1"; }
+    .flow-steps li:nth-child(2)::before { content: "2"; }
+    .flow-steps li:nth-child(3)::before { content: "3"; }
+    .flow-steps li:nth-child(4)::before { content: "4"; }
+    .flow-steps li:nth-child(5)::before { content: "5"; }
+    .flow-steps li:nth-child(6)::before { content: "6"; }
+    .flow-steps li:nth-child(7)::before { content: "7"; }
+    .flow-steps li:nth-child(8)::before { content: "8"; }
+    .flow-steps li.storage-step { border-radius: 50% / 28%; }
+    .flow-steps li.decision-step::before { content: ""; top: .62rem; left: .68rem; width: .52rem; height: .52rem; border: 1px solid var(--retained); border-radius: .08rem; background: #fff; transform: rotate(45deg); }
+    .historical-gap { margin: .55rem 0 0; padding: .62rem .7rem; border: 1px solid rgba(183,91,22,.36); border-radius: .6rem; background: rgba(183,91,22,.07); color: var(--moss); font-size: .8rem; line-height: 1.45; }
+    .plain-fallback { margin-top: .6rem; color: var(--moss); font-size: .8rem; }
+    .plain-fallback summary { cursor: pointer; }
+    .plain-fallback pre { overflow-x: auto; white-space: pre-wrap; font: inherit; line-height: 1.5; }
     .field { min-height: 5.5rem; padding: .75rem; border: 1px dashed #bdb5a5; border-radius: .6rem; background: rgba(255,255,255,.45); }
     .field h3 { margin: 0 0 .35rem; font-size: .95rem; }
     .field p { margin: 0; color: var(--moss); line-height: 1.45; }
@@ -113,7 +145,58 @@
       <div class="compare">
         <section class="card flow-card" aria-labelledby="before-title">
           <h3 id="before-title">Before · Beta 1.2 <span class="placeholder-tag">Historical</span></h3>
-          <div class="flow-placeholder"><strong>Beta 1.2 shopper flow</strong><span>Audited nodes will be placed here.</span></div>
+          <p class="source-note">Historical source snapshot only; the shipped Beta 1.2 build was not independently verified.</p>
+          <p class="shape-key">Shape key: pill = start/end · rectangle = action · ◇ = decision · cylinder = stored state.</p>
+          <div class="journey-flow" aria-label="Historical Beta 1.2 shopper journey">
+            <div class="flow-terminal">START · first use</div>
+            <div class="flow-arrow" aria-hidden="true">↓</div>
+            <details class="flow-node">
+              <summary><span class="flow-index">01</span><span class="flow-copy"><strong>Onboarding</strong><small>Six-screen historical preview · begins here</small></span></summary>
+              <ol class="flow-steps">
+                <li>Welcome.</li>
+                <li>Static protected-site preview; sample only.</li>
+                <li>Preview a 48-hour hold and 24-hour decision window.</li>
+                <li>Preview sample savings; not evidence of an outcome.</li>
+                <li>Preview Urgente as one use per month.</li>
+                <li>Finish writes onboarding completion, then opens the popup.</li>
+              </ol>
+            </details>
+            <div class="flow-arrow" aria-hidden="true">↓</div>
+            <details class="flow-node">
+              <summary><span class="flow-index">02</span><span class="flow-copy"><strong>Protected-site setup</strong><small>Popup list · archived code snapshot</small></span></summary>
+              <ol class="flow-steps">
+                <li>Popup reads the stored protected-site list.</li>
+                <li class="storage-step">User adds or removes a site; the list is written to Chrome sync storage.</li>
+                <li>Only a matching protected domain enters the checkout check.</li>
+              </ol>
+            </details>
+            <div class="flow-arrow" aria-hidden="true">↓</div>
+            <details class="flow-node">
+              <summary><span class="flow-index">03</span><span class="flow-copy"><strong>Checkout interception</strong><small>Archived flow is checkout-led, not browsing-led</small></span></summary>
+              <ol class="flow-steps">
+                <li>Trigger: a checkout attempt on a protected site.</li>
+                <li>Read: protected-site list and existing hold timestamp.</li>
+                <li class="storage-step">If no active hold, write a hold start to sync storage and show the hold overlay.</li>
+                <li class="decision-step">Decision: take the historical “Bypass Test” path, or go back and leave checkout.</li>
+                <li>If not bypassed, checkout waits through the 48-hour hold.</li>
+              </ol>
+            </details>
+            <div class="flow-arrow" aria-hidden="true">↓</div>
+            <details class="flow-node">
+              <summary><span class="flow-index">04</span><span class="flow-copy"><strong>Decision window</strong><small>48-hour hold → 24-hour choice window</small></span></summary>
+              <ol class="flow-steps">
+                <li class="decision-step">After 48 hours, show “Buy now” or “Drop it” during the 24-hour choice window.</li>
+                <li>Buy now removes the site hold and allows checkout for that session.</li>
+                <li>Drop it asks for confirmation, then attempts cart clearing; the archived tests expect logging only after confirmed removal.</li>
+                <li>On expiry, no silent cart clear; the next checkout check starts a new hold.</li>
+              </ol>
+            </details>
+            <div class="flow-arrow" aria-hidden="true">↓</div>
+            <div class="flow-terminal">END · buy, drop, or return to hold</div>
+          </div>
+          <p class="historical-gap"><strong>Historical source gap:</strong> onboarding says Urgente is monthly, while the clean archive code shows a typing-test bypass. Actual shipped Beta 1.2 runtime is unknown.</p>
+          <details class="plain-fallback"><summary>Plain-text fallback</summary><pre>First run: welcome → static protected-site preview → 48-hour hold preview → sample-savings preview → monthly Urgente preview → finish / open popup.
+Shop: popup site list → protected shop → checkout attempt → read site + hold state → historical hold / bypass-test path → 48-hour hold → 24-hour Buy now or Drop it → expiry prompt; no automatic cart clearing.</pre></details>
         </section>
         <section class="card flow-card" aria-labelledby="after-title">
           <h3 id="after-title">After · Cognoscene v1.3 <span class="placeholder-tag">Planned</span></h3>
