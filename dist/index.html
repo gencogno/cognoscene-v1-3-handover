@@ -143,7 +143,27 @@
     .plain-fallback pre { overflow-x: auto; white-space: pre-wrap; font: inherit; line-height: 1.5; }
     .field { min-height: 5.5rem; padding: .75rem; border: 1px dashed #bdb5a5; border-radius: .6rem; background: rgba(255,255,255,.45); }
     .field h3 { margin: 0 0 .35rem; font-size: .95rem; }
-    .field p { margin: 0; color: var(--moss); line-height: 1.45; }
+    .field p { margin: 0; color: var(--moss); line-height: 1.45; white-space: pre-line; }
+    .field-note { display: block; margin-top: .3rem; color: var(--moss); font-size: .72rem; line-height: 1.4; }
+    .checklist { display: grid; gap: .45rem; margin: .5rem 0 0; padding: 0; list-style: none; }
+    .checklist label { display: flex; align-items: flex-start; gap: .5rem; color: var(--moss); line-height: 1.4; cursor: pointer; }
+    .checklist input { flex: 0 0 auto; margin: .15rem 0 0; accent-color: var(--active); }
+    .checklist-tools { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .55rem; }
+    .checklist-state { margin: 0; color: var(--moss); font-size: .72rem; line-height: 1.4; }
+    .checklist-reset { padding: .25rem .4rem; border: 0; background: transparent; color: var(--moss); font: inherit; font-size: .72rem; text-decoration: underline; cursor: pointer; }
+    .checklist-reset:disabled { opacity: .45; cursor: default; }
+    .download-button { display: inline-flex; margin-top: .6rem; padding: .55rem .7rem; border: 1px solid var(--ink); border-radius: .55rem; background: var(--paper); color: var(--ink); font: inherit; font-size: .82rem; font-weight: 700; text-decoration: none; cursor: pointer; }
+    .download-button:hover, .download-button:focus-visible { background: var(--lime); outline: 2px solid var(--active); outline-offset: 2px; }
+    .download-button[hidden] { display: none; }
+    .compact-list { display: grid; gap: .35rem; margin: .35rem 0 0; padding-left: 1.05rem; color: var(--moss); line-height: 1.4; }
+    .shared-boundaries { padding: .7rem .8rem; border: 1px solid var(--line); border-radius: .65rem; background: rgba(255,255,255,.4); color: var(--moss); font-size: .82rem; }
+    .shared-boundaries summary { color: var(--ink); font-weight: 700; cursor: pointer; }
+    .shared-boundaries ul { display: grid; gap: .42rem; margin: .65rem 0 .1rem; padding-left: 1.1rem; line-height: 1.45; }
+    .flow-node.completed { filter: grayscale(1); border-color: #999b95; background: rgba(138,138,132,.12); box-shadow: none; animation: checklist-complete .5s ease-out; }
+    .flow-node.completed[open] { border-color: #777b74; box-shadow: 0 0 0 2px rgba(119,125,118,.14); }
+    .completion-label { width: fit-content; padding: .08rem .32rem; border: 1px solid #aaa9a1; border-radius: 999px; color: #62645e; background: #efeee9; font-size: .62rem; font-style: normal; font-weight: 800; letter-spacing: .04em; }
+    @keyframes checklist-complete { 0% { box-shadow: 0 0 0 0 rgba(119,125,118,.35); transform: scale(1); } 55% { box-shadow: 0 0 0 5px rgba(119,125,118,.12); transform: scale(1.008); } 100% { box-shadow: none; transform: scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .flow-node.completed { animation: none; } }
     .selected-feature[hidden] { display: none; }
     .selected-feature { scroll-margin-top: 1rem; }
     .selection-return { color: var(--moss); font-size: .78rem; white-space: nowrap; }
@@ -394,14 +414,25 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
       </div>
     </section>
 
+    <details class="shared-boundaries section">
+      <summary>Shared ownership boundaries · click to reveal</summary>
+      <ul>
+        <li><strong>Observer:</strong> owns optional browsing check-ins. Product Pulse is the confirmed-cart-growth branch within Observer, not a separate layer.</li>
+        <li><strong>Rationalisation:</strong> owns the 24-hour hold. Rationator is an in-hold return loop; Deliberation is the separate post-hold choice; Urgente is the user-triggered, unlimited-use checkout pass.</li>
+        <li><strong>Growth:</strong> tentative and grey. Cogno retains the scope decision; no Daniella runtime work or download until explicitly unlocked.</li>
+        <li><strong>Python:</strong> shadow-only analysis; it has no live UI, eligibility, blocking, or decision authority.</li>
+        <li><strong>Vision:</strong> planned fallback only after the DOM signal fails, never a parallel observer. Its current runtime wiring is unknown and needs an explicit contract before implementation.</li>
+      </ul>
+    </details>
+
     <section class="section card selected-feature" id="feature-details" aria-labelledby="feature-title" aria-live="polite" hidden>
       <div class="section-head"><div><p class="release-label" id="feature-kicker">Details for the selected chart node</p><h2 id="feature-title">Selected feature</h2></div><div><span class="change-badge" id="feature-change"></span> <a class="selection-return" id="feature-return" href="#journey-title">↑ Return to its flow</a></div></div>
       <div class="detail-grid">
-        <article class="field"><h3>Feature explanation</h3><p id="feature-explanation"></p></article>
-        <article class="field"><h3>Component download</h3><p id="feature-components"></p></article>
+        <article class="field"><h3>Feature design</h3><p id="feature-explanation"></p></article>
+        <article class="field"><h3>Component download</h3><p id="feature-components"></p><a class="download-button" id="feature-download" href="#" download>Download node handoff</a><span class="field-note" id="download-note">One combined design and source-map brief; no extension runtime code is included.</span></article>
         <article class="field"><h3>Claude prompt</h3><p id="feature-prompt"></p></article>
-        <article class="field"><h3>Daniella checklist</h3><p id="feature-checklist"></p></article>
-        <article class="field"><h3>Cognoscenti</h3><p id="feature-cognoscenti"></p></article>
+        <article class="field"><h3>Daniella checklist</h3><ul class="checklist" id="feature-checklist"></ul><div class="checklist-tools"><p class="checklist-state" id="checklist-state" aria-live="polite"></p><button class="checklist-reset" id="checklist-reset" type="button">Reset</button></div></article>
+        <article class="field"><h3>Cognoscenti</h3><ul class="compact-list" id="feature-cognoscenti"></ul></article>
         <article class="field"><h3>Proof and boundaries</h3><p id="feature-proof"></p></article>
       </div>
     </section>
@@ -430,90 +461,6 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
     </section>
     <footer>Friction, not restriction. The user keeps the decision.</footer>
   </main>
-  <script>
-    (() => {
-      const explanations = {
-        "challenge-onboarding": "Improve the five-screen first-run setup without weakening explicit site selection, consent, safe skip, or privacy boundaries.",
-        "challenge-ui": "Improve the current popup experience using popup.css as the palette source; keep internal QA tools out of the production runtime.",
-        onboarding: "A first-run setup lets the user choose protected sites and understand the pause. Daniella’s production challenge is to make onboarding clearer and consent-led.",
-        "protected-sites": "Only domains a person explicitly protects become eligible. Browser history or Top Sites never silently enable protection.",
-        "observer-product-pulse": "Observer offers optional check-ins after qualifying activity; Product Pulse is its branch for confirmed cart growth, not a separate fourth layer.",
-        rationalisation: "A qualifying checkout on a protected brand starts a 24-hour hold while the merchant cart and the user’s decision remain theirs.",
-        rationator: "During that hold, Rationator offers optional hobby/work or careful-browsing routes and returns to the same active hold.",
-        urgente: "Urgente is unlimited-use. A completed typing challenge grants a 12-hour checkout-only pass for that brand.",
-        deliberation: "After the hold, the user gets a separate 24-hour decision window. No purchase or cart edit happens automatically.",
-        removed: "The historical Beta 1.2 sample-savings preview and 48-hour hold are not part of the v1.3 target. The shipped Beta 1.2 artifact remains unverified."
-      };
-      const panel = document.getElementById("feature-details");
-      const fields = {
-        kicker: document.getElementById("feature-kicker"),
-        title: document.getElementById("feature-title"),
-        change: document.getElementById("feature-change"),
-        explanation: document.getElementById("feature-explanation"),
-        components: document.getElementById("feature-components"),
-        prompt: document.getElementById("feature-prompt"),
-        checklist: document.getElementById("feature-checklist"),
-        cognoscenti: document.getElementById("feature-cognoscenti"),
-        proof: document.getElementById("feature-proof"),
-        back: document.getElementById("feature-return")
-      };
-      const componentNotes = {
-        onboarding: "Source map only: instructions.html/js are dedicated, but site selection and settings cross into shopping-site-registry.js, background.js and popup.js. No audited runtime ZIP yet.",
-        "protected-sites": "Source map only: shopping-site-registry.js, instructions.js, popup.js and background.js share selection, registration and sync. No isolated production ZIP has been verified.",
-        "observer-product-pulse": "No node ZIP yet: both features share content.js/content.css with Rationalisation and QA branches. Production flags disable QA paths but do not extract them; an audited production allow-list is required.",
-        rationalisation: "No node ZIP yet: checkout logic shares content.js/content.css with Observer and QA. Background, mode, cart and outcome helpers are dependencies; verify the production allow-list before packaging.",
-        rationator: "No node ZIP yet: Rationator lives inside Rationalisation's content.js/content.css flow, not after the hold. Preserve hold ownership and exclude QA paths.",
-        urgente: "No node ZIP yet: the checkout-only pass spans shared content/background/reset paths. Keep it brand-scoped; do not export QA or a global bypass.",
-        deliberation: "No node ZIP yet: the flow spans content.js, cart-snapshot.js, native-cart-edit-state.js, decision helpers and background wiring. Export only after dependency and QA review.",
-        "challenge-onboarding": "Challenge brief only; no runtime ZIP. Its implementation crosses onboarding screens, protected-site registry and shared background/popup state.",
-        "challenge-ui": "Challenge brief only; no runtime ZIP. The current palette is #C8E88A. Production hides the popup QA panel, but copy-lab.js remains in the injected-file list; flags-off is not proof of code exclusion.",
-        removed: "No v1.3 runtime bundle: this is a historical change note, not a downloadable component."
-      };
-      let selectedNode = null;
-
-      function selectNode(node) {
-        const key = node.dataset.feature;
-        const explanation = explanations[key];
-        if (!explanation) return;
-        const title = node.querySelector("summary strong")?.textContent?.trim() || "Selected feature";
-        const badge = node.querySelector(".change-badge");
-        const status = key === "removed" ? "removed" : key.startsWith("challenge-") ? "challenge" : badge?.classList.contains("new") ? "new" : "enhanced";
-        const statusLabel = key === "removed" ? "REMOVED" : key.startsWith("challenge-") ? "CHALLENGE" : status.toUpperCase();
-        node.id = `feature-flow-${key}`;
-        selectedNode = node;
-        fields.kicker.textContent = key.startsWith("challenge-") ? "Details for the selected production challenge" : key === "removed" ? "Details for a historical change" : "Details for the selected chart node";
-        fields.title.textContent = title;
-        fields.change.className = `change-badge ${status}`;
-        fields.change.textContent = statusLabel;
-        fields.explanation.textContent = explanation;
-        fields.components.textContent = componentNotes[key]
-          || "Runtime ZIP not ready. Proposed format: one download per node with all audited production dependencies plus its feature design, prompt, checklist and Cognoscenti. Tests are referenced, not shipped in the runtime; QA/test/WIP are excluded.";
-        fields.prompt.textContent = "Recommendation, not locked: one short shared rules brief plus a focused prompt for this node. A single all-feature prompt risks crossing owners; node-only prompts can lose shared guardrails. Founder decision pending.";
-        fields.checklist.textContent = "Per-node implementation checks and the greyed-out completion state are scheduled for a later batch.";
-        fields.cognoscenti.textContent = "Feature-specific gold-standard acceptance notes are scheduled for a later batch; use the Cognoscenti legend above for its shared meaning.";
-        fields.proof.textContent = node.querySelector(".proof-line")?.innerText?.trim() || node.querySelector(".challenge-proof")?.innerText?.trim() || "Historical evidence only; shipped Beta 1.2 runtime is unknown.";
-        fields.back.href = `#${node.id}`;
-        fields.back.textContent = key.startsWith("challenge-") ? "↑ Return to challenge" : key === "removed" ? "↑ Return to change note" : "↑ Return to its flow";
-        panel.hidden = false;
-        requestAnimationFrame(() => panel.scrollIntoView({ behavior: "smooth", block: "start" }));
-      }
-
-      function clearSelection(node) {
-        if (selectedNode !== node) return;
-        selectedNode = null;
-        panel.hidden = true;
-      }
-
-      document.querySelectorAll("details[data-feature]").forEach((node) => {
-        node.addEventListener("toggle", () => node.open ? selectNode(node) : clearSelection(node));
-      });
-      fields.back.addEventListener("click", (event) => {
-        event.preventDefault();
-        if (!selectedNode) return;
-        selectedNode.scrollIntoView({ behavior: "smooth", block: "center" });
-        selectedNode.querySelector("summary")?.focus({ preventScroll: true });
-      });
-    })();
-  </script>
+  <script src="handover.js" defer></script>
 </body>
 </html>
