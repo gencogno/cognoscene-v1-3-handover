@@ -63,7 +63,12 @@
     .flow-card h3 { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin: 0 0 .8rem; font-size: 1rem; }
     .flow-placeholder { display: grid; min-height: 10rem; place-content: center; gap: .45rem; padding: 1rem; border: 1px dashed #bdb5a5; border-radius: .65rem; text-align: center; color: var(--moss); }
     .flow-placeholder strong { color: var(--ink); font-weight: 600; }
-    .shape-key { margin: -.15rem 0 .7rem; color: var(--moss); font-size: .78rem; }
+    .shape-key { display: flex; flex-wrap: wrap; gap: .35rem .65rem; margin: -.15rem 0 .7rem; color: var(--moss); font-size: .74rem; }
+    .shape-key span { display: inline-flex; align-items: center; gap: .28rem; }
+    .shape-mark { display: inline-block; width: .82rem; height: .58rem; border: 1px solid var(--retained); background: #fff9; }
+    .shape-mark.terminal { width: 1rem; border-radius: 999px; }
+    .shape-mark.decision { width: .55rem; height: .55rem; border: 0; background: var(--retained); transform: rotate(45deg); }
+    .shape-mark.state { border-radius: 50% / 24%; box-shadow: inset 0 .1rem 0 rgba(119,125,118,.28); }
     .source-note { margin: 0 0 .75rem; padding: .55rem .65rem; border-left: 3px solid var(--retained); background: rgba(119,125,118,.08); color: var(--moss); font-size: .8rem; line-height: 1.45; }
     .journey-flow { display: grid; gap: .42rem; }
     .flow-terminal { justify-self: center; padding: .28rem .75rem; border: 1px solid rgba(119,125,118,.52); border-radius: 999px; background: rgba(119,125,118,.1); color: var(--moss); font-size: .74rem; font-weight: 700; }
@@ -75,6 +80,9 @@
     .flow-node summary::-webkit-details-marker { display: none; }
     .flow-node summary::after { content: "Click to reveal"; margin-left: auto; padding-left: .5rem; color: var(--moss); font-size: .72rem; white-space: nowrap; }
     .flow-node[open] { border-color: var(--retained); box-shadow: 0 0 0 2px rgba(119,125,118,.12); }
+    .flow-node.status-new[open] { border-color: var(--new); box-shadow: 0 0 0 2px rgba(40,124,75,.18), 0 0 16px rgba(40,124,75,.18); }
+    .flow-node.status-enhanced[open] { border-color: var(--enhanced); box-shadow: 0 0 0 2px rgba(40,95,204,.18), 0 0 16px rgba(40,95,204,.18); }
+    .flow-node.status-removed[open] { border-color: var(--removed); box-shadow: 0 0 0 2px rgba(183,91,22,.18), 0 0 16px rgba(183,91,22,.18); }
     .flow-node[open] summary::after { content: "Click to hide"; }
     .flow-index { display: grid; flex: 0 0 1.6rem; width: 1.6rem; height: 1.6rem; place-items: center; border-radius: 50%; background: rgba(119,125,118,.13); color: var(--ink); font-size: .75rem; font-weight: 700; }
     .flow-copy { display: grid; flex: 1; min-width: 0; gap: .12rem; }
@@ -97,8 +105,13 @@
     .removed-note { margin-top: .65rem; padding: .6rem .7rem; border: 1px solid rgba(183,91,22,.42); border-left: 4px solid var(--removed); border-radius: .55rem; background: rgba(183,91,22,.07); color: var(--moss); font-size: .78rem; line-height: 1.45; }
     .flow-arrow { height: .6rem; color: var(--retained); text-align: center; line-height: .6rem; }
     .flow-steps { display: grid; gap: .38rem; margin: 0; padding: 0 .75rem .75rem; list-style: none; }
-    .flow-steps li { position: relative; min-width: 0; padding: .5rem .6rem .5rem 2.1rem; border: 1px solid rgba(119,125,118,.24); border-radius: .5rem; background: #fff9; color: var(--moss); font-size: .8rem; line-height: 1.4; }
+    .flow-steps li { position: relative; min-width: 0; padding: .5rem .6rem .5rem 2.55rem; border: 1px solid rgba(119,125,118,.24); border-radius: .5rem; background: #fff9; color: var(--moss); font-size: .8rem; line-height: 1.4; }
+    .flow-steps li strong { color: var(--ink); font-size: .7rem; letter-spacing: .025em; text-transform: uppercase; }
     .flow-steps li::before { position: absolute; top: .47rem; left: .6rem; color: var(--retained); font-size: .7rem; font-weight: 700; }
+    .flow-steps li::after { position: absolute; top: .58rem; left: 1.55rem; width: .52rem; height: .38rem; border: 1px solid var(--retained); border-radius: .12rem; background: #fff; content: ""; }
+    .flow-steps li.step-trigger::after { width: .68rem; border-radius: 999px; }
+    .flow-steps li.decision-step::after { width: .45rem; height: .45rem; top: .54rem; left: 1.58rem; border-radius: .04rem; transform: rotate(45deg); }
+    .flow-steps li.storage-step::after { width: .62rem; border-radius: 50% / 24%; box-shadow: inset 0 .08rem 0 rgba(119,125,118,.28); }
     .flow-steps li:nth-child(1)::before { content: "1"; }
     .flow-steps li:nth-child(2)::before { content: "2"; }
     .flow-steps li:nth-child(3)::before { content: "3"; }
@@ -107,8 +120,7 @@
     .flow-steps li:nth-child(6)::before { content: "6"; }
     .flow-steps li:nth-child(7)::before { content: "7"; }
     .flow-steps li:nth-child(8)::before { content: "8"; }
-    .flow-steps li.storage-step { border-radius: 50% / 28%; }
-    .flow-steps li.decision-step::before { content: ""; top: .62rem; left: .68rem; width: .52rem; height: .52rem; border: 1px solid var(--retained); border-radius: .08rem; background: #fff; transform: rotate(45deg); }
+    .flow-steps li.storage-step { border-radius: .5rem; }
     .historical-gap { margin: .55rem 0 0; padding: .62rem .7rem; border: 1px solid rgba(183,91,22,.36); border-radius: .6rem; background: rgba(183,91,22,.07); color: var(--moss); font-size: .8rem; line-height: 1.45; }
     .plain-fallback { margin-top: .6rem; color: var(--moss); font-size: .8rem; }
     .plain-fallback summary { cursor: pointer; }
@@ -155,7 +167,7 @@
     </section>
 
     <section class="section" aria-labelledby="journey-title">
-      <div class="section-head"><h2 id="journey-title">Shopper journey</h2><span class="section-note">Before / after flow placeholders</span></div>
+      <div class="section-head"><h2 id="journey-title">Shopper journey</h2><span class="section-note">Before / after chains · click a node to reveal its flow</span></div>
       <div class="legend" aria-label="Feature change legend">
         <span class="legend-item new"><i class="dot new" aria-hidden="true"></i>New</span>
         <span class="legend-item enhanced"><i class="dot enhanced" aria-hidden="true"></i>Enhanced</span>
@@ -171,7 +183,7 @@
         <section class="card flow-card" aria-labelledby="before-title">
           <h3 id="before-title">Before · Beta 1.2 <span class="placeholder-tag">Historical</span></h3>
           <p class="source-note">Historical source snapshot only; the shipped Beta 1.2 build was not independently verified.</p>
-          <p class="shape-key">Shape key: pill = start/end · rectangle = action · ◇ = decision · cylinder = stored state.</p>
+          <p class="shape-key" aria-label="Flowchart shape legend"><span><i class="shape-mark terminal" aria-hidden="true"></i>Start / end</span><span><i class="shape-mark" aria-hidden="true"></i>Action / UI</span><span><i class="shape-mark decision" aria-hidden="true"></i>Eligibility / decision</span><span><i class="shape-mark state" aria-hidden="true"></i>Stored state</span></p>
           <div class="journey-flow" aria-label="Historical Beta 1.2 shopper journey">
             <div class="flow-terminal">START · first use</div>
             <div class="flow-arrow" aria-hidden="true">↓</div>
@@ -226,7 +238,7 @@ Shop: popup site list → protected shop → checkout attempt → read site + ho
         <section class="card flow-card" aria-labelledby="after-title">
           <h3 id="after-title">After · Cognoscene v1.3 <span class="placeholder-tag">Planned target</span></h3>
           <p class="source-note">Evidence read from current manifest 1.4.103 and source; no Git metadata or browser proof. Current v2 code informs, but does not rename, the v1.3 target.</p>
-          <p class="shape-key">Shape key: pill = start/end · rectangle = action · ◇ = decision · cylinder = stored state.</p>
+          <p class="shape-key" aria-label="Flowchart shape legend"><span><i class="shape-mark terminal" aria-hidden="true"></i>Start / end</span><span><i class="shape-mark" aria-hidden="true"></i>Action / UI</span><span><i class="shape-mark decision" aria-hidden="true"></i>Eligibility / decision</span><span><i class="shape-mark state" aria-hidden="true"></i>Stored state</span></p>
           <div class="journey-flow" aria-label="Planned Cognoscene v1.3 shopper journey, based on current source">
             <div class="flow-terminal">START · first use</div>
             <div class="flow-arrow" aria-hidden="true">↓</div>
@@ -234,12 +246,13 @@ Shop: popup site list → protected shop → checkout attempt → read site + ho
               <summary><span class="flow-index">01</span><span class="flow-copy"><strong>Onboarding · production challenge</strong><small>Explicit setup is present; a production-grade redesign is planned</small></span><span class="change-badge enhanced">ENHANCED</span></summary>
               <p class="proof-line"><span class="proof-tag">Verified current</span><span class="proof-tag planned">Planned challenge</span>Current source has five screens; improving onboarding and UI remains Daniella’s challenge.</p>
               <ol class="flow-steps">
-                <li>Trigger: first run or a deliberate replay; read existing settings and protected sites.</li>
-                <li>Show the welcome, site setup, checkout pause, evidence-first progress, and ready/privacy screens.</li>
-                <li>User manually adds one or more sites; the page cannot advance with an empty selection.</li>
-                <li>Optional Chrome Top Sites suggestions require a separate unchecked-by-default choice; suggestions are local and never auto-protect a site.</li>
-                <li>Finish writes the selected sites, completion flag, skip flag, and settings; onboarding skip unlocks the extension without replacing the site list.</li>
-                <li>Current sync-across-devices choice is prechecked by default. Consent wording/default needs review in the onboarding challenge.</li>
+                <li class="step-trigger"><strong>Trigger</strong> Chrome opens the wizard on first install; an incomplete setup can reopen it after an update/startup.</li>
+                <li class="storage-step"><strong>Eligibility / state read</strong> Read onboarding status, current settings, and any existing protected-site list before showing setup.</li>
+                <li><strong>UI</strong> Show five screens: welcome, site selection, checkout pause, evidence-first progress, and ready/privacy.</li>
+                <li class="decision-step"><strong>User action</strong> The user adds at least one site to finish; optional Top Sites suggestions require a separate unchecked choice and explicit approval per site.</li>
+                <li class="storage-step"><strong>State / event write</strong> Finish saves selected sites and onboarding/settings flags; skip saves completion/skip flags and settings without replacing the protected-site list.</li>
+                <li><strong>Next state</strong> Try to open the extension popup; if that fails, show the “open toolbar” fallback.</li>
+                <li class="decision-step"><strong>Cooldown / reset / fallback</strong> No Top Sites access means no suggestions. Device-sync consent is currently prechecked and needs review in this challenge.</li>
               </ol>
             </details>
             <div class="flow-arrow" aria-hidden="true">↓</div>
@@ -247,9 +260,13 @@ Shop: popup site list → protected shop → checkout attempt → read site + ho
               <summary><span class="flow-index">02</span><span class="flow-copy"><strong>Protected-site shopping</strong><small>Only user-chosen domains are eligible</small></span><span class="change-badge enhanced">ENHANCED</span></summary>
               <p class="proof-line"><span class="proof-tag">Verified current</span>Top Sites suggestions are separate from the explicit protection list.</p>
               <ol class="flow-steps">
-                <li>Read the user’s selected domains and separate shopping-suggestion consent.</li>
-                <li>If Chrome Top Sites or the shopping registry is unavailable, show no suggestions; never infer consent.</li>
-                <li>Only an explicitly added domain can enter Observer, Product Pulse, or checkout eligibility.</li>
+                <li class="step-trigger"><strong>Trigger</strong> The user opens setup or chooses add/remove in the extension popup.</li>
+                <li class="storage-step"><strong>Eligibility / state read</strong> Read protected domains and the separate Top Sites suggestion preference.</li>
+                <li><strong>UI</strong> Show the protected-site list; suggestions are visibly separate from protected sites.</li>
+                <li class="decision-step"><strong>User action</strong> The user explicitly adds/removes a domain or accepts a suggested domain; nothing is auto-protected.</li>
+                <li class="storage-step"><strong>State / event write</strong> Persist the protected-domain list in Chrome sync storage; Top Sites preference remains separate.</li>
+                <li><strong>Next state</strong> Only a listed domain becomes eligible for Observer, Product Pulse, and checkout checks.</li>
+                <li class="decision-step"><strong>Cooldown / reset / fallback</strong> If suggestions are unavailable, show none; removing a domain removes its eligibility.</li>
               </ol>
             </details>
             <div class="flow-arrow" aria-hidden="true">↓</div>
@@ -257,12 +274,13 @@ Shop: popup site list → protected shop → checkout attempt → read site + ho
               <summary><span class="flow-index">03</span><span class="flow-copy"><strong>Observer + Product Pulse</strong><small>Paired browsing and cart-growth branch</small></span><span class="change-badge new">NEW</span></summary>
               <p class="proof-line"><span class="proof-tag">Verified current</span><span class="proof-tag incomplete">Five-return UI incomplete</span>Source and focused tests exist; tests were not run for this handover.</p>
               <ol class="flow-steps">
-                <li><strong>Observer:</strong> on a protected site, read user frequency, active-hold state, prompt cooldown, and qualifying activity; current code requires an active-minute threshold plus fresh scrolling and a natural pause.</li>
-                <li>Show a soft or active check-in only when eligible; the user may leave or continue. Continued prompts can ask a user-confirmed need; never infer motive.</li>
-                <li>Write bounded prompt/answer state. The fifth-return reason has event-contract support, but the user-facing five-return prompt is missing in current source.</li>
-                <li><strong>Product Pulse:</strong> independently confirm rendered cart additions; below seven items it stays quiet.</li>
-                <li>At seven or more items and outside its 60-second cooldown, show the cart-growth prompt; if it is open, defer Observer.</li>
-                <li>Dismissal records the bounded pulse event; Observer may resume after a five-second delay. Uncertain DOM evidence means no pulse.</li>
+                <li class="step-trigger"><strong>Trigger</strong> A protected shopping page receives qualifying browsing activity or a possible cart addition.</li>
+                <li class="decision-step"><strong>Eligibility / state read</strong> Observer checks active-hold state, settings/cooldowns, at least one active minute, fresh scrolling and a natural pause. Product Pulse separately confirms a rendered cart increase.</li>
+                <li><strong>UI</strong> Show one eligible Observer check-in, or Product Pulse at seven confirmed items when its 60-second cooldown has elapsed; Rationalisation surfaces take priority.</li>
+                <li class="decision-step"><strong>User action</strong> The user may answer, dismiss, or continue browsing; a reason is stored only when the user supplies it.</li>
+                <li class="storage-step"><strong>State / event write</strong> Record bounded prompt/answer and confirmed cart-growth events; do not store product titles or infer intent.</li>
+                <li><strong>Next state</strong> After Product Pulse closes, defer Observer for five seconds, then resume only if it is still eligible.</li>
+                <li class="decision-step"><strong>Cooldown / reset / fallback</strong> Enforce Pulse cooldown; uncertain DOM/cart evidence stays quiet. The fifth-return reason prompt is still missing in current source.</li>
               </ol>
             </details>
             <div class="flow-arrow" aria-hidden="true">↓</div>
@@ -270,11 +288,13 @@ Shop: popup site list → protected shop → checkout attempt → read site + ho
               <summary><span class="flow-index">04</span><span class="flow-copy"><strong>Rationalisation · checkout hold</strong><small>First qualifying checkout starts a 24-hour hold</small></span><span class="change-badge enhanced">ENHANCED</span></summary>
               <p class="proof-line"><span class="proof-tag">Verified current</span><span class="proof-tag incomplete">Merchant proof incomplete</span>Static tests cover selected controls; browser support is not universal proof.</p>
               <ol class="flow-steps">
-                <li>Trigger only on a qualifying merchant checkout action for a protected brand; Cognoscene’s own prompt controls do not count as merchant checkout.</li>
-                <li>Read brand hold, active Urgente pass, and checkout classification; uncertainty fails open.</li>
-                <li>Show the hold UI and write the brand-scoped start time; ordinary browsing and add-to-cart remain available.</li>
-                <li>Keep the original hold clock across reloads and matching brand subdomains; do not restart it on a return loop.</li>
-                <li>At 24 hours, transition to the separate 24-hour Deliberation window; an expired window returns to a fresh hold only at a later qualifying checkout.</li>
+                <li class="step-trigger"><strong>Trigger</strong> A user activates a qualifying merchant checkout control on a protected brand; Cognoscene prompt buttons do not qualify.</li>
+                <li class="decision-step"><strong>Eligibility / state read</strong> Read the brand hold, Urgente pass, and control classification. Unknown classification fails open.</li>
+                <li><strong>UI</strong> For an eligible checkout, show the 24-hour Rationalisation hold; normal browsing and add-to-cart remain available.</li>
+                <li class="decision-step"><strong>User action</strong> The user can keep browsing, leave the merchant, or choose an optional in-hold route; no cart item is removed.</li>
+                <li class="storage-step"><strong>State / event write</strong> Save the brand-scoped hold start and journey identifier in Chrome sync storage.</li>
+                <li><strong>Next state</strong> Preserve the original timer across reloads/brand subdomains; after 24 hours, open the separate 24-hour Deliberation window.</li>
+                <li class="decision-step"><strong>Cooldown / reset / fallback</strong> Rationator does not restart the hold. After the decision window expires, a later checkout can begin a fresh hold; uncertain checkout controls fail open.</li>
               </ol>
             </details>
             <div class="journey-branch" aria-label="Optional routes while the 24-hour hold is active">
@@ -284,23 +304,26 @@ Shop: popup site list → protected shop → checkout attempt → read site + ho
                   <summary><span class="flow-index">↶</span><span class="flow-copy"><strong>Rationator · return loop</strong><small>Optional pause while browsing during the hold</small></span><span class="change-badge new">NEW</span></summary>
                   <p class="proof-line"><span class="proof-tag">Verified current source</span><span class="proof-tag incomplete">Browser proof incomplete</span>Local per-tab/per-hold state only.</p>
                   <ol class="flow-steps">
-                    <li>On a neutral page during the active hold, read the hold start and return-availability state.</li>
-                    <li>Show the hold reminder; the user may dismiss it or choose “take a pause.”</li>
-                    <li>Rationator offers optional hobby/work directions or careful browsing; it does not decide or alter checkout.</li>
-                    <li>Choosing careful browsing records a site-and-hold key in tab session storage and returns to the persistent Rationator card.</li>
-                    <li>“Take a pause” reopens Rationator; dismissing the surface returns to the same active hold with its original timer.</li>
-                    <li>Clear the loop when the hold expires, is bypassed, or enters Deliberation.</li>
+                    <li class="step-trigger"><strong>Trigger</strong> During an active hold, the user selects “take a pause” from the hold reminder or uses its return action.</li>
+                    <li class="decision-step"><strong>Eligibility / state read</strong> Confirm the same hold is active and read its start plus per-tab/per-hold return state.</li>
+                    <li><strong>UI</strong> Show optional hobby/work directions, careful browsing, back, and dismiss choices.</li>
+                    <li class="decision-step"><strong>User action</strong> The user chooses a direction, carefully browses, returns, or dismisses; Rationator does not decide or alter checkout.</li>
+                    <li class="storage-step"><strong>State / event write</strong> A careful-browsing choice records a site-and-hold key in tab session storage.</li>
+                    <li><strong>Next state</strong> Return to the persistent Rationator card or reopen Rationator; the original hold and timer stay active.</li>
+                    <li class="decision-step"><strong>Cooldown / reset / fallback</strong> Clear the loop when the hold expires, is bypassed, or enters Deliberation; otherwise dismiss back to the active hold.</li>
                   </ol>
                 </details>
                 <details class="flow-node status-enhanced" data-feature="urgente">
                   <summary><span class="flow-index">↗</span><span class="flow-copy"><strong>Urgente · unlimited use</strong><small>Typed, brand-specific, checkout-only pass</small></span><span class="change-badge enhanced">ENHANCED</span></summary>
                   <p class="proof-line"><span class="proof-tag">Founder-confirmed</span><span class="proof-tag">Verified current</span><span class="proof-tag incomplete">Legacy monthly counter remains</span></p>
                   <ol class="flow-steps">
-                    <li>Trigger from the active checkout hold; read the same-brand pass. There is no monthly usage gate.</li>
-                    <li>Show the optional typing challenge; user may finish it or cancel and keep the hold.</li>
-                    <li>On success, write a 12-hour same-brand checkout pass locally, then expose checkout for that brand only.</li>
-                    <li>The old monthly usage counter still increments for display/reset history; it does not limit use. Observer and Product Pulse remain separate.</li>
-                    <li>After 12 hours, remove the pass; the next protected checkout again reads the hold state.</li>
+                    <li class="step-trigger"><strong>Trigger</strong> From the active checkout hold, the user chooses unlimited-use Urgente.</li>
+                    <li class="storage-step"><strong>Eligibility / state read</strong> Read the pass for that same brand; there is no monthly usage gate.</li>
+                    <li><strong>UI</strong> Show the optional typing challenge.</li>
+                    <li class="decision-step"><strong>User action</strong> The user completes the phrase or cancels; cancel keeps the hold.</li>
+                    <li class="storage-step"><strong>State / event write</strong> On success, save a 12-hour same-brand checkout-only pass locally. Legacy monthly display/reset usage may increment, but never limits use.</li>
+                    <li><strong>Next state</strong> Allow checkout only for the passed brand; Observer and Product Pulse remain separate.</li>
+                    <li class="decision-step"><strong>Cooldown / reset / fallback</strong> At 12 hours the pass expires; the next protected checkout reads the hold again. Repeated Urgente use remains unlimited.</li>
                   </ol>
                 </details>
               </div>
@@ -311,12 +334,13 @@ Shop: popup site list → protected shop → checkout attempt → read site + ho
               <summary><span class="flow-index">05</span><span class="flow-copy"><strong>Deliberation · user chooses</strong><small>Opens after the 24-hour hold</small></span><span class="change-badge enhanced">ENHANCED</span></summary>
               <p class="proof-line"><span class="proof-tag">Verified current source</span><span class="proof-tag unknown">Normal pass duration needs founder sign-off</span>Growth remains tentative and outside the active journey.</p>
               <ol class="flow-steps">
-                <li>Read the original brand hold, decision-window end, settled cart evidence, and any pending user choice.</li>
-                <li>Show the separate 24-hour window with continue/buy, wait, and selected-item edit options; no automatic purchase.</li>
-                <li>Only an explicit buy/continue confirmation may grant a temporary brand-scoped checkout permission.</li>
-                <li>Selected-item changes remain on the merchant’s own cart; record a reduction only when the settled cart confirms it.</li>
-                <li>Unknown price, item, or removal evidence stays unknown; do not invent a saving or claim a purchase was prevented.</li>
-                <li>At expiry, remove the episode and show a brief notice that the cart is unchanged, with a “Continue browsing” action; a later qualifying checkout starts a fresh hold.</li>
+                <li class="step-trigger"><strong>Trigger</strong> The original 24-hour Rationalisation hold reaches expiry.</li>
+                <li class="decision-step"><strong>Eligibility / state read</strong> Read the original brand hold, decision-window end, settled cart evidence, and pending user choice; uncertain cart facts remain unknown.</li>
+                <li><strong>UI</strong> Show the separate 24-hour decision window with continue/buy, wait, and selected-item edit options; never purchase automatically.</li>
+                <li class="decision-step"><strong>User action</strong> The user explicitly continues/buys, waits, or edits their own merchant cart.</li>
+                <li class="storage-step"><strong>State / event write</strong> Record the explicit choice; only confirmed cart changes may support a reduction record. Normal checkout-pass duration still needs founder sign-off.</li>
+                <li><strong>Next state</strong> An explicit buy/continue choice may grant temporary brand-scoped checkout permission; the merchant owns the cart.</li>
+                <li class="decision-step"><strong>Cooldown / reset / fallback</strong> At expiry, remove the episode and show the brief “cart unchanged” notice with Continue browsing; a later qualifying checkout starts a fresh hold. Never claim savings, regret reduction, prevented purchases, or behavioural efficacy.</li>
               </ol>
             </details>
             <div class="flow-arrow" aria-hidden="true">↓</div>
