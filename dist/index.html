@@ -194,7 +194,7 @@
           <div class="challenge-detail">
             <p><strong>Design source of truth:</strong> the current popup, not the old design-document lime. Current popup tokens include lime <code>#C8E88A</code>, paper <code>#F5F0E8</code>, and surface <code>#EBE4D4</code>.</p>
             <p><strong>Challenge:</strong> improve hierarchy and usability without obscuring user choice, hiding important state, or introducing restriction language.</p>
-            <p class="challenge-proof"><strong>Proof:</strong> QA tools exist in popup markup, while current production-mode <code>popup.js</code> removes that tools panel; <code>tests/extension-mode.test.js</code> checks production QA flags off. Final packaged production/browser proof remains incomplete.</p>
+            <p class="challenge-proof"><strong>Proof:</strong> production-mode <code>popup.js</code> removes the QA panel, but <code>background.js</code> still lists <code>copy-lab.js</code> in protected-site injection. Production flags disable QA paths; they do not strip the code. <code>tests/extension-mode.test.js</code> checks flags, not the export allow-list. Package/browser proof remains incomplete.</p>
             <p><strong>Source scope:</strong> <code>popup.html</code>, <code>popup.js</code>, <code>popup.css</code>, and <code>cognoscene-mode.js</code>.</p>
           </div>
         </details>
@@ -458,8 +458,15 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
         back: document.getElementById("feature-return")
       };
       const componentNotes = {
-        "challenge-onboarding": "Challenge packet only; no runtime bundle yet. Audit instructions.html, instructions.js, background.js, popup.html and popup.js together before exporting dependencies.",
-        "challenge-ui": "Challenge packet only; no runtime bundle yet. Audit popup.html, popup.js, popup.css and cognoscene-mode.js together; the current lime is #C8E88A.",
+        onboarding: "Source map only: instructions.html/js are dedicated, but site selection and settings cross into shopping-site-registry.js, background.js and popup.js. No audited runtime ZIP yet.",
+        "protected-sites": "Source map only: shopping-site-registry.js, instructions.js, popup.js and background.js share selection, registration and sync. No isolated production ZIP has been verified.",
+        "observer-product-pulse": "No node ZIP yet: both features share content.js/content.css with Rationalisation and QA branches. Production flags disable QA paths but do not extract them; an audited production allow-list is required.",
+        rationalisation: "No node ZIP yet: checkout logic shares content.js/content.css with Observer and QA. Background, mode, cart and outcome helpers are dependencies; verify the production allow-list before packaging.",
+        rationator: "No node ZIP yet: Rationator lives inside Rationalisation's content.js/content.css flow, not after the hold. Preserve hold ownership and exclude QA paths.",
+        urgente: "No node ZIP yet: the checkout-only pass spans shared content/background/reset paths. Keep it brand-scoped; do not export QA or a global bypass.",
+        deliberation: "No node ZIP yet: the flow spans content.js, cart-snapshot.js, native-cart-edit-state.js, decision helpers and background wiring. Export only after dependency and QA review.",
+        "challenge-onboarding": "Challenge brief only; no runtime ZIP. Its implementation crosses onboarding screens, protected-site registry and shared background/popup state.",
+        "challenge-ui": "Challenge brief only; no runtime ZIP. The current palette is #C8E88A. Production hides the popup QA panel, but copy-lab.js remains in the injected-file list; flags-off is not proof of code exclusion.",
         removed: "No v1.3 runtime bundle: this is a historical change note, not a downloadable component."
       };
       let selectedNode = null;
@@ -480,8 +487,8 @@ After 24 hours → 24-hour Deliberation window → explicit user choice. Growth 
         fields.change.textContent = statusLabel;
         fields.explanation.textContent = explanation;
         fields.components.textContent = componentNotes[key]
-          || "Bundle not packaged yet. The export batch will provide one node-level download containing all audited production runtime dependencies together; QA and test files will be excluded unless separately requested.";
-        fields.prompt.textContent = "Open decision: one v1.3-wide Claude prompt or focused prompts inside each feature node. The handover will compare both before this is locked.";
+          || "Runtime ZIP not ready. Proposed format: one download per node with all audited production dependencies plus its feature design, prompt, checklist and Cognoscenti. Tests are referenced, not shipped in the runtime; QA/test/WIP are excluded.";
+        fields.prompt.textContent = "Recommendation, not locked: one short shared rules brief plus a focused prompt for this node. A single all-feature prompt risks crossing owners; node-only prompts can lose shared guardrails. Founder decision pending.";
         fields.checklist.textContent = "Per-node implementation checks and the greyed-out completion state are scheduled for a later batch.";
         fields.cognoscenti.textContent = "Feature-specific gold-standard acceptance notes are scheduled for a later batch; use the Cognoscenti legend above for its shared meaning.";
         fields.proof.textContent = node.querySelector(".proof-line")?.innerText?.trim() || node.querySelector(".challenge-proof")?.innerText?.trim() || "Historical evidence only; shipped Beta 1.2 runtime is unknown.";
