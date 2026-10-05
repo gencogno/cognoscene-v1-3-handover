@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Cognoscene v1.3 Stage B developer handover for Daniella.">
+  <meta name="description" content="Cognoscene v1.3 Journey Atlas for Daniella's developer handover.">
   <meta name="theme-color" content="#F5F0E8">
-  <title>Cognoscene v1.3 · Stage B</title>
+  <title>Cognoscene v1.3 · Journey Atlas</title>
   <style>
     :root {
       color-scheme: light;
@@ -51,20 +51,52 @@
     .legend { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.2rem; }
     .legend .tag::before { content: ""; width: .48rem; height: .48rem; margin-right: .35rem; border-radius: 50%; background: currentColor; }
 
-    .flow-shell { margin: 0 0 2rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; background: rgba(255,255,255,.55); box-shadow: var(--shadow); }
-    .flow-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
-    .flow-heading p { margin: 0; color: var(--moss); font-size: .83rem; }
-    .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; align-items: stretch; }
-    .flow-node { position: relative; min-height: 92px; padding: .9rem .85rem; border: 1px solid var(--line); border-radius: .8rem; background: #fffdf8; text-align: left; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
-    .flow-node:not(:disabled) { cursor: pointer; }
-    .flow-node:not(:disabled):hover, .flow-node.active { transform: translateY(-2px); border-color: var(--ink); box-shadow: 0 8px 18px rgba(54, 49, 38, .12); }
-    .flow-node.active::after { content: ""; position: absolute; inset: -.22rem; border: 2px solid var(--ink); border-radius: 1rem; pointer-events: none; }
-    .flow-node:disabled { cursor: not-allowed; opacity: .74; }
-    .flow-node .node-title { display: block; margin: .55rem 0 .18rem; font-weight: 800; }
-    .flow-node .node-note { display: block; color: var(--moss); font-size: .73rem; line-height: 1.35; }
-    .flow-arrow { position: absolute; top: 50%; right: -.72rem; width: .8rem; height: 1px; background: var(--line); z-index: 1; }
-    .flow-arrow::after { content: ""; position: absolute; right: 0; top: -.2rem; width: .4rem; height: .4rem; border-top: 1px solid var(--line); border-right: 1px solid var(--line); transform: rotate(45deg); }
-    .flow-node:last-child .flow-arrow { display: none; }
+    .journey-shell { margin: 0 0 2rem; padding: clamp(1rem, 2vw, 1.35rem); border: 1px solid var(--line); border-radius: 1rem; background: rgba(255,255,255,.58); box-shadow: var(--shadow); }
+    .journey-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+    .journey-heading p { margin: 0; color: var(--moss); font-size: .83rem; }
+    .journey-map { overflow: hidden; padding: .25rem; }
+    .journey-main { display: grid; grid-template-columns: minmax(0, 1.1fr) auto minmax(0, 1.1fr) auto minmax(0, 1.1fr) auto minmax(0, 1.1fr); align-items: center; gap: .55rem; }
+    .journey-main.secondary { grid-template-columns: minmax(0, 1.1fr) auto minmax(0, 1.1fr) auto minmax(0, 1.1fr) auto minmax(0, 1.1fr); }
+    .journey-node, .journey-subnode, .journey-action { position: relative; width: 100%; min-height: 102px; padding: .78rem .72rem; border: 2px solid var(--line); color: var(--ink); background: #fffdf8; text-align: left; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, opacity .18s ease; }
+    .journey-node:not(:disabled), .journey-subnode:not(:disabled), .journey-action:not(:disabled) { cursor: pointer; }
+    .journey-node:hover, .journey-subnode:hover, .journey-action:hover, .journey-node.active, .journey-subnode.active, .journey-action.active { transform: translateY(-2px); box-shadow: 0 9px 20px rgba(54, 49, 38, .16); }
+    .journey-node.active::after, .journey-subnode.active::after, .journey-action.active::after { content: ""; position: absolute; inset: -.35rem; border: 2px solid currentColor; border-radius: inherit; opacity: .55; pointer-events: none; }
+    .journey-node .node-title, .journey-subnode .node-title, .journey-action .node-title { display: block; margin: .5rem 0 .18rem; font-weight: 800; }
+    .journey-node .node-note, .journey-subnode .node-note, .journey-action .node-note { display: block; color: var(--moss); font-size: .73rem; line-height: 1.35; }
+    .journey-node.status-new, .journey-subnode.status-new, .journey-action.status-new { border-color: var(--new); background: var(--new-soft); }
+    .journey-node.status-enhanced, .journey-subnode.status-enhanced, .journey-action.status-enhanced { border-color: var(--changed); background: var(--changed-soft); }
+    .journey-node.status-removed, .journey-subnode.status-removed, .journey-action.status-removed { border-color: var(--tentative); background: var(--tentative-soft); }
+    .journey-node.tentative, .journey-subnode.tentative { border: 2px dashed var(--locked); background: repeating-linear-gradient(-45deg, rgba(232,229,222,.82), rgba(232,229,222,.82) 8px, rgba(245,240,232,.82) 8px, rgba(245,240,232,.82) 16px); }
+    .shape-start { border-radius: 1.5rem; }
+    .shape-process { border-radius: .65rem; }
+    .shape-state { border-radius: 50% / 20%; }
+    .shape-decision { min-height: 150px; padding: 1.15rem 1.2rem; border: 0; background: transparent !important; border-radius: .25rem; overflow: visible; }
+    .shape-decision::before { content: ""; position: absolute; z-index: 0; top: 50%; left: 50%; width: 105px; height: 105px; border: 2px solid var(--changed); border-radius: .25rem; background: var(--changed-soft); transform: translate(-50%, -50%) rotate(45deg); }
+    .shape-decision > * { position: relative; z-index: 1; }
+    .shape-decision { text-align: center; }
+    .shape-decision .status { margin-left: 0; }
+    .shape-decision .node-note { max-width: 12rem; margin-left: auto; margin-right: auto; }
+    .shape-decision.active::after { content: none; }
+    .journey-link { position: relative; display: grid; place-items: center; min-width: 1.7rem; color: var(--moss); font-size: 1.35rem; }
+    .journey-link::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 2px solid var(--line); }
+    .journey-link::after { content: ""; position: relative; width: .45rem; height: .45rem; border-top: 2px solid var(--line); border-right: 2px solid var(--line); transform: rotate(45deg); justify-self: end; }
+    .journey-turn { display: flex; align-items: center; justify-content: center; gap: .55rem; margin: .55rem 0; color: var(--moss); font-size: .75rem; font-weight: 700; }
+    .journey-turn .down { display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; border: 1px solid var(--line); border-radius: 50%; background: var(--cream); font-size: 1rem; }
+    .journey-branches { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .85rem; margin-top: .95rem; }
+    .branch-group { padding: .8rem; border: 1px solid var(--line); border-radius: .8rem; background: rgba(255,255,255,.48); }
+    .branch-group > strong { display: block; margin-bottom: .55rem; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; }
+    .branch-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+    .branch-row.single { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; }
+    .branch-row .journey-subnode, .branch-row .journey-action { min-height: 86px; }
+    .branch-arrow { color: var(--moss); text-align: center; font-size: 1.1rem; }
+    .dependency-note { margin: .65rem 0 0; padding-top: .55rem; border-top: 1px dotted var(--locked); color: var(--moss); font-size: .75rem; line-height: 1.4; }
+    .dependency-note strong { color: var(--ink); }
+    .journey-key { display: flex; flex-wrap: wrap; gap: .45rem 1rem; margin-top: 1rem; padding-top: .8rem; border-top: 1px dashed var(--line); color: var(--moss); font-size: .74rem; }
+    .journey-key span { display: inline-flex; align-items: center; gap: .3rem; }
+    .journey-key i { display: inline-block; width: .72rem; height: .72rem; border: 1px solid currentColor; }
+    .journey-key .round { border-radius: 50%; }
+    .journey-key .diamond { transform: rotate(45deg); }
+    .journey-key .dashed { border-style: dashed; }
 
     .phase-panel { min-height: 430px; }
     .phase-top { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1.25rem; }
@@ -112,53 +144,97 @@
     footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--moss); font-size: .82rem; line-height: 1.5; }
     @media (max-width: 760px) {
       .site-header { align-items: flex-start; flex-direction: column; gap: .25rem; }
-      .flow { grid-template-columns: repeat(2, minmax(0,1fr)); }
-      .flow-arrow { display: none; }
+      .journey-main, .journey-main.secondary { grid-template-columns: 1fr; gap: .35rem; }
+      .journey-link { width: 1.7rem; min-height: 1.25rem; transform: none; }
+      .journey-link::before { top: 0; bottom: 0; left: 50%; right: auto; border-top: 0; border-left: 2px solid var(--line); }
+      .journey-link::after { align-self: end; justify-self: center; transform: rotate(135deg); }
+      .journey-branches { grid-template-columns: 1fr; }
       .phase-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 470px) {
       main { width: min(100% - 1rem, 1120px); }
-      .flow { grid-template-columns: 1fr; }
+      .branch-row, .branch-row.single { grid-template-columns: 1fr; }
+      .branch-arrow { transform: rotate(90deg); }
       .sequence { grid-template-columns: 1fr; }
       .phase-top { flex-direction: column; }
-      .flow-heading { display: block; }
-      .flow-heading p { margin-top: .35rem; }
+      .journey-heading { display: block; }
+      .journey-heading p { margin-top: .35rem; }
     }
   </style>
 </head>
 <body>
   <header class="site-header">
     <div class="brand">Cognoscene · v1.3</div>
-    <div class="header-meta">Stage B · developer handover for Daniella</div>
+    <div class="header-meta">Batch 2 · Journey Atlas</div>
   </header>
 
   <main>
     <p class="eyebrow">Beta 1.2 → v1.3</p>
-    <h1>Work one phase at a time.</h1>
-    <p class="lede">This is a small, reviewable slice of the v1.3 handover. Use the flow to move between phases; open a feature to see the implementation contract. Earlier phases stay available for reference without making the page noisy.</p>
+    <h1>Follow the shopper journey.</h1>
+    <p class="lede">This is the cumulative v1.3 journey map. The main path shows what happens in sequence; nested branches show product ownership and runtime dependencies.</p>
 
-    <div class="stage-note"><strong>Stage B preview.</strong> Rationalisation is now unlocked: the 24-hour hold, Deliberation, and Urgente are documented together. Checkpoint persistence and downloadable component bundles remain deferred.</div>
+    <div class="stage-note"><strong>Batch 2 preview.</strong> The Journey Atlas is now the organising map. Node detail reveal, comparison treatment, downloadable components, and progress tracking remain later batches.</div>
     <div class="legend" aria-label="Status legend">
       <span class="tag new">New</span>
       <span class="tag changed">Enhanced</span>
-      <span class="tag tentative">Tentative</span>
-      <span class="tag locked">Later / locked</span>
+      <span class="tag tentative">Removed / historical</span>
+      <span class="tag locked">Tentative / locked</span>
     </div>
 
-    <section class="flow-shell" aria-labelledby="flow-title">
-      <div class="flow-heading">
+    <section class="journey-shell" aria-labelledby="flow-title">
+      <div class="journey-heading">
         <div>
-          <p class="eyebrow">Phase map</p>
-          <h2 id="flow-title">v1.3 implementation flow</h2>
+          <p class="eyebrow">Cumulative shopper journey</p>
+          <h2 id="flow-title">Current v1.3 path</h2>
         </div>
-        <p>Click a phase to preview its current slice.</p>
+        <p>Select a node to open its current handover slice below.</p>
       </div>
-      <nav class="flow" aria-label="v1.3 phases">
-        <button class="flow-node" data-phase="onboarding" type="button"><span class="status changed">Enhanced</span><span class="node-title">Onboarding</span><span class="node-note">Consent, setup, and Website Tracking.</span><span class="flow-arrow" aria-hidden="true"></span></button>
-        <button class="flow-node" data-phase="observer" type="button"><span class="status new">New</span><span class="node-title">Observer</span><span class="node-note">Product Pulse + Rationator ownership.</span><span class="flow-arrow" aria-hidden="true"></span></button>
-        <button class="flow-node" data-phase="rationalisation" type="button"><span class="status changed">Enhanced</span><span class="node-title">Rationalisation</span><span class="node-note">24h hold → Deliberation → Urgente.</span><span class="flow-arrow" aria-hidden="true"></span></button>
-        <button class="flow-node" data-phase="growth" type="button"><span class="status tentative">Tentative</span><span class="node-title">Growth</span><span class="node-note">Grey placeholder; Python shadow-only.</span></button>
-      </nav>
+      <div class="journey-map" aria-label="Cognoscene v1.3 shopper journey flowchart">
+        <div class="journey-main">
+          <button class="journey-node status-enhanced shape-start" data-phase="onboarding" type="button"><span class="status changed">Enhanced</span><span class="node-title">Onboarding</span><span class="node-note">Consent-led setup and Website Tracking.</span></button>
+          <span class="journey-link" aria-hidden="true"></span>
+          <button class="journey-node status-enhanced shape-process" data-phase="onboarding" type="button"><span class="status changed">Enhanced</span><span class="node-title">Selected site</span><span class="node-note">The user chooses where Cognoscene operates.</span></button>
+          <span class="journey-link" aria-hidden="true"></span>
+          <button class="journey-node status-new shape-process" data-phase="observer" type="button"><span class="status new">New</span><span class="node-title">Observer</span><span class="node-note">Read the relevant local product signal.</span></button>
+          <span class="journey-link" aria-hidden="true"></span>
+          <button class="journey-node status-enhanced shape-decision" data-phase="rationalisation" type="button"><span class="status changed">Enhanced</span><span class="node-title">Qualifying checkout?</span><span class="node-note">Unknown classification fails open.</span></button>
+        </div>
+        <div class="journey-turn"><span class="down" aria-hidden="true">↓</span><span>Yes: first qualifying checkout starts the hold</span></div>
+        <div class="journey-main secondary">
+          <button class="journey-node status-enhanced shape-state" data-phase="rationalisation" type="button"><span class="status changed">Enhanced</span><span class="node-title">24-hour hold</span><span class="node-note">Browsing and add-to-cart remain available.</span></button>
+          <span class="journey-link" aria-hidden="true"></span>
+          <button class="journey-node status-enhanced shape-process" data-phase="rationalisation" type="button"><span class="status changed">Enhanced</span><span class="node-title">Deliberation</span><span class="node-note">Continue, wait, decline, or edit selected items.</span></button>
+          <span class="journey-link" aria-hidden="true"></span>
+          <button class="journey-node status-enhanced shape-decision" data-phase="rationalisation" type="button"><span class="status changed">Enhanced</span><span class="node-title">User decision</span><span class="node-note">The user keeps the decision.</span></button>
+          <span class="journey-link" aria-hidden="true"></span>
+          <button class="journey-node tentative shape-process" data-phase="growth" type="button"><span class="status locked">Tentative</span><span class="node-title">Growth</span><span class="node-note">Grey placeholder; Python remains shadow-only.</span></button>
+        </div>
+        <div class="journey-branches">
+          <div class="branch-group">
+            <strong>Observer-owned branches</strong>
+            <div class="branch-row">
+              <button class="journey-subnode status-new shape-process" data-phase="observer" type="button"><span class="status new">New</span><span class="node-title">Product Pulse</span><span class="node-note">Confirmed cart-growth context.</span></button>
+              <button class="journey-subnode status-new shape-process" data-phase="observer" type="button"><span class="status new">New</span><span class="node-title">Rationator</span><span class="node-note">Counter-re-entry loop under Observer.</span></button>
+            </div>
+            <p class="dependency-note"><strong>Dotted dependency:</strong> Rationator may operate only while the 24-hour hold is active. Runtime timing does not change product ownership.</p>
+          </div>
+          <div class="branch-group">
+            <strong>Hold side route</strong>
+            <div class="branch-row single">
+              <button class="journey-action status-enhanced shape-process" data-phase="rationalisation" type="button"><span class="status changed">Enhanced</span><span class="node-title">Urgente</span><span class="node-note">Unlimited challenge use.</span></button>
+              <span class="branch-arrow" aria-hidden="true">→</span>
+              <div class="journey-action status-enhanced shape-state" aria-label="12-hour brand-scoped checkout-only pass"><span class="status changed">Enhanced</span><span class="node-title">12-hour pass</span><span class="node-note">Checkout-only and brand-scoped.</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="journey-key" aria-label="Flowchart shape key">
+          <span><i class="round"></i> start / end</span>
+          <span><i></i> process or interface</span>
+          <span><i class="diamond"></i> decision</span>
+          <span><i class="round"></i> persistent state</span>
+          <span><i class="dashed"></i> tentative / unresolved</span>
+        </div>
+      </div>
     </section>
 
     <section id="phase-panel" class="phase-panel" aria-live="polite"></section>

@@ -18,7 +18,7 @@
 
   const views = {
     onboarding: {
-      title: 'Onboarding', badge: 'Enhanced', badgeClass: 'changed', stage: 'Stage A complete',
+      title: 'Onboarding', badge: 'Enhanced', badgeClass: 'changed', stage: 'Batch 1 reference',
       intro: 'The entry point remains consent-led. v1.3 adds Website Tracking as an explicit, optional setup choice; it does not silently protect or continuously inspect browsing.',
       visual: '<div class="mini-flow"><div class="mini-node"><strong>Onboarding</strong><span>Explain the boundary and ask for explicit choices.</span></div><div class="mini-node child"><strong>Website Tracking</strong><span>Optional Top Sites suggestion + explicit site selection.</span></div></div>',
       cards: [
@@ -41,7 +41,7 @@
       ]
     },
     observer: {
-      title: 'Observer', badge: 'New', badgeClass: 'new', stage: 'Stage A complete',
+      title: 'Observer', badge: 'New', badgeClass: 'new', stage: 'Batch 1 reference',
       intro: 'Observer is the v1.3 observation surface. Product Pulse and Rationator are shown together here for product ownership, while the Rationator card calls out its runtime dependency on the active Rationalisation hold.',
       visual: '<div class="mini-flow"><div class="mini-node"><strong>Observer</strong><span>Read the relevant local signal without taking the decision away.</span></div><div class="mini-node child"><strong>Product Pulse</strong><span>Confirmed-cart-growth branch; render and inspect the product signal.</span></div><div class="mini-node child"><strong>Rationator</strong><span>Counter-re-entry loop owned here; depends on an active hold.</span></div></div>',
       cards: [
@@ -80,9 +80,9 @@
       ]
     },
     rationalisation: {
-      title: 'Rationalisation', badge: 'Enhanced', badgeClass: 'changed', stage: 'Stage B current',
+      title: 'Rationalisation', badge: 'Enhanced', badgeClass: 'changed', stage: 'Batch 2 current',
       intro: 'Rationalisation owns the active checkout hold and the post-hold choice window. Rationator remains under Observer; its active-hold dependency is a runtime boundary, not a change in product ownership.',
-      visual: '<div class="mini-flow"><div class="mini-node"><strong>24h hold</strong><span>First qualifying checkout attempt; ordinary browsing and add-to-cart remain available.</span></div><div class="mini-node child"><strong>Deliberation · Ajante</strong><span>Post-hold decision window with safe, explicit cart choices.</span></div><div class="mini-node child"><strong>Urgente</strong><span>Checkout-only typing challenge; unlimited use, 12h pass.</span></div><div class="locked-card"><p><strong>Ownership boundary.</strong> Rationator is displayed under Observer and may operate only while this hold is active.</p><span class="status new">Observer-owned dependency</span></div></div>',
+      visual: '<div class="mini-flow"><div class="mini-node"><strong>24h hold</strong><span>First qualifying checkout attempt; ordinary browsing and add-to-cart remain available.</span></div><div class="mini-node child"><strong>Deliberation</strong><span>Post-hold decision window with safe, explicit cart choices.</span></div><div class="mini-node child"><strong>Urgente</strong><span>Checkout-only typing challenge; unlimited use, 12h pass.</span></div><div class="locked-card"><p><strong>Ownership boundary.</strong> Rationator is displayed under Observer and may operate only while this hold is active.</p><span class="status new">Observer-owned dependency</span></div></div>',
       cards: [
         {
           name: '24-hour checkout hold', badge: 'Enhanced', badgeClass: 'changed',
@@ -101,7 +101,7 @@
           source: '<span class="tag changed">Verified current</span> <code>BLOCK_DURATION_MS</code> defaults to 24h and hold state is brand-scoped. Static checks exist; cross-merchant browser proof is <span class="tag tentative">Incomplete</span>.'
         },
         {
-          name: 'Deliberation · Ajante', badge: 'Enhanced', badgeClass: 'changed',
+          name: 'Deliberation', badge: 'Enhanced', badgeClass: 'changed',
           copy: 'When the hold expires, a separate 24-hour decision window presents continue/buy, wait, decline, and explicit selected-item removal. Removing items is not checkout approval.',
           sequence: [
             ['Trigger', 'The 24-hour hold expires.'],
@@ -135,9 +135,9 @@
       ]
     },
     growth: {
-      title: 'Growth', badge: 'Tentative', badgeClass: 'tentative', stage: 'Future / owner decision',
+      title: 'Growth', badge: 'Tentative', badgeClass: 'tentative', stage: 'Batch 2 placeholder',
       intro: 'Growth is intentionally greyed out while Cogno decides its scope. Python is included here as a shadow-only analysis path; it has no live UI, eligibility, blocking, or decision authority.',
-      visual: '<div class="locked-card"><p><strong>Placeholder.</strong> No Growth checklist, download, or completion state is available in Stage B.</p><span class="status tentative">Tentative / owner decision pending</span></div>', cards: []
+      visual: '<div class="locked-card"><p><strong>Placeholder.</strong> No Growth checklist, download, or completion state is available in Batch 2.</p><span class="status tentative">Tentative / owner decision pending</span></div>', cards: []
     }
   };
 
@@ -151,8 +151,8 @@
     const cards = view.cards.length ? `<div class="details-stack">${view.cards.map(featureCard).join('')}</div>` : '';
     const next = phase === 'onboarding' ? 'observer' : phase === 'observer' ? 'rationalisation' : null;
     const previous = phase === 'observer' ? 'onboarding' : phase === 'rationalisation' ? 'observer' : null;
-    const nextLabel = next === 'observer' ? 'Next: Observer →' : next === 'rationalisation' ? 'Next: Rationalisation →' : 'Next phase is tentative';
-    panel.innerHTML = `<div class="phase-top"><div><p class="eyebrow">Current slice</p><h2>${view.title} <span class="tag ${view.badgeClass}">${view.badge}</span></h2><p>${view.intro}</p></div><span class="phase-mark status ${view.badgeClass}">${view.stage}</span></div><div class="phase-grid"><div class="visual-card"><h3>At-a-glance</h3>${view.visual}</div><div>${cards || '<div class="locked-card"><p>This phase is intentionally quiet. Use the flow to return to an active implementation slice.</p></div>'}</div></div><div class="phase-actions"><button type="button" data-go="${previous || ''}" ${previous ? '' : 'disabled'}>← Back</button><button type="button" data-go="${next || ''}" ${next ? '' : 'disabled'}>${next ? nextLabel : 'Next phase is tentative'}</button></div>`;
+    const nextLabel = next === 'observer' ? 'Next: Observer' : next === 'rationalisation' ? 'Next: Rationalisation' : 'Next phase is tentative';
+    panel.innerHTML = `<div class="phase-top"><div><p class="eyebrow">Current slice</p><h2>${view.title} <span class="tag ${view.badgeClass}">${view.badge}</span></h2><p>${view.intro}</p></div><span class="phase-mark status ${view.badgeClass}">${view.stage}</span></div><div class="phase-grid"><div class="visual-card"><h3>At-a-glance</h3>${view.visual}</div><div>${cards || '<div class="locked-card"><p>This phase is intentionally quiet. Use the flow to return to an active implementation slice.</p></div>'}</div></div><div class="phase-actions"><button type="button" data-go="${previous || ''}" ${previous ? '' : 'disabled'}>Back</button><button type="button" data-go="${next || ''}" ${next ? '' : 'disabled'}>${next ? nextLabel : 'Next phase is tentative'}</button></div>`;
     panel.querySelectorAll('[data-go]').forEach((button) => button.addEventListener('click', () => button.dataset.go && go(button.dataset.go)));
   }
 
