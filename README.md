@@ -9,7 +9,7 @@ It is **not** the canonical extension repository. The live extension remains at:
 ## Start here
 
 1. Read [HANDOVER_INDEX.md](HANDOVER_INDEX.md).
-2. Read [current status](docs/current/STATUS.md) and the [current reconciliation](docs/current/CURRENT_RECONCILIATION.md).
+2. Read the [source inventory](docs/current/SOURCE_INVENTORY.md), [current status](docs/current/STATUS.md) and [current reconciliation](docs/current/CURRENT_RECONCILIATION.md).
 3. Read the relevant feature packet only after the reconciliation.
 
 ## Authority and proof

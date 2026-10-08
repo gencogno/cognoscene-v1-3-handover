@@ -3,9 +3,10 @@
 ## Required reading order
 
 1. [Repository entrypoint](README.md)
-2. [Current status](docs/current/STATUS.md)
-3. [Current reconciliation](docs/current/CURRENT_RECONCILIATION.md)
-4. [Proof ledger](docs/current/proof-ledger.md)
+2. [Source inventory](docs/current/SOURCE_INVENTORY.md)
+3. [Current status](docs/current/STATUS.md)
+4. [Current reconciliation](docs/current/CURRENT_RECONCILIATION.md)
+5. [Proof ledger](docs/current/proof-ledger.md)
 5. The feature packet or implementation request in scope
 
 ## Status authority
@@ -18,17 +19,30 @@
 | `data/public-feature-status.json` | Safe derived status for the public website | Public handover site and Mobile review |
 | `docs/current/CURRENT_RECONCILIATION.md` | Live-source evidence boundary | All implementers |
 
-## Status labels
+## Feature state
+
+Every feature has one workflow state. It answers: where is this handover work now?
+
+| State | Meaning |
+| --- | --- |
+| `planned` | Approved work not yet started |
+| `in progress` | Active handover work is underway |
+| `completed` | The stated handover acceptance checks passed |
+| `tentative` | Scope intentionally remains open |
+| `blocked` | Cannot proceed without a decision or external evidence |
+| `historical` | Retained context; not current implementation work |
+
+## Proof label
+
+Every material claim also has a separate proof label. It answers: what supports this statement?
 
 | Label | Meaning |
 | --- | --- |
 | `founder-confirmed` | Founder decision recorded; source proof may still be pending |
 | `verified current` | Rechecked against current canonical source |
-| `completed` | The stated handover acceptance checks passed |
 | `planned` | Approved work not yet started |
 | `tentative` | Scope intentionally remains open |
 | `incomplete` | Known gap, missing proof or unfinished work |
-| `blocked` | Cannot proceed without a decision or external evidence |
 | `historical` | Retained context; not current implementation guidance |
 
 ## Update rule
