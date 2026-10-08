@@ -25,3 +25,13 @@ Public-status effect:
 - **Needs live-source reconciliation:** yes, before any runtime state is labelled verified current.
 - **TerraLite outcome:** control-plane files created; public-site wiring remains planned.
 - **Public-status effect:** none yet.
+
+## 8 October 2026 — coupled handover rule
+
+- **Feature:** Website and GitHub handover workflow
+- **Founder update:** Every website update must update the GitHub handover in the same work batch so ChatGPT Mobile has matching context.
+- **Requested website effect:** The public site remains on the existing Sites host; no GitHub Pages migration.
+- **Requested implementation effect:** TerraLite commits website source, status records, reconciliation evidence and the update log before publishing the corresponding Sites version.
+- **Needs live-source reconciliation:** yes, whenever the update makes a live extension claim.
+- **TerraLite outcome:** Coupled-update rule recorded in the repository entrypoint and index.
+- **Public-status effect:** none yet.

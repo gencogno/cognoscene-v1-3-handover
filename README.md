@@ -39,3 +39,5 @@ It is **not** the canonical extension repository. The live extension remains at:
 ## Public website
 
 The public handover website remains hosted through the existing Sites deployment. GitHub Pages is not used. GitHub carries the private record for ChatGPT Mobile; TerraLite publishes website changes to the existing host after the relevant change is committed and checked.
+
+Every website batch is coupled to a GitHub handover update. A public-site change is not complete until its source, status effect and evidence boundary are committed here; a public status change is not complete until the corresponding Sites version is published.

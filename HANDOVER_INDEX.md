@@ -48,3 +48,15 @@ Every material claim also has a separate proof label. It answers: what supports 
 ## Update rule
 
 Every founder update is added to the internal log. TerraLite decides whether the update also changes the public status summary, then rechecks current extension source before presenting runtime behaviour as verified. A public website update is published only after the corresponding status/source change is committed.
+
+## Coupled website and GitHub rule
+
+For every website batch, TerraLite must update and commit, in the same GitHub batch:
+
+1. the changed `dist/` website source;
+2. `data/public-feature-status.json` when a public status changes;
+3. `data/internal-feature-status.json` and `docs/current/STATUS.md` when the private state changes;
+4. `docs/current/CURRENT_RECONCILIATION.md` when the batch makes or changes a claim about live extension behaviour; and
+5. `docs/current/UPDATE_LOG.md` with the founder decision, outcome and resulting publish revision.
+
+Then TerraLite publishes the existing Sites host and records the deployment result. Do not perform site-only edits, and do not leave GitHub documentation ahead of or behind the published website without marking that divergence explicitly.
