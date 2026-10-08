@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "updatedAtSgt": "2026-10-08",
+  "authority": "Private handover record; current canonical extension source overrides any stale runtime claim.",
+  "features": [
+    {
+      "id": "github-handover",
+      "name": "GitHub handover repository",
+      "state": "completed",
+      "proofLabel": "verified current",
+      "owner": "TerraLite",
+      "publicSummary": "Private Mobile-readable handover record established.",
+      "nextAction": "Maintain the status record with every relevant handover update."
+    },
+    {
+      "id": "journey-atlas",
+      "name": "Journey Atlas",
+      "state": "completed",
+      "proofLabel": "verified current",
+      "owner": "TerraLite",
+      "publicSummary": "Current shopper-journey map is published.",
+      "nextAction": "Add comparison and detail-panel batches."
+    },
+    {
+      "id": "mobile-control-plane",
+      "name": "ChatGPT Mobile control plane",
+      "state": "in progress",
+      "proofLabel": "planned",
+      "owner": "TerraLite",
+      "publicSummary": "Private status data exists; public website wiring is next.",
+      "nextAction": "Render safe public status data on the existing Sites host."
+    },
+    {
+      "id": "growth",
+      "name": "Growth",
+      "state": "tentative",
+      "proofLabel": "founder-confirmed",
+      "owner": "Cogno",
+      "publicSummary": "Growth remains intentionally tentative.",
+      "nextAction": "Do not create an active component packet until scope is unlocked."
+    },
+    {
+      "id": "python",
+      "name": "Python",
+      "state": "tentative",
+      "proofLabel": "verified current",
+      "owner": "Shadow-analysis workstream",
+      "publicSummary": "Python remains shadow-only.",
+      "nextAction": "Do not grant live UX or decision authority."
+    },
+    {
+      "id": "vision",
+      "name": "Vision",
+      "state": "tentative",
+      "proofLabel": "planned",
+      "owner": "Future fallback workstream",
+      "publicSummary": "Vision is limited to a future DOM-failure fallback.",
+      "nextAction": "Do not represent Vision as active runtime."
+    }
+  ]
+}

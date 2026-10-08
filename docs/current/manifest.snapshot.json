@@ -1,0 +1,35 @@
+{
+  "snapshotPurpose": "Evidence-only copy of the canonical extension manifest at handover reconciliation time. It is not a deployable manifest for this repository.",
+  "reconciledAt": "2026-10-08",
+  "canonicalPath": "D:\\TeraBox\\cognoscene\\beta versions\\cognoscene, b v1.2, v2\\v2",
+  "manifest": {
+    "manifest_version": 3,
+    "name": "Cognoscene - Fast Fashion Disabler",
+    "version": "1.4.112",
+    "description": "Block impulsive spending on fashion websites by adding a cooling period",
+    "permissions": [
+      "storage",
+      "alarms",
+      "identity",
+      "identity.email",
+      "activeTab",
+      "scripting",
+      "tabs",
+      "topSites"
+    ],
+    "host_permissions": [
+      "<all_urls>",
+      "https://checkout.stripe.com/*",
+      "https://buy.stripe.com/*",
+      "https://eqjatvjhbqojwkdfrwfd.supabase.co/*",
+      "https://dsirhwysbdnmtyvuxyhk.supabase.co/*"
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_title": "Cognoscene - Fast Fashion Disabler"
+    },
+    "background": {
+      "service_worker": "background.js"
+    }
+  }
+}

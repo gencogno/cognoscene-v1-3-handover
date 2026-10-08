@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "updatedAtSgt": "2026-10-08",
+  "revisionLabel": "GitHub control-plane setup",
+  "features": [
+    {
+      "id": "journey-atlas",
+      "name": "Journey Atlas",
+      "state": "completed",
+      "proofLabel": "verified current",
+      "summary": "Current shopper-journey map is published."
+    },
+    {
+      "id": "mobile-control-plane",
+      "name": "Mobile handover access",
+      "state": "in progress",
+      "proofLabel": "planned",
+      "summary": "Private status record established; website status display is next."
+    },
+    {
+      "id": "growth",
+      "name": "Growth",
+      "state": "tentative",
+      "proofLabel": "founder-confirmed",
+      "summary": "Scope remains intentionally open."
+    },
+    {
+      "id": "python",
+      "name": "Python",
+      "state": "tentative",
+      "proofLabel": "verified current",
+      "summary": "Shadow-only; no live decision authority."
+    },
+    {
+      "id": "vision",
+      "name": "Vision",
+      "state": "tentative",
+      "proofLabel": "planned",
+      "summary": "Future DOM-failure fallback only."
+    }
+  ]
+}
