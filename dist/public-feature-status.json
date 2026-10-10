@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "updatedAtSgt": "2026-10-08",
-  "revisionLabel": "Atlas 2.5 phase contract",
+  "updatedAtSgt": "2026-10-10",
+  "revisionLabel": "Atlas 2.75 phase contract",
   "atlas": {
     "schemaVersion": 1,
     "releaseLabel": "v1.3",
@@ -14,7 +14,7 @@
         "name": "onboarding",
         "state": "current",
         "proofLabel": "planned",
-        "summary": "Consent-led setup and explicit protected-site selection, including Website Tracking.",
+        "summary": "Planned onboarding challenge: explicit consent, optional local discovery and protected-site selection.",
         "previousSummary": "Beta 1.2 used a protected-site list and optional Top Sites tracking.",
         "changeLabels": ["enhanced"]
       },

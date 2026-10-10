@@ -1,49 +1,64 @@
-/* Public-safe Atlas 2.5 content. Runtime claims must be reconciled before edits. */
+/* Public-safe Atlas content. Reconcile runtime claims before changing it. */
 (function () {
   'use strict';
 
   window.CognosceneAtlasData = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     releaseLabel: 'v1.3',
     sourceOfTruth: 'dist/public-feature-status.json',
-    nodes: [
-      { id: 'onboarding', phaseId: 'onboarding', label: 'Onboarding', kind: 'start', status: 'enhanced' },
-      { id: 'protected-sites', phaseId: 'onboarding', label: 'Protected sites', kind: 'process', status: 'enhanced' },
-      { id: 'browse', phaseId: 'onboarding', label: 'Selected-site browsing', kind: 'process', status: 'enhanced' },
-      { id: 'observer', phaseId: 'observer', label: 'Observer', kind: 'process', status: 'new' },
-      { id: 'product-pulse', phaseId: 'observer', label: 'Product Pulse', kind: 'process', status: 'new' },
-      { id: 'rationator', phaseId: 'observer', label: 'Rationator', kind: 'process', status: 'new' },
-      { id: 'qualifying-checkout', phaseId: 'rationalisation', label: 'Qualifying checkout?', kind: 'decision', status: 'enhanced' },
-      { id: 'hold', phaseId: 'rationalisation', label: '24-hour hold', kind: 'state', status: 'enhanced' },
-      { id: 'deliberation', phaseId: 'rationalisation', label: 'Deliberation', kind: 'process', status: 'enhanced' },
-      { id: 'urgente', phaseId: 'rationalisation', label: 'Urgente', kind: 'process', status: 'enhanced' },
-      { id: 'growth', phaseId: 'growth', label: 'Growth', kind: 'process', status: 'tentative' }
-    ],
-    comparison: {
+    flows: {
       onboarding: {
-        proofLabel: 'historical',
-        before: 'Beta 1.2 used a protected-site list and optional Top Sites tracking.',
-        after: 'v1.3 frames setup as consent-led Website Tracking and explicit protected-site selection.',
-        changes: ['enhanced']
+        label: 'onboarding challenge', proofLabel: 'planned',
+        nodes: [
+          { id: 'challenge', label: 'onboarding challenge', note: 'choose your boundary', status: 'enhanced' },
+          { id: 'discovery', label: 'optional discovery', note: 'local suggestions only', status: 'enhanced' },
+          { id: 'protect', label: 'protect selected sites', note: 'explicit consent', status: 'enhanced' },
+          { id: 'browse', label: 'selected-site browsing', note: 'scope stays editable', status: 'enhanced' }
+        ], edges: [['challenge', 'discovery'], ['discovery', 'protect'], ['protect', 'browse']],
+        dependency: 'manual entry remains available if optional discovery is unavailable.'
       },
       observer: {
-        proofLabel: 'historical',
-        before: 'Beta 1.2 did not expose Observer as a distinct product layer.',
-        after: 'v1.3 gives Observer ownership of Product Pulse and Rationator.',
-        changes: ['new', 'enhanced']
+        label: 'observer', proofLabel: 'planned',
+        nodes: [
+          { id: 'observe', label: 'observer', note: 'local browsing signal', status: 'new' },
+          { id: 'pulse', label: 'product pulse', note: 'cart-growth branch', status: 'new' },
+          { id: 'return', label: 'return to browsing', note: 'no checkout hold', status: 'enhanced' },
+          { id: 'rationator', label: 'rationator', note: 'counter re-entry', status: 'new' }
+        ], edges: [['observe', 'pulse'], ['pulse', 'return'], ['rationator', 'observe']],
+        dependency: 'rationator is observer-owned but requires an active rationalisation hold.'
       },
       rationalisation: {
-        proofLabel: 'historical',
-        before: 'Beta 1.2 defaulted to a 48-hour hold and limited Urgente to once each month.',
-        after: 'Current source defaults to a 24-hour hold; Urgente is an unlimited challenge with a 12-hour brand-scoped checkout pass.',
-        changes: ['enhanced']
+        label: 'rationalisation', proofLabel: 'planned',
+        nodes: [
+          { id: 'checkout', label: 'qualifying checkout?', note: 'uncertain signals fail open', status: 'enhanced', kind: 'decision' },
+          { id: 'hold', label: '24-hour hold', note: 'ordinary browsing remains open', status: 'enhanced' },
+          { id: 'deliberation', label: 'deliberation', note: 'user decides', status: 'enhanced' },
+          { id: 'urgente', label: 'urgente', note: 'unlimited typing challenge', status: 'enhanced' },
+          { id: 'pass', label: '12-hour checkout pass', note: 'brand-scoped only', status: 'enhanced' }
+        ], edges: [['checkout', 'hold'], ['hold', 'deliberation'], ['hold', 'urgente'], ['urgente', 'pass']],
+        dependency: 'a pass is checkout-only, brand-scoped and expires after 12 hours.'
       },
       growth: {
-        proofLabel: 'tentative',
-        before: 'Older analytics surfaces are historical context only.',
-        after: 'Growth remains tentative; Python is shadow-only and Vision is a future DOM-failure fallback.',
-        changes: ['removed', 'tentative']
+        label: 'growth', proofLabel: 'tentative',
+        nodes: [
+          { id: 'history', label: 'factual decision history', note: 'bounded outcomes only', status: 'tentative' },
+          { id: 'python', label: 'python', note: 'shadow-only', status: 'tentative' },
+          { id: 'vision', label: 'vision', note: 'dom-failure fallback', status: 'tentative' }
+        ], edges: [['history', 'python'], ['vision', 'history']],
+        dependency: 'no live model authority and no inferred financial or behavioural outcome.'
       }
+    },
+    comparison: {
+      onboarding: { proofLabel: 'planned', beforeFlow: ['protected-site list', 'optional top sites'], afterFlow: ['onboarding challenge', 'optional discovery', 'explicit protection'], delta: 'enhanced: v1.3 is founder-directed to frame consent and site choice as an onboarding challenge. current source still evidences explicit selection, not this final framing.', changes: ['enhanced', 'planned'] },
+      observer: { proofLabel: 'historical', beforeFlow: ['browsing', 'no distinct observer layer'], afterFlow: ['observer', 'product pulse', 'rationator return'], delta: 'new: observer becomes a named browsing-time layer. enhanced: product pulse and rationator have explicit ownership boundaries.', changes: ['new', 'enhanced'] },
+      rationalisation: { proofLabel: 'historical', beforeFlow: ['48-hour hold', 'monthly urgente bypass'], afterFlow: ['24-hour hold', 'deliberation', 'unlimited urgente challenge'], delta: 'enhanced: a qualifying checkout uses a 24-hour hold; urgente is unlimited and grants a separate 12-hour brand-scoped checkout pass.', changes: ['enhanced'] },
+      growth: { proofLabel: 'tentative', beforeFlow: ['historical analytics surfaces'], afterFlow: ['bounded decision history', 'shadow-only python', 'vision fallback'], delta: 'removed/tentative: no active growth packet. python remains shadow-only and vision remains a dom-failure fallback.', changes: ['removed', 'tentative'] }
+    },
+    buildPlaceholders: {
+      onboarding: 'the onboarding component packet will define challenge copy, consent boundaries, protected-site selection and fallback manual entry in batch 4a.',
+      observer: 'the observer component packet will define product pulse, rationator and their explicit runtime boundary in batch 4b.',
+      rationalisation: 'the rationalisation component packet will define checkout classification, hold, deliberation and urgente in batch 4c.',
+      growth: 'growth is intentionally tentative. no active component packet is available until founder scope is unlocked.'
     }
   };
 })();

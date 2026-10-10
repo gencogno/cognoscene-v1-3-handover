@@ -1,25 +1,76 @@
 (function () {
   'use strict';
-  const map = document.querySelector('#atlas-map');
-  const rail = document.querySelector('#phase-rail');
-  const detail = document.querySelector('#phase-detail');
+  const spine = document.querySelector('#phase-spine');
+  const drawer = document.querySelector('#phase-drawer');
   const summary = document.querySelector('#phase-summary');
   const revision = document.querySelector('#revision');
+  const openFlow = document.querySelector('#open-flow');
+  const spineHint = document.querySelector('#spine-hint');
   const atlas = window.CognosceneAtlasData;
-  let status; let selected; let justUnlocked = false;
-  const pos = { onboarding:[70,80], 'protected-sites':[265,80], browse:[460,80], observer:[655,80], 'product-pulse':[655,255], rationator:[655,430], 'qualifying-checkout':[850,80], hold:[850,255], deliberation:[850,430], urgente:[1045,255], growth:[1045,430] };
-  const notes = { onboarding:'consent-led setup', 'protected-sites':'user chooses scope', browse:'selected site only', observer:'local product signal', 'product-pulse':'cart-growth branch', rationator:'hold re-entry route', 'qualifying-checkout':'unknown fails open', hold:'browsing remains open', deliberation:'user decides', urgente:'unlimited challenge', growth:'tentative history' };
-  const edges = [['onboarding','protected-sites'],['protected-sites','browse'],['browse','observer'],['observer','product-pulse'],['product-pulse','browse'],['observer','qualifying-checkout'],['qualifying-checkout','hold'],['hold','deliberation'],['hold','urgente'],['deliberation','growth'],['rationator','hold'],['hold','rationator']];
+  let status; let selected; let drawerOpen = false; let tab = 'flow'; let pressTimer;
+
   const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
-  async function load() { try { const response = await fetch('public-feature-status.json', { cache:'no-store' }); if (!response.ok) throw new Error(); return await response.json(); } catch { return { revisionLabel:'Local Atlas fallback', atlas:{ currentPhaseId:'onboarding', phases:[{id:'onboarding',state:'current',name:'Onboarding'},{id:'observer',state:'locked',name:'Observer'},{id:'rationalisation',state:'locked',name:'Rationalisation'},{id:'growth',state:'tentative',name:'Growth'}] } }; } }
-  function phase(id) { return status.atlas.phases.find((item) => item.id === id) || { id:id, state:'locked', name:id }; }
-  function canOpen(id) { return ['current','completed'].includes(phase(id).state); }
-  function phaseIndex(id) { return status.atlas.phases.findIndex((item) => item.id === id); }
-  function feature(id) { return atlas.nodes.find((item) => item.id === id); }
-  function nodeSvg(item) { const point=pos[item.id], locked=!canOpen(item.phaseId), state=locked?'locked':item.status, shape=item.kind==='decision'?'<polygon class="body" points="0,-58 70,0 0,58 -70,0"/>':'<rect class="body" x="-76" y="-46" width="152" height="92" rx="14"/>', badge=locked?'LOCKED':item.status.toUpperCase(), unlocked=justUnlocked&&item.phaseId===status.atlas.currentPhaseId?' unlocked':''; return '<g transform="translate('+point[0]+' '+point[1]+')" class="node '+state+unlocked+(selected===item.phaseId?' selected':'')+(locked?' locked':'')+'" data-node="'+item.id+'" tabindex="'+(locked?'-1':'0')+'" role="button" aria-label="'+esc(item.label)+(locked?', locked':'')+'">'+shape+'<text class="badge" x="0" y="-19" text-anchor="middle">'+badge+'</text><text class="label" x="0" y="5" text-anchor="middle">'+esc(item.label)+'</text><text class="note" x="0" y="25" text-anchor="middle">'+esc(notes[item.id])+'</text></g>'; }
-  function renderMap() { const paths=edges.map(([a,b]) => { const A=pos[a], B=pos[b], vertical=A[0]===B[0], loop=a==='product-pulse'||a==='rationator'; return '<path class="edge '+(loop?'loop':'')+'" d="M '+(A[0]+(vertical?0:76))+' '+(A[1]+(vertical?46:0))+' L '+(B[0]-(vertical?0:76))+' '+(B[1]-(vertical?46:0))+'"/>'; }).join(''); map.innerHTML='<svg viewBox="0 0 1200 540" role="img" aria-labelledby="map-title map-desc"><title id="map-title">Cognoscene v1.3 shopper journey</title><desc id="map-desc">Implementation map with onboarding, Observer, Rationalisation, and tentative Growth phases.</desc><defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#a9a398"/></marker></defs>'+paths+atlas.nodes.map(nodeSvg).join('')+'</svg>'; map.querySelectorAll('[data-node]').forEach((element) => { const go=() => { const item=feature(element.dataset.node); if (canOpen(item.phaseId)) select(item.phaseId); }; element.addEventListener('click',go); element.addEventListener('keydown',(event) => { if ((event.key==='Enter'||event.key===' ')&&!element.classList.contains('locked')) { event.preventDefault(); go(); } }); }); }
-  function renderRail() { rail.innerHTML=status.atlas.phases.map((item,index) => '<button class="phase-button '+item.state+'" '+(canOpen(item.id)?'':'disabled')+' aria-current="'+(item.id===selected?'step':'false')+'" data-phase="'+item.id+'"><span class="phase-index">'+(index+1)+'</span><span>'+esc(item.name)+'</span></button>').join(''); rail.querySelectorAll('[data-phase]').forEach((button) => button.addEventListener('click',() => select(button.dataset.phase))); }
-  function renderDetail() { const item=phase(selected), comparison=atlas.comparison[selected]||atlas.comparison.onboarding, current=phase(status.atlas.currentPhaseId), index=phaseIndex(selected), previous=status.atlas.phases[index-1], next=status.atlas.phases[index+1]; summary.textContent='Current work: '+current.name+'. '+(current.id===selected?'Open this phase to continue.':'Reference only.'); detail.innerHTML='<div class="detail-top"><div><p class="eyebrow">'+esc(item.state)+' phase</p><h2>'+esc(item.name)+' <span class="status '+(item.state==='current'?'enhanced':item.state)+'">'+esc(item.state)+'</span></h2><p>'+esc(item.summary||'Implementation detail is pending reconciliation.')+'</p></div><p class="status '+esc(comparison.proofLabel)+'">'+esc(comparison.proofLabel)+'</p></div><div class="compare"><article><h3>Beta 1.2</h3><p>'+esc(comparison.before)+'</p></article><article class="current"><h3>v1.3</h3><p>'+esc(comparison.after)+'</p></article></div><div class="change-row">'+comparison.changes.map((change) => '<span class="status '+esc(change)+'">'+esc(change)+'</span>').join('')+'</div><div class="detail-actions"><button type="button" data-go="'+(previous&&canOpen(previous.id)?previous.id:'')+'" '+(previous&&canOpen(previous.id)?'':'disabled')+'>Previous phase</button><button type="button" disabled>'+((next&&next.state==='locked')?'Next phase locked · awaiting reviewed status':'No next phase available')+'</button></div>'; detail.querySelectorAll('[data-go]').forEach((button) => button.addEventListener('click',() => { if (button.dataset.go) select(button.dataset.go); })); }
-  function select(id) { if (!canOpen(id)) return; selected=id; renderRail(); renderMap(); renderDetail(); }
-  (async function init() { status=await load(); const prior=sessionStorage.getItem('cognoscene-atlas-current-phase'); justUnlocked=Boolean(prior&&prior!==status.atlas.currentPhaseId); sessionStorage.setItem('cognoscene-atlas-current-phase',status.atlas.currentPhaseId); selected=status.atlas.currentPhaseId; revision.textContent=status.revisionLabel||'Atlas 2.5'; renderRail(); renderMap(); renderDetail(); })();
+  const lower = (v) => String(v).toLowerCase();
+  async function load() {
+    try { const response = await fetch('public-feature-status.json', { cache:'no-store' }); if (!response.ok) throw new Error(); return await response.json(); }
+    catch { return { revisionLabel:'local atlas fallback', atlas:{ currentPhaseId:'onboarding', phases:[{id:'onboarding',state:'current',name:'onboarding'},{id:'observer',state:'locked',name:'observer'},{id:'rationalisation',state:'locked',name:'rationalisation'},{id:'growth',state:'tentative',name:'growth'}] } }; }
+  }
+  function phase(id) { return status.atlas.phases.find((item) => item.id === id) || { id, state:'locked', name:id }; }
+  function isBuildable(id) { return ['current', 'completed'].includes(phase(id).state); }
+  function isPreview(id) { return !isBuildable(id); }
+  function currentId() { return status.atlas.currentPhaseId; }
+  function nodePosition(index, length) { return [104 + index * (800 / Math.max(1, length - 1)), 115]; }
+  function split(value, limit) { const words = String(value).split(' '); const lines = []; let line = ''; words.forEach((word) => { const candidate = line ? line + ' ' + word : word; if (candidate.length > limit && line) { lines.push(line); line = word; } else line = candidate; }); if (line) lines.push(line); return lines; }
+  function tspans(value, y, css, limit) { return split(value, limit).map((line, index) => '<tspan class="'+css+'" x="0" dy="'+(index ? 16 : 0)+'" y="'+(index ? '' : y)+'">'+esc(line)+'</tspan>').join(''); }
+  function svgNode(item, index, length) {
+    const point = nodePosition(index, length); const diamond = item.kind === 'decision';
+    const body = diamond ? '<polygon class="body" points="0,-52 66,0 0,52 -66,0"/>' : '<rect class="body" x="-78" y="-43" width="156" height="86" rx="14"/>';
+    return '<g class="flow-node '+esc(item.status)+'" transform="translate('+point[0]+' '+point[1]+')">'+body+'<text>'+tspans(item.label, -7, 'flow-label', 20)+'<tspan class="flow-note" x="0" dy="19">'+esc(item.note)+'</tspan></text></g>';
+  }
+  function flowSvg(flow) {
+    const index = Object.fromEntries(flow.nodes.map((node, i) => [node.id, i]));
+    const edges = flow.edges.map(([from, to]) => { const a = nodePosition(index[from], flow.nodes.length); const b = nodePosition(index[to], flow.nodes.length); return '<path class="flow-edge" d="M '+(a[0]+78)+' '+a[1]+' L '+(b[0]-78)+' '+b[1]+'"/>'; }).join('');
+    const dependency = '<path class="flow-edge dependency" d="M 115 197 L 860 197"/>';
+    return '<div class="flow-wrap"><svg class="phase-flow" viewBox="0 0 1000 230" role="img" aria-label="'+esc(flow.label)+' flow"><defs><marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#8a8a84"/></marker></defs>'+edges+dependency+flow.nodes.map((node, i) => svgNode(node, i, flow.nodes.length)).join('')+'</svg></div><p class="flow-dependency">dependency / fallback: '+esc(flow.dependency)+'</p>';
+  }
+  function changesMarkup(id) {
+    const compare = atlas.comparison[id];
+    return '<div class="compare-grid"><article class="mini-flow"><h4>beta 1.2</h4><ol>'+compare.beforeFlow.map((item) => '<li>'+esc(item)+'</li>').join('')+'</ol></article><span class="compare-arrow" aria-hidden="true">→</span><article class="mini-flow"><h4>v1.3</h4><ol>'+compare.afterFlow.map((item) => '<li>'+esc(item)+'</li>').join('')+'</ol></article></div><div class="delta"><strong>what changed</strong><br>'+esc(compare.delta)+'<div class="change-row">'+compare.changes.map((item) => '<span class="status '+esc(item)+'">'+esc(item)+'</span>').join('')+'</div></div>';
+  }
+  function drawerMarkup() {
+    const item = phase(selected); const flow = atlas.flows[selected]; const preview = isPreview(selected); const tabs = ['flow', 'changes', 'build'];
+    const content = tab === 'flow' ? flowSvg(flow) : tab === 'changes' ? changesMarkup(selected) : '<div class="build-card">'+esc(atlas.buildPlaceholders[selected])+'</div>';
+    const returnButton = preview ? '<p class="preview-note">preview only — this phase cannot be marked complete or promoted here.</p><button class="return-current" type="button" data-return-current>return to current phase</button>' : '';
+    return '<div class="drawer-head"><div><p class="eyebrow">'+(preview ? 'preview only' : 'current implementation')+'</p><h3>'+esc(flow.label)+'</h3><p>'+esc(item.summary || '')+'</p></div><div><span class="drawer-proof '+esc(flow.proofLabel)+'">'+esc(flow.proofLabel)+'</span><button class="drawer-close" type="button" aria-label="close phase drawer" data-close>×</button></div></div><div class="drawer-tabs" role="tablist" aria-label="'+esc(flow.label)+' details">'+tabs.map((name) => '<button class="drawer-tab" role="tab" type="button" aria-selected="'+(tab === name)+'" data-tab="'+name+'">'+name+'</button>').join('')+'</div><div class="drawer-body">'+content+returnButton+'</div>';
+  }
+  function renderSpine() {
+    spine.innerHTML = status.atlas.phases.map((item, index) => {
+      const selectedClass = selected === item.id ? ' selected' : ''; const label = item.state === 'locked' ? 'preview only' : item.state;
+      return '<button class="phase-stop '+esc(item.state)+selectedClass+'" type="button" data-phase="'+esc(item.id)+'" aria-current="'+(selected === item.id ? 'step' : 'false')+'" aria-label="'+esc(lower(item.name))+', '+label+'"><span class="phase-dot">'+(item.state === 'completed' ? '✓' : index + 1)+'</span><span class="phase-name">'+esc(lower(item.name))+'</span><span class="phase-state">'+esc(label)+'</span></button>';
+    }).join('');
+    spine.querySelectorAll('[data-phase]').forEach((button) => {
+      const release = () => { button.classList.remove('pressed'); clearTimeout(pressTimer); };
+      button.addEventListener('pointerdown', () => { button.classList.add('pressed'); pressTimer = setTimeout(release, 280); });
+      button.addEventListener('pointerup', release); button.addEventListener('pointercancel', release);
+      button.addEventListener('click', () => { selected = button.dataset.phase; drawerOpen = true; tab = 'flow'; render(); });
+    });
+  }
+  function renderDrawer() {
+    drawer.hidden = !drawerOpen; openFlow.setAttribute('aria-expanded', String(drawerOpen)); openFlow.textContent = drawerOpen ? 'close phase flow' : 'open phase flow';
+    if (!drawerOpen) return;
+    drawer.innerHTML = drawerMarkup();
+    drawer.querySelector('[data-close]').addEventListener('click', () => { drawerOpen = false; renderDrawer(); });
+    drawer.querySelectorAll('[data-tab]').forEach((button) => button.addEventListener('click', () => { tab = button.dataset.tab; renderDrawer(); }));
+    const returnButton = drawer.querySelector('[data-return-current]'); if (returnButton) returnButton.addEventListener('click', () => { selected = currentId(); tab = 'flow'; render(); });
+  }
+  function render() {
+    const current = phase(currentId()); const selectedPhase = phase(selected);
+    summary.textContent = 'current work: '+lower(current.name)+'. '+(selected === currentId() ? 'open this phase to continue.' : 'reviewing '+lower(selectedPhase.name)+'.');
+    spineHint.textContent = isPreview(selected) ? 'preview only. github-reviewed status remains the unlock authority.' : 'open this phase to inspect its bounded handover.';
+    renderSpine(); renderDrawer();
+  }
+  (async function init() {
+    status = await load(); selected = currentId(); revision.textContent = status.revisionLabel || 'atlas 2.75 phase contract';
+    openFlow.addEventListener('click', () => { drawerOpen = !drawerOpen; renderDrawer(); }); render();
+  })();
 })();

@@ -70,3 +70,13 @@ Public-status effect:
 - **TerraLite outcome:** Replaced the generic palette with the canonical cream, surface, lime, ink, muted and active tokens; loaded Be Vietnam Pro; and applied all-lowercase presentation. Semantic green, blue and grey Atlas states remain distinct.
 - **Evidence limit:** This batch changes the handover presentation only. It does not change any extension runtime, phase progression rule or live-product claim.
 - **Public-status effect:** Pending source publication and browser validation.
+
+## 10 October 2026 — Batches 2.75B–H compact Atlas
+
+- **Feature:** Journey Atlas compact flow and phase drawer
+- **Founder update:** Replace the large permanent chart with a phase-led compact spine. Onboarding is framed as an onboarding challenge; future phases remain accessible for preview but cannot be promoted from the browser.
+- **TerraLite outcome:** Added the compact phase spine, expandable drawer, per-phase SVG flow, deterministic SVG text wrapping, flow/changes/build tabs, Beta 1.2/v1.3 mini-flow comparisons, explicit delta copy, preview-only future-phase navigation, return-to-current control, touch/press feedback and reduced-motion treatment.
+- **Evidence:** Local browser validation confirmed the compact spine, opening/closing the onboarding drawer, the challenge framing, changes tab, Observer preview-only state and return-to-current path. JavaScript syntax, JSON parsing, mirror synchronization and whitespace checks passed.
+- **Evidence limit:** This is website evidence only. The onboarding challenge wording is a **planned founder direction**; canonical source currently proves explicit selection and optional local Top Sites suggestions, not the final challenge framing. The compact Atlas was also rendered at 390px mobile width; extension-runtime browser proof remains incomplete.
+- **Reconciliation risk:** Canonical `manifest.json` is `1.4.114`; adjacent `package.json` remains `1.4.112`; canonical provenance is unknown because no `.git` metadata is mounted.
+- **Public-status effect:** Pending GitHub push and Sites publication of this tested source revision.
