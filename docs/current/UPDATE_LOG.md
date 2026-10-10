@@ -54,3 +54,11 @@ Public-status effect:
 - **TerraLite outcome:** Staged a custom SVG/HTML map, status-driven phase rail, keyboard-accessible available nodes, locked future nodes, reduced-motion treatment, and a compact historical comparison panel. The public mirror is validated by the phase-contract script.
 - **Evidence limit:** JavaScript syntax, JSON parsing, mirror equality and whitespace checks passed. The browser sandbox blocks local-file navigation, so desktop/mobile visual proof and public deployment remain incomplete.
 - **Public-status effect:** none until visual review and deployment are completed.
+
+## 10 October 2026 — Atlas 2.5 deployed
+
+- **Feature:** Journey Atlas replacement
+- **TerraLite outcome:** Deployed the saved Atlas 2.5 source revision through the existing Sites host after the local archive helper failed. The source-only hosted fallback completed successfully.
+- **Desktop evidence:** Connected Chrome rendered the deployed HTTPS page with Onboarding as the current phase; Observer, Rationalisation and Growth locked; the SVG map; and the Beta 1.2/v1.3 comparison panel.
+- **Evidence limit:** Mobile viewport proof and a future phase-unlock transition remain unverified because the current reviewed status keeps Onboarding active.
+- **Public-status effect:** Atlas 2.5 is live.
