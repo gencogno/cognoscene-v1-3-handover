@@ -35,3 +35,22 @@ Public-status effect:
 - **Needs live-source reconciliation:** yes, whenever the update makes a live extension claim.
 - **TerraLite outcome:** Coupled-update rule recorded in the repository entrypoint and index.
 - **Public-status effect:** none yet.
+
+## 8 October 2026 — Atlas 2.5 phase contract
+
+- **Feature:** Journey Atlas replacement
+- **Founder update:** Build a sequential, phase-led Atlas with compact Beta 1.2 comparison rather than two large flowcharts.
+- **Requested website effect:** Show the current phase, retain completed-phase reference, lock future phases, and reveal the next phase through motion after a reviewed status advance.
+- **Requested implementation effect:** Public status data supplies the phase state; browser interactions cannot promote project progress.
+- **Needs live-source reconciliation:** yes, before revising any runtime statement or historical comparison.
+- **TerraLite outcome:** Public and private phase records, a safe hosted-data mirror, and a validator are staged. SVG rendering remains the next batch.
+- **Public-status effect:** none yet; the current visual Atlas is unchanged.
+
+## 10 October 2026 — Atlas 2.5 renderer and reveal
+
+- **Feature:** Journey Atlas replacement
+- **Founder update:** Execute the remaining Atlas 2.5 batches as one run.
+- **Requested website effect:** Replace the grid of feature cards with a phase-led flowchart; show locked future work and a compact Beta 1.2 comparison for the open phase.
+- **TerraLite outcome:** Staged a custom SVG/HTML map, status-driven phase rail, keyboard-accessible available nodes, locked future nodes, reduced-motion treatment, and a compact historical comparison panel. The public mirror is validated by the phase-contract script.
+- **Evidence limit:** JavaScript syntax, JSON parsing, mirror equality and whitespace checks passed. The browser sandbox blocks local-file navigation, so desktop/mobile visual proof and public deployment remain incomplete.
+- **Public-status effect:** none until visual review and deployment are completed.

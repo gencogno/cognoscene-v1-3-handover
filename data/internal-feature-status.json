@@ -1,7 +1,19 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "updatedAtSgt": "2026-10-08",
   "authority": "Private handover record; current canonical extension source overrides any stale runtime claim.",
+  "atlas": {
+    "schemaVersion": 1,
+    "currentPhaseId": "onboarding",
+    "advanceAuthority": "TerraLite updates the GitHub-backed record after founder review and live-source reconciliation.",
+    "completionRule": "Checklist interaction is informative only; it cannot promote a phase.",
+    "phases": [
+      { "id": "onboarding", "state": "current", "owner": "Daniella", "nextGate": "Founder review plus live-source reconciliation" },
+      { "id": "observer", "state": "locked", "owner": "Daniella", "nextGate": "Onboarding phase completed" },
+      { "id": "rationalisation", "state": "locked", "owner": "Rationalisation workstream", "nextGate": "Observer phase completed" },
+      { "id": "growth", "state": "tentative", "owner": "Cogno", "nextGate": "Founder scope decision" }
+    ]
+  },
   "features": [
     {
       "id": "github-handover",
