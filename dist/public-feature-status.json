@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "updatedAtSgt": "2026-10-10",
-  "revisionLabel": "Atlas 2.75 v2 · flowchart review",
+  "revisionLabel": "Atlas 2.75 v3 · onboarding comparison",
   "atlas": {
     "schemaVersion": 1,
     "releaseLabel": "v1.3",
@@ -14,9 +14,9 @@
         "name": "onboarding",
         "state": "current",
         "proofLabel": "planned",
-        "summary": "Planned onboarding challenge: explicit consent, optional local discovery and protected-site selection.",
-        "previousSummary": "Beta 1.2 used a protected-site list and optional Top Sites tracking.",
-        "changeLabels": ["enhanced"]
+        "summary": "Current onboarding source: explicit protected-site selection, optional local discovery and completion consent.",
+        "previousSummary": "Beta 1.2 was an explainer flow with a 48-hour hold, savings and monthly Urgente walkthroughs.",
+        "changeLabels": ["new", "enhanced", "removed"]
       },
       {
         "id": "observer",

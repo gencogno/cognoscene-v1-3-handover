@@ -3,12 +3,12 @@
   'use strict';
 
   window.CognosceneAtlasData = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     releaseLabel: 'v1.3',
     sourceOfTruth: 'dist/public-feature-status.json',
     flows: {
       onboarding: {
-        label: 'onboarding challenge', proofLabel: 'planned',
+        label: 'onboarding challenge', proofLabel: 'verified current',
         nodes: [
           { id: 'challenge', label: 'understand the boundary', note: 'chosen and reversible', status: 'enhanced' },
           { id: 'discovery', label: 'choose how to add sites', note: 'manual or local suggestions', status: 'enhanced' },
@@ -49,7 +49,43 @@
       }
     },
     comparison: {
-      onboarding: { proofLabel: 'planned', beforeFlow: ['protected-site list', 'optional top sites'], afterFlow: ['chosen boundary', 'manual or local discovery', 'explicit protection'], delta: 'enhanced: v1.3 connects optional discovery, explicit protection and reversible site scope into one consent-led journey. current source proves explicit selection; challenge framing remains planned.', changes: ['enhanced', 'planned'] },
+      onboarding: {
+        proofLabel: 'verified current',
+        beta12: {
+          label: 'beta 1.2',
+          proof: 'historical',
+          nodes: [
+            { id: 'b-start', label: 'start or skip', note: 'two entry choices', kind: 'decision' },
+            { id: 'b-boundary', label: 'site-boundary explainer', note: 'illustrative list; no selection in setup' },
+            { id: 'b-hold', label: '48-hour hold explainer', note: 'checkout pause model' },
+            { id: 'b-savings', label: 'savings explainer', note: 'historical claim surface' },
+            { id: 'b-urgente', label: 'monthly urgente explainer', note: 'one-per-month model' },
+            { id: 'b-done', label: 'complete', note: 'onboarding flag written' }
+          ],
+          edges: [['b-start', 'b-boundary'], ['b-boundary', 'b-hold'], ['b-hold', 'b-savings'], ['b-savings', 'b-urgente'], ['b-urgente', 'b-done']],
+          branches: [{ from: 'b-start', label: 'skip', target: 'b-done' }]
+        },
+        v13: {
+          label: 'v1.3 current',
+          proof: 'verified current',
+          nodes: [
+            { id: 'v-start', label: 'start or skip', note: 'setup remains optional', kind: 'decision', status: 'enhanced' },
+            { id: 'v-sites', label: 'add protected sites', note: 'one site required to continue', status: 'enhanced' },
+            { id: 'v-discover', label: 'optional local suggestions', note: 'Chrome Top Sites; opt-in only', kind: 'decision', status: 'new' },
+            { id: 'v-protect', label: 'explicitly protect sites', note: 'nothing activates automatically', status: 'enhanced' },
+            { id: 'v-hold', label: '24-hour hold explainer', note: 'cart remains with the shop', status: 'enhanced' },
+            { id: 'v-record', label: 'evidence-bounded record', note: 'amount only with complete evidence', status: 'enhanced' },
+            { id: 'v-consent', label: 'consent and done', note: 'sync control; completion written', status: 'enhanced' }
+          ],
+          edges: [['v-start', 'v-sites'], ['v-sites', 'v-discover'], ['v-discover', 'v-protect'], ['v-protect', 'v-hold'], ['v-hold', 'v-record'], ['v-record', 'v-consent']],
+          branches: [
+            { from: 'v-start', label: 'skip', target: 'v-consent' },
+            { from: 'v-discover', label: 'no / unavailable', target: 'v-protect', fallback: true }
+          ]
+        },
+        delta: 'enhanced: v1.3 turns the historical onboarding explainer into explicit site selection, opt-in local suggestions, and a 24-hour setup sequence. Historical savings and monthly Urgente walkthroughs are no longer onboarding steps.',
+        changes: ['enhanced', 'new', 'removed']
+      },
       observer: { proofLabel: 'historical', beforeFlow: ['browsing', 'no distinct observer layer'], afterFlow: ['observer', 'product pulse', 'rationator return'], delta: 'new: observer becomes a named browsing-time layer. enhanced: product pulse and rationator have explicit ownership boundaries.', changes: ['new', 'enhanced'] },
       rationalisation: { proofLabel: 'historical', beforeFlow: ['48-hour hold', 'monthly urgente bypass'], afterFlow: ['24-hour hold', 'deliberation', 'unlimited urgente challenge'], delta: 'enhanced: a qualifying checkout uses a 24-hour hold; urgente is unlimited and grants a separate 12-hour brand-scoped checkout pass.', changes: ['enhanced'] },
       growth: { proofLabel: 'tentative', beforeFlow: ['historical analytics surfaces'], afterFlow: ['bounded decision history', 'shadow-only python', 'vision fallback'], delta: 'removed/tentative: no active growth packet. python remains shadow-only and vision remains a dom-failure fallback.', changes: ['removed', 'tentative'] }
@@ -59,6 +95,15 @@
       observer: 'the observer component packet will define product pulse, rationator and their explicit runtime boundary in batch 4b.',
       rationalisation: 'the rationalisation component packet will define checkout classification, hold, deliberation and urgente in batch 4c.',
       growth: 'growth is intentionally tentative. no active component packet is available until founder scope is unlocked.'
+    },
+    downloads: {
+      onboarding: {
+        file: 'downloads/onboarding/onboarding-reference-packet.zip',
+        label: 'download onboarding reference packet',
+        status: 'incomplete',
+        contents: ['source boundary and dependency map', 'acceptance checks', 'Claude implementation brief', 'reference-only extraction notes'],
+        note: 'This is a reference packet, not a production component extractor. The current onboarding runtime remains coupled to its extension context; demo and QA-only assets are excluded.'
+      }
     }
   };
 })();

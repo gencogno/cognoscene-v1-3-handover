@@ -64,21 +64,31 @@
     return '<div class="flow-wrap"><svg class="phase-flow" viewBox="0 0 1000 230" role="img" aria-label="' + esc(flow.label) + ' flow"><defs><marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#8a8a84"/></marker></defs>' + edges + flow.nodes.map((node, position) => svgNode(node, position, flow.nodes.length)).join('') + '</svg></div><p class="flow-dependency">dependency / fallback: ' + esc(flow.dependency) + '</p>';
   }
 
+  function comparisonNode(node, column, index) {
+    const isCurrent = column === 'current';
+    const tag = isCurrent ? '<span class="flow-status ' + esc(node.status || 'enhanced') + '">' + esc(node.status || 'enhanced') + '</span>' : '';
+    const trigger = isCurrent ? ' data-onboarding-node="' + esc(node.id) + '" aria-expanded="false" aria-controls="onboarding-shelf"' : ' aria-disabled="true"';
+    return '<button class="comparison-node ' + esc(node.kind || 'state') + ' ' + esc(node.status || 'historical') + '" type="button"' + trigger + '><span class="comparison-index">' + String(index + 1).padStart(2, '0') + '</span><span class="comparison-copy"><strong>' + esc(node.label) + '</strong><small>' + esc(node.note) + '</small></span>' + tag + '</button>';
+  }
+
+  function comparisonColumn(flow, column) {
+    const isCurrent = column === 'current';
+    const branchLabels = (flow.branches || []).map((branch) => '<span class="flow-branch ' + (branch.fallback ? 'fallback' : '') + '">' + esc(branch.label) + ' → ' + esc(flow.nodes.find((node) => node.id === branch.target).label) + '</span>').join('');
+    return '<section class="comparison-column ' + column + '" aria-label="' + esc(flow.label) + ' flowchart"><header><p class="eyebrow">' + esc(flow.proof) + '</p><h5>' + esc(flow.label) + '</h5><p>' + (isCurrent ? 'current implementation flow' : 'historical onboarding flow') + '</p></header><div class="comparison-flow">'
+      + flow.nodes.map((node, index) => comparisonNode(node, column, index) + (index < flow.nodes.length - 1 ? '<span class="comparison-connector" aria-hidden="true"></span>' : '')).join('')
+      + '</div>' + (branchLabels ? '<div class="flow-branches">' + branchLabels + '</div>' : '') + '</section>';
+  }
+
   function onboardingChallenge() {
-    return '<section class="onboarding-challenge" aria-label="onboarding challenge journey">'
-      + '<div class="challenge-intro"><div><p class="eyebrow">challenge 01 · planned</p><h4>define the shopping boundary</h4><p>the shopper chooses what Cognoscene may protect. every route stays voluntary, local and reversible.</p></div><span class="proof-chip planned">planned framing</span></div>'
-      + '<div class="journey-key"><span><i class="journey-dot enhanced"></i>enhanced in v1.3</span><span><i class="journey-line"></i>manual entry is the fallback</span></div>'
-      + '<div class="onboarding-map">'
-      + '<div class="history-card history-boundary"><p>beta 1.2</p><strong>protected-site list</strong><span>the starting point</span></div>'
-      + '<div class="challenge-step step-boundary"><button class="challenge-node enhanced" type="button" data-challenge-node="boundary" aria-expanded="false" aria-controls="challenge-detail-boundary"><span class="node-number">01</span><span class="node-copy"><strong>understand the boundary</strong><small>protection is chosen, not assumed</small></span><span class="change-badge">enhanced</span></button><div class="node-detail" id="challenge-detail-boundary" hidden><strong>what changed</strong><p>v1.3 frames the protected-site list as an explicit boundary. Current source proves manual selection; this challenge framing is planned.</p><span class="detail-proof">planned · selection verified current</span></div></div>'
-      + '<div class="history-card history-discovery"><p>beta 1.2</p><strong>optional top sites</strong><span>one suggestion surface</span></div>'
-      + '<div class="challenge-step step-discovery"><span class="vertical-connector" aria-hidden="true"></span><button class="challenge-node enhanced" type="button" data-challenge-node="discovery" aria-expanded="false" aria-controls="challenge-detail-discovery"><span class="node-number">02</span><span class="node-copy"><strong>choose how to add sites</strong><small>manual entry or optional local suggestions</small></span><span class="change-badge">enhanced</span></button><div class="route-grid"><span class="route-card">manual entry</span><span class="route-card optional">optional local suggestions</span></div><div class="node-detail" id="challenge-detail-discovery" hidden><strong>what changed</strong><p>recognised Chrome Top Sites may be suggested locally after the shopper opts in. A shopper can always add a site manually instead.</p><span class="detail-proof">verified current · no automatic protection</span></div></div>'
-      + '<div class="history-card history-protect"><p>beta 1.2</p><strong>list entry</strong><span>no explicit journey shown</span></div>'
-      + '<div class="challenge-step step-protect"><span class="vertical-connector" aria-hidden="true"></span><button class="challenge-node enhanced decision" type="button" data-challenge-node="protect" aria-expanded="false" aria-controls="challenge-detail-protect"><span class="node-number">03</span><span class="node-copy"><strong>protect this site?</strong><small>only an explicit protect action enables it</small></span><span class="change-badge">enhanced</span></button><div class="decision-options"><span>no · revise choice</span><span>yes · protect selected site</span></div><div class="node-detail" id="challenge-detail-protect" hidden><strong>what changed</strong><p>suggestion and protection are separate. Nothing becomes protected through discovery alone.</p><span class="detail-proof">verified current · explicit consent</span></div></div>'
-      + '<div class="history-card history-browse"><p>beta 1.2</p><strong>protected state</strong><span>limited visible recovery context</span></div>'
-      + '<div class="challenge-step step-browse"><span class="vertical-connector" aria-hidden="true"></span><button class="challenge-node enhanced" type="button" data-challenge-node="browse" aria-expanded="false" aria-controls="challenge-detail-browse"><span class="node-number">04</span><span class="node-copy"><strong>selected-site browsing</strong><small>scope stays editable, removable and skippable</small></span><span class="change-badge">enhanced</span></button><div class="node-detail" id="challenge-detail-browse" hidden><strong>what changed</strong><p>the scope remains a user choice: people can remove sites, skip onboarding, or replay it later.</p><span class="detail-proof">verified current · browser proof incomplete</span></div><p class="fallback-line"><span aria-hidden="true">- - -</span> fallback: manual entry remains available if local discovery is unavailable.</p></div>'
-      + '</div>'
-      + '<div class="plain-fallback"><strong>plain-text flow</strong><p>understand the boundary → choose manual entry or optional local suggestions → explicitly protect a selected site → browse within an editable protected-site boundary. If suggestions are unavailable, manual entry remains available.</p></div>'
+    const comparison = atlas.comparison.onboarding;
+    const packet = atlas.downloads.onboarding;
+    return '<section class="onboarding-challenge v3" aria-label="onboarding comparison">'
+      + '<div class="challenge-intro"><div><p class="eyebrow">challenge 01 · onboarding</p><h4>from explainer to explicit setup</h4><p>two separate, source-reconciled flows. the current path keeps site protection voluntary, local and reversible.</p></div><span class="proof-chip">verified current</span></div>'
+      + '<div class="journey-key"><span><i class="journey-dot"></i>green = new or enhanced in v1.3</span><span><i class="journey-line"></i>dashed = optional or fallback route</span><span><i class="journey-removed"></i>grey = historical or removed</span></div>'
+      + '<div class="comparison-columns">' + comparisonColumn(comparison.beta12, 'historical') + comparisonColumn(comparison.v13, 'current') + '</div>'
+      + '<aside class="onboarding-shelf" id="onboarding-shelf" hidden aria-live="polite"><p class="eyebrow">selected v1.3 node</p><h5 data-shelf-title>select a green node</h5><p data-shelf-copy>node details and the onboarding handover packet appear here.</p><div class="shelf-actions"><a class="lime-button" data-shelf-download href="' + esc(packet.file) + '" download hidden>' + esc(packet.label) + '</a><button class="return-current" type="button" data-shelf-close hidden>close details</button></div><p class="packet-note" data-shelf-note hidden></p></aside>'
+      + '<div class="delta"><strong>comparison delta</strong><br>' + esc(comparison.delta) + '<div class="change-row">' + comparison.changes.map((item) => '<span class="status ' + esc(item) + '">' + esc(item) + '</span>').join('') + '</div></div>'
+      + '<div class="plain-fallback"><strong>plain-text fallback</strong><p>Beta 1.2: start or skip → site-boundary explainer → 48-hour hold → savings explainer → monthly Urgente → complete. v1.3: start or skip → add protected sites → optional local suggestions → explicit protection → 24-hour hold → evidence-bounded record → consent and done.</p></div>'
       + '</section>';
   }
 
@@ -91,9 +101,15 @@
 
   function challengeMarkup(id) { return id === 'onboarding' ? onboardingChallenge() : genericChallenge(id); }
 
+  function buildMarkup(id) {
+    if (id !== 'onboarding') return '<div class="build-card">' + esc(atlas.buildPlaceholders[id]) + '</div>';
+    const packet = atlas.downloads.onboarding;
+    return '<div class="build-card onboarding-build"><p class="eyebrow">reference packet · ' + esc(packet.status) + '</p><h4>one onboarding download</h4><p>' + esc(packet.note) + '</p><ul>' + packet.contents.map((item) => '<li>' + esc(item) + '</li>').join('') + '</ul><a class="lime-button" href="' + esc(packet.file) + '" download>' + esc(packet.label) + '</a></div>';
+  }
+
   function drawerMarkup() {
     const item = phase(selected); const flow = atlas.flows[selected]; const preview = isPreview(selected); const tabs = ['challenge', 'build'];
-    const content = tab === 'challenge' ? challengeMarkup(selected) : '<div class="build-card">' + esc(atlas.buildPlaceholders[selected]) + '</div>';
+    const content = tab === 'challenge' ? challengeMarkup(selected) : buildMarkup(selected);
     const returnButton = preview ? '<p class="preview-note">preview only — this phase cannot be marked complete or promoted here.</p><button class="return-current" type="button" data-return-current>return to current phase</button>' : '';
     return '<div class="drawer-head"><div><p class="eyebrow">' + (preview ? 'preview only' : 'current implementation') + '</p><h3>' + esc(flow.label) + '</h3><p>' + esc(item.summary || '') + '</p></div><div><span class="drawer-proof ' + esc(flow.proofLabel) + '">' + esc(flow.proofLabel) + '</span><button class="drawer-close" type="button" aria-label="close phase drawer" data-close>×</button></div></div><div class="drawer-tabs" role="tablist" aria-label="' + esc(flow.label) + ' details">' + tabs.map((name) => '<button class="drawer-tab" role="tab" type="button" aria-selected="' + (tab === name) + '" data-tab="' + name + '">' + name + '</button>').join('') + '</div><div class="drawer-body">' + content + returnButton + '</div>';
   }
@@ -113,6 +129,41 @@
           const detail = drawer.querySelector('#' + button.getAttribute('aria-controls'));
           button.setAttribute('aria-expanded', 'true'); button.classList.add('selected'); if (detail) detail.hidden = false;
         }
+      });
+    });
+    const shelf = drawer.querySelector('#onboarding-shelf');
+    if (!shelf) return;
+    const packet = atlas.downloads.onboarding;
+    const detailByNode = {
+      'v-start': ['start or skip', 'The current setup gives the shopper an intentional start or skip route. Skip writes an onboarding-complete, skipped state.'],
+      'v-sites': ['add protected sites', 'Manual entry is the baseline route. The current source blocks progression until at least one site has been added.'],
+      'v-discover': ['optional local suggestions', 'Chrome Top Sites are read only after opt-in and filtered locally; suggestions do not activate a site.'],
+      'v-protect': ['explicitly protect sites', 'Protection happens only after a site is explicitly added. This packet groups the relevant handover references together.'],
+      'v-hold': ['24-hour hold explainer', 'The onboarding screen describes the current 24-hour hold; the cart remains with the shop.'],
+      'v-record': ['evidence-bounded record', 'The current screen limits amount display to complete evidence rather than inferred totals.'],
+      'v-consent': ['consent and done', 'Completion writes the onboarding and selected-site state. Sync is a current checkbox control.']
+    };
+    const close = shelf.querySelector('[data-shelf-close]');
+    const title = shelf.querySelector('[data-shelf-title]');
+    const copy = shelf.querySelector('[data-shelf-copy]');
+    const download = shelf.querySelector('[data-shelf-download]');
+    const note = shelf.querySelector('[data-shelf-note]');
+    const closeShelf = () => {
+      drawer.querySelectorAll('[data-onboarding-node]').forEach((node) => { node.setAttribute('aria-expanded', 'false'); node.classList.remove('selected'); });
+      shelf.hidden = true;
+    };
+    close.addEventListener('click', closeShelf);
+    drawer.querySelectorAll('[data-onboarding-node]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const open = button.getAttribute('aria-expanded') === 'true';
+        closeShelf();
+        if (open) return;
+        const details = detailByNode[button.dataset.onboardingNode];
+        button.setAttribute('aria-expanded', 'true'); button.classList.add('selected');
+        title.textContent = details[0]; copy.textContent = details[1];
+        download.hidden = false; close.hidden = false; note.hidden = false; note.textContent = packet.note;
+        shelf.hidden = false;
+        shelf.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
     });
   }

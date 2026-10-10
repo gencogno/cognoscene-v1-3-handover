@@ -80,3 +80,12 @@ Public-status effect:
 - **Evidence limit:** This is website evidence only. The onboarding challenge wording is a **planned founder direction**; canonical source currently proves explicit selection and optional local Top Sites suggestions, not the final challenge framing. The compact Atlas was also rendered at 390px mobile width; extension-runtime browser proof remains incomplete.
 - **Reconciliation risk:** Canonical `manifest.json` is `1.4.114`; adjacent `package.json` remains `1.4.112`; canonical provenance is unknown because no `.git` metadata is mounted.
 - **Public-status effect:** Published as Sites version 19 from GitHub revision `c46d236`; public URL and challenge drawer were browser-validated after deployment.
+
+## 10 October 2026 — Atlas 2.75 v3 onboarding comparison
+
+- **Feature:** Journey Atlas onboarding flow
+- **Founder update:** Replace the mixed historic/current map with two separate Beta 1.2 and v1.3 flowcharts; use green for new or enhanced v1.3 states; reintroduce one complete download per relevant current node.
+- **TerraLite outcome:** Reconciled both diagrams to the historical Beta 1.2 and current canonical onboarding sources. The public UI now renders independently scannable vertical flows, clean optional/fallback branches, touch/keyboard feedback, a selected-node detail shelf, and a single downloadable onboarding reference packet. The packet is explicitly documentation/reference-only; it does not misrepresent the coupled current runtime as a standalone production component.
+- **Evidence:** Canonical manifest is `1.4.117`; JavaScript syntax, ZIP manifest listing, public-status mirror and whitespace checks passed.
+- **Evidence limit:** Public browser validation and deployment are pending. The challenge framing remains a founder-directed handover framing; it is not an additional runtime behaviour. No extension test, Chrome storage write, toolbar behaviour, merchant path or live-service behaviour was re-proven in this batch.
+- **Public-status effect:** Pending publication.
