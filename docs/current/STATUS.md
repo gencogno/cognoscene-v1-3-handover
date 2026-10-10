@@ -1,7 +1,7 @@
 # Current handover status
 
 **Last internal status update:** 10 October 2026, SGT
-**Public site state:** Atlas 2.75 is prepared for publication: compact phase spine, expandable phase drawer, phase-scoped flow, explicit Beta 1.2/v1.3 change record and preview-only future phases.
+**Public site state:** Atlas 2.75 is published: compact phase spine, expandable phase drawer, phase-scoped flow, explicit Beta 1.2/v1.3 change record and preview-only future phases.
 
 | Area | Status | Proof label | Next action |
 | --- | --- | --- | --- |

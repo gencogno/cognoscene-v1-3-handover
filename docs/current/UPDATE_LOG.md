@@ -79,4 +79,4 @@ Public-status effect:
 - **Evidence:** Local browser validation confirmed the compact spine, opening/closing the onboarding drawer, the challenge framing, changes tab, Observer preview-only state and return-to-current path. JavaScript syntax, JSON parsing, mirror synchronization and whitespace checks passed.
 - **Evidence limit:** This is website evidence only. The onboarding challenge wording is a **planned founder direction**; canonical source currently proves explicit selection and optional local Top Sites suggestions, not the final challenge framing. The compact Atlas was also rendered at 390px mobile width; extension-runtime browser proof remains incomplete.
 - **Reconciliation risk:** Canonical `manifest.json` is `1.4.114`; adjacent `package.json` remains `1.4.112`; canonical provenance is unknown because no `.git` metadata is mounted.
-- **Public-status effect:** Pending GitHub push and Sites publication of this tested source revision.
+- **Public-status effect:** Published as Sites version 19 from GitHub revision `c46d236`; public URL and challenge drawer were browser-validated after deployment.
