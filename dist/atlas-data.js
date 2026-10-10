@@ -10,9 +10,9 @@
       onboarding: {
         label: 'onboarding challenge', proofLabel: 'planned',
         nodes: [
-          { id: 'challenge', label: 'onboarding challenge', note: 'choose your boundary', status: 'enhanced' },
-          { id: 'discovery', label: 'optional discovery', note: 'local suggestions only', status: 'enhanced' },
-          { id: 'protect', label: 'protect selected sites', note: 'explicit consent', status: 'enhanced' },
+          { id: 'challenge', label: 'understand the boundary', note: 'chosen and reversible', status: 'enhanced' },
+          { id: 'discovery', label: 'choose how to add sites', note: 'manual or local suggestions', status: 'enhanced' },
+          { id: 'protect', label: 'explicitly protect a site', note: 'nothing activates itself', status: 'enhanced', kind: 'decision' },
           { id: 'browse', label: 'selected-site browsing', note: 'scope stays editable', status: 'enhanced' }
         ], edges: [['challenge', 'discovery'], ['discovery', 'protect'], ['protect', 'browse']],
         dependency: 'manual entry remains available if optional discovery is unavailable.'
@@ -49,7 +49,7 @@
       }
     },
     comparison: {
-      onboarding: { proofLabel: 'planned', beforeFlow: ['protected-site list', 'optional top sites'], afterFlow: ['onboarding challenge', 'optional discovery', 'explicit protection'], delta: 'enhanced: v1.3 is founder-directed to frame consent and site choice as an onboarding challenge. current source still evidences explicit selection, not this final framing.', changes: ['enhanced', 'planned'] },
+      onboarding: { proofLabel: 'planned', beforeFlow: ['protected-site list', 'optional top sites'], afterFlow: ['chosen boundary', 'manual or local discovery', 'explicit protection'], delta: 'enhanced: v1.3 connects optional discovery, explicit protection and reversible site scope into one consent-led journey. current source proves explicit selection; challenge framing remains planned.', changes: ['enhanced', 'planned'] },
       observer: { proofLabel: 'historical', beforeFlow: ['browsing', 'no distinct observer layer'], afterFlow: ['observer', 'product pulse', 'rationator return'], delta: 'new: observer becomes a named browsing-time layer. enhanced: product pulse and rationator have explicit ownership boundaries.', changes: ['new', 'enhanced'] },
       rationalisation: { proofLabel: 'historical', beforeFlow: ['48-hour hold', 'monthly urgente bypass'], afterFlow: ['24-hour hold', 'deliberation', 'unlimited urgente challenge'], delta: 'enhanced: a qualifying checkout uses a 24-hour hold; urgente is unlimited and grants a separate 12-hour brand-scoped checkout pass.', changes: ['enhanced'] },
       growth: { proofLabel: 'tentative', beforeFlow: ['historical analytics surfaces'], afterFlow: ['bounded decision history', 'shadow-only python', 'vision fallback'], delta: 'removed/tentative: no active growth packet. python remains shadow-only and vision remains a dom-failure fallback.', changes: ['removed', 'tentative'] }
