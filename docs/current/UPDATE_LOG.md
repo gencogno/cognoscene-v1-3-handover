@@ -62,3 +62,11 @@ Public-status effect:
 - **Desktop evidence:** Connected Chrome rendered the deployed HTTPS page with Onboarding as the current phase; Observer, Rationalisation and Growth locked; the SVG map; and the Beta 1.2/v1.3 comparison panel.
 - **Evidence limit:** Mobile viewport proof and a future phase-unlock transition remain unverified because the current reviewed status keeps Onboarding active.
 - **Public-status effect:** Atlas 2.5 is live.
+
+## 10 October 2026 — Batch 2.75A brand foundation
+
+- **Feature:** Journey Atlas visual foundation
+- **Founder update:** Apply Cognoscene’s locked brand ethos across the handover before further Atlas restructuring.
+- **TerraLite outcome:** Replaced the generic palette with the canonical cream, surface, lime, ink, muted and active tokens; loaded Be Vietnam Pro; and applied all-lowercase presentation. Semantic green, blue and grey Atlas states remain distinct.
+- **Evidence limit:** This batch changes the handover presentation only. It does not change any extension runtime, phase progression rule or live-product claim.
+- **Public-status effect:** Pending source publication and browser validation.

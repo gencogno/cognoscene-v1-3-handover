@@ -11,7 +11,7 @@
     "phases": [
       {
         "id": "onboarding",
-        "name": "Onboarding",
+        "name": "onboarding",
         "state": "current",
         "proofLabel": "planned",
         "summary": "Consent-led setup and explicit protected-site selection, including Website Tracking.",
@@ -20,7 +20,7 @@
       },
       {
         "id": "observer",
-        "name": "Observer",
+        "name": "observer",
         "state": "locked",
         "proofLabel": "planned",
         "summary": "Observer owns Product Pulse and Rationator as distinct browsing-time paths.",
@@ -29,7 +29,7 @@
       },
       {
         "id": "rationalisation",
-        "name": "Rationalisation",
+        "name": "rationalisation",
         "state": "locked",
         "proofLabel": "planned",
         "summary": "Qualifying checkout leads to a 24-hour hold, Deliberation, or optional Urgente route.",
@@ -38,7 +38,7 @@
       },
       {
         "id": "growth",
-        "name": "Growth",
+        "name": "growth",
         "state": "tentative",
         "proofLabel": "founder-confirmed",
         "summary": "Factual decision history remains intentionally scoped; Python is shadow-only and Vision is a future fallback.",

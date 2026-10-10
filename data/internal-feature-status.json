@@ -9,8 +9,8 @@
     "completionRule": "Checklist interaction is informative only; it cannot promote a phase.",
     "phases": [
       { "id": "onboarding", "state": "current", "owner": "Daniella", "nextGate": "Founder review plus live-source reconciliation" },
-      { "id": "observer", "state": "locked", "owner": "Daniella", "nextGate": "Onboarding phase completed" },
-      { "id": "rationalisation", "state": "locked", "owner": "Rationalisation workstream", "nextGate": "Observer phase completed" },
+      { "id": "observer", "state": "locked", "owner": "Daniella", "nextGate": "onboarding phase completed" },
+      { "id": "rationalisation", "state": "locked", "owner": "rationalisation workstream", "nextGate": "observer phase completed" },
       { "id": "growth", "state": "tentative", "owner": "Cogno", "nextGate": "Founder scope decision" }
     ]
   },
